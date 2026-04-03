@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: imms-backend
+  datasource:
+    url: jdbc:postgresql://localhost:5432/imms_db
+    username: postgres
+    password: postgres
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        # dialect is auto-detected. In Hibernate 6+ spatial is built into the standard PostgreSQLDialect
+    show-sql: true
+  # MinIO config later
