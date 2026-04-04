@@ -51,9 +51,9 @@ const Dashboard = () => {
         const fetchDashboardData = async () => {
             try {
                 const [propsRes, assetsRes, woRes] = await Promise.all([
-                    axios.get('http://localhost:8080/api/properties'),
-                    axios.get('http://localhost:8080/api/assets'),
-                    axios.get('http://localhost:8080/api/work-orders')
+                    axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:8080'}/api/properties`),
+                    axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:8080'}/api/assets`),
+                    axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:8080'}/api/work-orders`)
                 ]);
                 setProperties(propsRes.data);
                 setAssets(assetsRes.data);

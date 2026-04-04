@@ -78,15 +78,15 @@ const WorkOrders = () => {
 
     const fetchData = async () => {
         try {
-            const woRes = await axios.get('http://localhost:8080/api/work-orders');
+            const woRes = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:8080'}/api/work-orders`);
             setWorkOrders(woRes.data.reverse()); // LIFO order
             
             if (isAdmin) {
-                const assetRes = await axios.get('http://localhost:8080/api/assets');
+                const assetRes = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:8080'}/api/assets`);
                 setAssets(assetRes.data);
                 if (assetRes.data.length > 0) setAssetId(String(assetRes.data[0].id));
             } else if (user?.id) {
-                const appsRes = await axios.get(`http://localhost:8080/api/work-orders/my-applications?vendorId=${user.id}`);
+                const appsRes = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:8080'}/api/work-orders/my-applications?vendorId=${user.id}`);
                 const appliedIds = new Set<number>(appsRes.data.map((app: any) => app.workOrder?.id).filter(Boolean));
                 setAppliedWoIds(appliedIds);
             }
@@ -103,7 +103,7 @@ const WorkOrders = () => {
     const handleCreateWorkOrder = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            await axios.post('http://localhost:8080/api/work-orders', {
+            await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:8080'}/api/work-orders`, {
                 description,
                 assetId: parseInt(assetId)
             });
@@ -125,7 +125,7 @@ const WorkOrders = () => {
         }
 
         try {
-            await axios.post(`http://localhost:8080/api/work-orders/${id}/applications?vendorId=${user?.id}&amount=${amount}`);
+            await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:8080'}/api/work-orders/${id}/applications?vendorId=${user?.id}&amount=${amount}`);
             fetchData();
             alert('Competitive Application securely logged!');
         } catch (error) {
@@ -136,7 +136,7 @@ const WorkOrders = () => {
 
     const viewApplications = async (woId: number) => {
         try {
-            const res = await axios.get(`http://localhost:8080/api/work-orders/${woId}/applications`);
+            const res = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:8080'}/api/work-orders/${woId}/applications`);
             setActiveApps(res.data);
             setActiveWoId(woId);
             setShowAppsModal(true);
@@ -150,7 +150,7 @@ const WorkOrders = () => {
         if (!confirm('Are you definitively assigning this Vendor permanently?')) return;
         
         try {
-            await axios.put(`http://localhost:8080/api/work-orders/${activeWoId}/assign?applicationId=${appId}`);
+            await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:8080'}/api/work-orders/${activeWoId}/assign?applicationId=${appId}`);
             setShowAppsModal(false);
             fetchData();
         } catch (error) {
@@ -162,7 +162,7 @@ const WorkOrders = () => {
     const handleCancelOrder = async (id: number) => {
         if (!confirm('Strictly CANCEL this broadcasted Work Order?')) return;
         try {
-            await axios.put(`http://localhost:8080/api/work-orders/${id}/cancel`);
+            await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:8080'}/api/work-orders/${id}/cancel`);
             fetchData();
         } catch (error: any) {
             console.error(error);
