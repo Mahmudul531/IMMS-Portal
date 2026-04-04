@@ -1,6 +1,18 @@
 spring:
   application:
     name: imms-backend
+  profiles:
+    active: prod # Change this to 'prod' when you are ready to switch to Supabase
+
+server:
+  port: ${PORT:8080}
+
+# --- DEVELOPMENT CONFIGURATION ---
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
   datasource:
     url: jdbc:postgresql://localhost:5432/imms_db
     username: postgres
@@ -8,8 +20,24 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+    show-sql: true
+
+# --- PRODUCTION CONFIGURATION (SUPABASE) ---
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+  datasource:
+    # IMPORTANT: The domain 'db.iszmhcijlyovccybcbch.supabase.co' is IPv6 ONLY and blocks your local PC.
+    # Go to Supabase Dashboard -> Database -> Check "Use Connection Pooler" -> Get the 'pooler.supabase.com:6543' host address!
+    url: jdbc:postgresql://aws-1-ap-northeast-2.pooler.supabase.com:6543/postgres?sslmode=require&prepareThreshold=0
+    username: postgres.iszmhcijlyovccybcbch
+    password: F*8vszP+*LZwCGh
+  jpa:
+    hibernate:
+      ddl-auto: update
     properties:
       hibernate:
-        # dialect is auto-detected. In Hibernate 6+ spatial is built into the standard PostgreSQLDialect
-    show-sql: true
-  # MinIO config later
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: false
