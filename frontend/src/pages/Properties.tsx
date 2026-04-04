@@ -56,7 +56,7 @@ const Properties = () => {
 
     const fetchProperties = async () => {
         try {
-            const { data } = await axios.get('http://localhost:8080/api/properties');
+            const { data } = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:8080'}/api/properties`);
             setProperties(data.reverse());
         } catch (error) {
             console.error(error);
@@ -87,9 +87,9 @@ const Properties = () => {
 
         try {
             if (editingId) {
-                await axios.put(`http://localhost:8080/api/properties/${editingId}`, payload);
+                await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:8080'}/api/properties/${editingId}`, payload);
             } else {
-                await axios.post('http://localhost:8080/api/properties', payload);
+                await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:8080'}/api/properties`, payload);
             }
             fetchProperties();
             resetForm();
@@ -114,7 +114,7 @@ const Properties = () => {
     const handleDelete = async (id: number) => {
         if (!confirm('Are you sure you want to delete this property?')) return;
         try {
-            await axios.delete(`http://localhost:8080/api/properties/${id}`);
+            await axios.delete(`${import.meta.env.VITE_API_URL || 'http://localhost:8080'}/api/properties/${id}`);
             fetchProperties();
         } catch (error) {
             console.error(error);

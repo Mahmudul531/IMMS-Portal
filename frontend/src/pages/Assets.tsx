@@ -33,8 +33,8 @@ const Assets = () => {
     const fetchData = async () => {
         try {
             const [assetsRes, propsRes] = await Promise.all([
-                axios.get('http://localhost:8080/api/assets'),
-                axios.get('http://localhost:8080/api/properties')
+                axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:8080'}/api/assets`),
+                axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:8080'}/api/properties`)
             ]);
             setAssets(assetsRes.data.reverse());
             setProperties(propsRes.data);
@@ -64,9 +64,9 @@ const Assets = () => {
 
         try {
             if (editingId) {
-                await axios.put(`http://localhost:8080/api/assets/${editingId}`, payload);
+                await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:8080'}/api/assets/${editingId}`, payload);
             } else {
-                await axios.post('http://localhost:8080/api/assets', payload);
+                await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:8080'}/api/assets`, payload);
             }
             fetchData();
             resetForm();
@@ -85,7 +85,7 @@ const Assets = () => {
     const handleDelete = async (id: number) => {
         if (!confirm('Are you sure you want to delete this asset?')) return;
         try {
-            await axios.delete(`http://localhost:8080/api/assets/${id}`);
+            await axios.delete(`${import.meta.env.VITE_API_URL || 'http://localhost:8080'}/api/assets/${id}`);
             fetchData();
         } catch (error) {
             console.error(error);

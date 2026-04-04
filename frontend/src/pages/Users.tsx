@@ -30,7 +30,7 @@ const Users = () => {
 
     const fetchUsers = async () => {
         try {
-            const { data } = await axios.get('http://localhost:8080/api/users');
+            const { data } = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:8080'}/api/users`);
             setUsers(data.reverse());
         } catch (error) {
             console.error('Failed to fetch users', error);
@@ -44,7 +44,7 @@ const Users = () => {
     const handleCreateUser = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            await axios.post('http://localhost:8080/api/users/register', {
+            await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:8080'}/api/users/register`, {
                 username,
                 email,
                 password,
@@ -73,7 +73,7 @@ const Users = () => {
         }
 
         try {
-            await axios.put(`http://localhost:8080/api/users/${id}/status?active=${status}&note=${encodeURIComponent(note)}`);
+            await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:8080'}/api/users/${id}/status?active=${status}&note=${encodeURIComponent(note)}`);
             fetchUsers();
         } catch (error) {
             console.error('Failed to toggle active status', error);
