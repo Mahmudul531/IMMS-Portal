@@ -1,3 +1,4 @@
+import React, { type ReactNode, type ReactElement } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import Login from './pages/Login';
@@ -9,7 +10,7 @@ import WorkOrders from './pages/WorkOrders';
 import Sidebar from './components/Sidebar';
 
 // Protected Route Component
-const ProtectedRoute = ({ children, allowedRoles }: { children: JSX.Element, allowedRoles?: string[] }) => {
+const ProtectedRoute = ({ children, allowedRoles }: { children: ReactElement, allowedRoles?: string[] }) => {
   const { user } = useAuth();
   
   if (!user) {
