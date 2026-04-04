@@ -297,6 +297,7 @@ const WorkOrders = () => {
                             <tr key={wo.id}>
                                 <td>#{wo.id}</td>
                                 <td><strong>{wo.description}</strong></td>
+                                <td>{wo.createdAt || 'N/A'}</td>
                                 <td>
                                     <span style={{ padding: '0.3rem 0.6rem', borderRadius: '4px', fontSize: '0.8rem', fontWeight: 600, ...getStatusStyle(wo.status) }}>
                                         {wo.status}

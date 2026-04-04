@@ -8,9 +8,9 @@ import L from 'leaflet';
 // Fix leaflet icon issue in react-leaflet
 delete (L.Icon.Default.prototype as any)._getIconUrl;
 L.Icon.Default.mergeOptions({
-  iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
-  iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
-  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+    iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
+    iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
+    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
 });
 
 interface Property {
@@ -34,24 +34,24 @@ const MapSelector = ({ onSelectPosition }: { onSelectPosition: (lat: number, lng
 
 const Properties = () => {
     const [properties, setProperties] = useState<Property[]>([]);
-    
+
     // Search & Pagination
     const [searchTerm, setSearchTerm] = useState('');
     const [dateFrom, setDateFrom] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const ITEMS_PER_PAGE = 5;
-    
+
     // Form States
     const [name, setName] = useState('');
     const [address, setAddress] = useState('');
     const [latitude, setLatitude] = useState('');
     const [longitude, setLongitude] = useState('');
     const [editingId, setEditingId] = useState<number | null>(null);
-    
+
     // Map Modals
     const [showPickerMap, setShowPickerMap] = useState(false);
     const [markerPos, setMarkerPos] = useState<[number, number] | null>(null);
-    
+
     const [viewingProperty, setViewingProperty] = useState<Property | null>(null);
 
     const fetchProperties = async () => {
@@ -126,7 +126,7 @@ const Properties = () => {
         setLatitude(lat.toString());
         setLongitude(lng.toString());
     };
-    
+
     const viewAddressMap = (prop: Property) => {
         if (!prop.locLat || !prop.locLon) {
             alert('This property does not have GPS coordinates mapped!');
@@ -158,7 +158,7 @@ const Properties = () => {
             <div className="page-header">
                 <h2>Manage Properties</h2>
             </div>
-            
+
             <div className="card" style={{ marginBottom: '2rem' }}>
                 <h3 style={{ marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                     <Plus size={20} />
@@ -233,9 +233,9 @@ const Properties = () => {
                             <button onClick={() => setViewingProperty(null)} style={{ background: 'none', border: 'none', cursor: 'pointer' }}><X size={24} /></button>
                         </div>
                         <div style={{ flex: 1, borderRadius: '8px', overflow: 'hidden' }}>
-                            <MapContainer 
-                                center={[parseFloat(viewingProperty.locLat!), parseFloat(viewingProperty.locLon!)]} 
-                                zoom={15} 
+                            <MapContainer
+                                center={[parseFloat(viewingProperty.locLat!), parseFloat(viewingProperty.locLon!)]}
+                                zoom={15}
                                 style={{ height: '100%', width: '100%' }}
                             >
                                 <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" attribution="&copy; OpenStreetMap contributors" />
@@ -251,10 +251,10 @@ const Properties = () => {
                     <h3 style={{ margin: 0 }}>Registered Properties</h3>
                     <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
                         <div className="form-group" style={{ marginBottom: 0 }}>
-                            <input 
-                                className="form-input" 
-                                type="text" 
-                                placeholder="Search properties..." 
+                            <input
+                                className="form-input"
+                                type="text"
+                                placeholder="Search properties..."
                                 value={searchTerm}
                                 onChange={e => { setSearchTerm(e.target.value); setCurrentPage(1); }}
                                 style={{ padding: '0.4rem 0.8rem', minWidth: '220px' }}
@@ -262,9 +262,9 @@ const Properties = () => {
                         </div>
                         <div className="form-group" style={{ marginBottom: 0, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                             <span style={{ fontSize: '0.85rem', fontWeight: 600 }}>Date From:</span>
-                            <input 
-                                className="form-input" 
-                                type="date" 
+                            <input
+                                className="form-input"
+                                type="date"
                                 value={dateFrom}
                                 onChange={e => { setDateFrom(e.target.value); setCurrentPage(1); }}
                                 style={{ padding: '0.4rem 0.8rem' }}
@@ -273,44 +273,44 @@ const Properties = () => {
                     </div>
                 </div>
                 <div className="table-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Name</th>
-                            <th>Address & Location</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {paginatedProps.map(prop => (
-                            <tr key={prop.id}>
-                                <td>{prop.id}</td>
-                                <td><strong>{prop.name}</strong></td>
-                                <td>
-                                    {prop.locLat && prop.locLon ? (
-                                        <span 
-                                            onClick={() => viewAddressMap(prop)} 
-                                            style={{ color: 'var(--primary)', textDecoration: 'underline', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}
-                                        >
-                                            <MapIcon size={14} />
-                                            {prop.address || 'View on Map'}
-                                        </span>
-                                    ) : (
-                                        <span>{prop.address} <small style={{color:'var(--danger)'}}>(No GPS Map)</small></span>
-                                    )}
-                                </td>
-                                <td style={{ display: 'flex', gap: '0.5rem' }}>
-                                    <button className="action-btn" onClick={() => handleEdit(prop)}><Edit2 size={18}/></button>
-                                    <button className="action-btn" style={{ color: 'var(--danger)' }} onClick={() => handleDelete(prop.id)}><Trash2 size={18}/></button>
-                                </td>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Address & Location</th>
+                                <th>Actions</th>
                             </tr>
-                        ))}
-                        {filteredProps.length === 0 && (
-                            <tr><td colSpan={4} style={{textAlign: 'center', color: 'var(--text-muted)'}}>No properties match searches.</td></tr>
-                        )}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            {paginatedProps.map(prop => (
+                                <tr key={prop.id}>
+                                    <td>{prop.id}</td>
+                                    <td><strong>{prop.name}</strong></td>
+                                    <td>
+                                        {prop.locLat && prop.locLon ? (
+                                            <span
+                                                onClick={() => viewAddressMap(prop)}
+                                                style={{ color: 'var(--primary)', textDecoration: 'underline', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}
+                                            >
+                                                <MapIcon size={14} />
+                                                {prop.address || 'View on Map'}
+                                            </span>
+                                        ) : (
+                                            <span>{prop.address} <small style={{ color: 'var(--danger)' }}>(No GPS Map)</small></span>
+                                        )}
+                                    </td>
+                                    <td style={{ display: 'flex', gap: '0.5rem' }}>
+                                        <button className="action-btn" onClick={() => handleEdit(prop)}><Edit2 size={18} /></button>
+                                        <button className="action-btn" style={{ color: 'var(--danger)' }} onClick={() => handleDelete(prop.id)}><Trash2 size={18} /></button>
+                                    </td>
+                                </tr>
+                            ))}
+                            {filteredProps.length === 0 && (
+                                <tr><td colSpan={4} style={{ textAlign: 'center', color: 'var(--text-muted)' }}>No properties match searches.</td></tr>
+                            )}
+                        </tbody>
+                    </table>
                 </div>
 
                 {totalPages > 1 && (
