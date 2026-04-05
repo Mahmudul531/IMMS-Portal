@@ -4,27 +4,13 @@ import { Trash2, Edit2, Plus, X, Image } from 'lucide-react';
 
 const API = import.meta.env.VITE_API_URL || 'http://localhost:8080';
 
-interface Property {
-    id: number;
-    name: string;
-}
+interface Property { id: number; name: string; }
+interface Asset { id: number; name: string; type: string; property: Property; createdAt?: string; }
+interface AssetImage { id: number; imageData: string; }
 
-interface Asset {
-    id: number;
-    name: string;
-    type: string;
-    property: Property;
-    createdAt?: string;
-}
-
-interface AssetImage {
-    id: number;
-    imageData: string;
-}
-
-// Compress image to < 1MB using Canvas API
-const compressAndConvert = (file: File): Promise<string> => {
-    return new Promise((resolve, reject) => {
+// Compress image file using Canvas
+const compressFile = (file: File): Promise<File> => {
+    return new Promise((resolve) => {
         const reader = new FileReader();
         reader.onload = (e) => {
             const img = new window.Image();
@@ -36,21 +22,19 @@ const compressAndConvert = (file: File): Promise<string> => {
                     if (width > height) { height = Math.round(height * MAX_DIM / width); width = MAX_DIM; }
                     else { width = Math.round(width * MAX_DIM / height); height = MAX_DIM; }
                 }
-                canvas.width = width;
-                canvas.height = height;
+                canvas.width = width; canvas.height = height;
                 canvas.getContext('2d')!.drawImage(img, 0, 0, width, height);
-                let quality = 0.85;
-                let dataUrl = canvas.toDataURL('image/jpeg', quality);
-                while (dataUrl.length > 1_300_000 && quality > 0.2) {
-                    quality -= 0.1;
-                    dataUrl = canvas.toDataURL('image/jpeg', quality);
-                }
-                resolve(dataUrl);
+                const tryBlob = (q: number) => {
+                    canvas.toBlob((blob) => {
+                        if (!blob) { resolve(file); return; }
+                        if (blob.size > 900_000 && q > 0.2) tryBlob(q - 0.1);
+                        else resolve(new File([blob], file.name.replace(/\.[^.]+$/, '.jpg'), { type: 'image/jpeg' }));
+                    }, 'image/jpeg', q);
+                };
+                tryBlob(0.85);
             };
-            img.onerror = reject;
             img.src = e.target!.result as string;
         };
-        reader.onerror = reject;
         reader.readAsDataURL(file);
     });
 };
@@ -60,7 +44,6 @@ const Assets = () => {
     const [properties, setProperties] = useState<Property[]>([]);
     const [assetImages, setAssetImages] = useState<Record<number, AssetImage[]>>({});
 
-    // Search & Pagination
     const [searchTerm, setSearchTerm] = useState('');
     const [dateFrom, setDateFrom] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
@@ -70,7 +53,8 @@ const Assets = () => {
     const [type, setType] = useState('');
     const [propertyId, setPropertyId] = useState('');
     const [editingId, setEditingId] = useState<number | null>(null);
-    const [pendingImages, setPendingImages] = useState<string[]>([]);
+    const [pendingFiles, setPendingFiles] = useState<File[]>([]);
+    const [pendingPreviews, setPendingPreviews] = useState<string[]>([]);
     const [uploading, setUploading] = useState(false);
     const [lightboxSrc, setLightboxSrc] = useState<string | null>(null);
 
@@ -80,18 +64,12 @@ const Assets = () => {
                 axios.get(`${API}/api/assets`),
                 axios.get(`${API}/api/properties`)
             ]);
-            const assetData = Array.isArray(assetsRes.data) ? assetsRes.data : [];
-            const propData = Array.isArray(propsRes.data) ? propsRes.data : [];
-            setAssets([...assetData].reverse());
-            setProperties(propData);
-        } catch (error) {
-            console.error(error);
-        }
+            setAssets([...((Array.isArray(assetsRes.data) ? assetsRes.data : []))].reverse());
+            setProperties(Array.isArray(propsRes.data) ? propsRes.data : []);
+        } catch (err) { console.error(err); }
     };
 
-    useEffect(() => {
-        fetchData();
-    }, []);
+    useEffect(() => { fetchData(); }, []);
 
     const fetchImagesForAsset = async (assetId: number) => {
         try {
@@ -101,28 +79,30 @@ const Assets = () => {
     };
 
     const resetForm = () => {
-        setName('');
-        setType('');
-        setPropertyId('');
-        setEditingId(null);
-        setPendingImages([]);
+        setName(''); setType(''); setPropertyId(''); setEditingId(null);
+        setPendingFiles([]); setPendingPreviews([]);
     };
 
     const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const files = Array.from(e.target.files || []);
-        const converted = await Promise.all(files.map(compressAndConvert));
-        setPendingImages(prev => [...prev, ...converted]);
+        const compressed = await Promise.all(files.map(compressFile));
+        setPendingFiles(prev => [...prev, ...compressed]);
+        setPendingPreviews(prev => [...prev, ...compressed.map(f => URL.createObjectURL(f))]);
         e.target.value = '';
     };
 
-    const removePending = (idx: number) => setPendingImages(prev => prev.filter((_, i) => i !== idx));
+    const removePending = (idx: number) => {
+        URL.revokeObjectURL(pendingPreviews[idx]);
+        setPendingFiles(prev => prev.filter((_, i) => i !== idx));
+        setPendingPreviews(prev => prev.filter((_, i) => i !== idx));
+    };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setUploading(true);
-        const payload = { name, type, propertyId: parseInt(propertyId) };
         try {
             let savedId: number;
+            const payload = { name, type, propertyId: parseInt(propertyId) };
             if (editingId) {
                 await axios.put(`${API}/api/assets/${editingId}`, payload);
                 savedId = editingId;
@@ -130,23 +110,21 @@ const Assets = () => {
                 const { data } = await axios.post(`${API}/api/assets`, payload);
                 savedId = data.id;
             }
-            for (const imgData of pendingImages) {
-                await axios.post(`${API}/api/assets/${savedId}/images`, { imageData: imgData });
+            for (const file of pendingFiles) {
+                const form = new FormData();
+                form.append('file', file);
+                await axios.post(`${API}/api/assets/${savedId}/images`, form, { headers: { 'Content-Type': 'multipart/form-data' } });
             }
             await fetchData();
             await fetchImagesForAsset(savedId);
             resetForm();
-        } catch (error) {
-            console.error(error);
-        } finally {
-            setUploading(false);
-        }
+        } catch (err) { console.error(err); }
+        finally { setUploading(false); }
     };
 
     const handleEdit = (asset: Asset) => {
         setEditingId(asset.id);
-        setName(asset.name);
-        setType(asset.type || '');
+        setName(asset.name); setType(asset.type || '');
         setPropertyId(asset.property?.id?.toString() || '');
         fetchImagesForAsset(asset.id);
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -154,12 +132,8 @@ const Assets = () => {
 
     const handleDelete = async (id: number) => {
         if (!confirm('Are you sure you want to delete this asset?')) return;
-        try {
-            await axios.delete(`${API}/api/assets/${id}`);
-            fetchData();
-        } catch (error) {
-            console.error(error);
-        }
+        try { await axios.delete(`${API}/api/assets/${id}`); fetchData(); }
+        catch (err) { console.error(err); }
     };
 
     const handleDeleteImage = async (assetId: number, imageId: number) => {
@@ -169,12 +143,10 @@ const Assets = () => {
 
     const filteredAssets = assets.filter(asset => {
         if (searchTerm) {
-            const term = searchTerm.toLowerCase();
-            if (!asset.name?.toLowerCase().includes(term) && !asset.type?.toLowerCase().includes(term) && !asset.property?.name?.toLowerCase().includes(term)) return false;
+            const t = searchTerm.toLowerCase();
+            if (!asset.name?.toLowerCase().includes(t) && !asset.type?.toLowerCase().includes(t) && !asset.property?.name?.toLowerCase().includes(t)) return false;
         }
-        if (dateFrom) {
-            if (!asset.createdAt || new Date(asset.createdAt) < new Date(dateFrom)) return false;
-        }
+        if (dateFrom && (!asset.createdAt || new Date(asset.createdAt) < new Date(dateFrom))) return false;
         return true;
     });
 
@@ -182,23 +154,17 @@ const Assets = () => {
     const paginatedAssets = filteredAssets.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE);
 
     useEffect(() => {
-        paginatedAssets.forEach(a => {
-            if (!assetImages[a.id]) fetchImagesForAsset(a.id);
-        });
+        paginatedAssets.forEach(a => { if (!assetImages[a.id]) fetchImagesForAsset(a.id); });
     }, [paginatedAssets.map(a => a.id).join(',')]);
 
     const existingImages = editingId ? (assetImages[editingId] || []) : [];
 
     return (
         <div>
-            <div className="page-header">
-                <h2>Manage Assets</h2>
-            </div>
-
+            <div className="page-header"><h2>Manage Assets</h2></div>
             <div className="card" style={{ marginBottom: '2rem' }}>
                 <h3 style={{ marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                    <Plus size={20} />
-                    {editingId ? 'Edit Asset' : 'Add Asset'}
+                    <Plus size={20} />{editingId ? 'Edit Asset' : 'Add Asset'}
                 </h3>
                 <form onSubmit={handleSubmit} style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr)', gap: '1rem' }}>
                     <div className="form-group">
@@ -213,31 +179,22 @@ const Assets = () => {
                         <label className="form-label">Assign to Property</label>
                         <select className="form-input" value={propertyId} onChange={e => setPropertyId(e.target.value)} required>
                             <option value="">Select a property...</option>
-                            {properties.map(p => (
-                                <option key={p.id} value={p.id}>{p.name}</option>
-                            ))}
+                            {properties.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
                         </select>
                     </div>
 
-                    {/* Image Upload Section */}
+                    {/* Image Upload */}
                     <div className="form-group" style={{ gridColumn: '1 / -1' }}>
                         <label className="form-label" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                            <Image size={16} /> Asset Photos (compressed to &lt;1MB each)
+                            <Image size={16} /> Asset Photos (auto-compressed to &lt;1MB)
                         </label>
-                        <input
-                            className="form-input"
-                            type="file"
-                            accept="image/*"
-                            multiple
-                            onChange={handleFileSelect}
-                            style={{ padding: '0.4rem' }}
-                        />
-                        {pendingImages.length > 0 && (
+                        <input className="form-input" type="file" accept="image/*" multiple onChange={handleFileSelect} style={{ padding: '0.4rem' }} />
+                        {pendingPreviews.length > 0 && (
                             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginTop: '8px' }}>
-                                {pendingImages.map((src, idx) => (
+                                {pendingPreviews.map((src, idx) => (
                                     <div key={idx} style={{ position: 'relative' }}>
                                         <img src={src} alt="" style={{ width: 80, height: 80, objectFit: 'cover', borderRadius: 6, border: '2px solid var(--primary)' }} />
-                                        <button type="button" onClick={() => removePending(idx)} style={{ position: 'absolute', top: -6, right: -6, background: 'var(--danger)', color: 'white', border: 'none', borderRadius: '50%', width: 20, height: 20, cursor: 'pointer', fontSize: 12, display: 'flex', alignItems: 'center', justifyContent: 'center' }}><X size={12} /></button>
+                                        <button type="button" onClick={() => removePending(idx)} style={{ position: 'absolute', top: -6, right: -6, background: 'var(--danger)', color: 'white', border: 'none', borderRadius: '50%', width: 20, height: 20, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><X size={12} /></button>
                                     </div>
                                 ))}
                             </div>
@@ -248,8 +205,8 @@ const Assets = () => {
                                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginTop: '6px' }}>
                                     {existingImages.map(img => (
                                         <div key={img.id} style={{ position: 'relative' }}>
-                                            <img src={img.imageData} alt="" style={{ width: 80, height: 80, objectFit: 'cover', borderRadius: 6, border: '2px solid var(--border)', cursor: 'pointer' }} onClick={() => setLightboxSrc(img.imageData)} />
-                                            <button type="button" onClick={() => handleDeleteImage(editingId, img.id)} style={{ position: 'absolute', top: -6, right: -6, background: 'var(--danger)', color: 'white', border: 'none', borderRadius: '50%', width: 20, height: 20, cursor: 'pointer', fontSize: 12, display: 'flex', alignItems: 'center', justifyContent: 'center' }}><X size={12} /></button>
+                                            <img src={`${API}${img.imageData}`} alt="" style={{ width: 80, height: 80, objectFit: 'cover', borderRadius: 6, border: '2px solid var(--border)', cursor: 'pointer' }} onClick={() => setLightboxSrc(`${API}${img.imageData}`)} />
+                                            <button type="button" onClick={() => handleDeleteImage(editingId, img.id)} style={{ position: 'absolute', top: -6, right: -6, background: 'var(--danger)', color: 'white', border: 'none', borderRadius: '50%', width: 20, height: 20, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><X size={12} /></button>
                                         </div>
                                     ))}
                                 </div>
@@ -261,11 +218,7 @@ const Assets = () => {
                         <button type="submit" className="btn btn-primary" style={{ width: 'auto' }} disabled={uploading}>
                             {uploading ? 'Saving...' : (editingId ? 'Update Asset' : 'Save Asset')}
                         </button>
-                        {editingId && (
-                            <button type="button" className="btn" onClick={resetForm} style={{ width: 'auto', background: 'var(--border)' }}>
-                                Cancel
-                            </button>
-                        )}
+                        {editingId && <button type="button" className="btn" onClick={resetForm} style={{ width: 'auto', background: 'var(--border)' }}>Cancel</button>}
                     </div>
                 </form>
             </div>
@@ -281,24 +234,13 @@ const Assets = () => {
                     <h3 style={{ margin: 0 }}>Registered Assets</h3>
                     <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
                         <div className="form-group" style={{ marginBottom: 0 }}>
-                            <input
-                                className="form-input"
-                                type="text"
-                                placeholder="Search assets..."
-                                value={searchTerm}
-                                onChange={e => { setSearchTerm(e.target.value); setCurrentPage(1); }}
-                                style={{ padding: '0.4rem 0.8rem', minWidth: '220px' }}
-                            />
+                            <input className="form-input" type="text" placeholder="Search assets..." value={searchTerm}
+                                onChange={e => { setSearchTerm(e.target.value); setCurrentPage(1); }} style={{ padding: '0.4rem 0.8rem', minWidth: '220px' }} />
                         </div>
                         <div className="form-group" style={{ marginBottom: 0, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                             <span style={{ fontSize: '0.85rem', fontWeight: 600 }}>Date From:</span>
-                            <input
-                                className="form-input"
-                                type="date"
-                                value={dateFrom}
-                                onChange={e => { setDateFrom(e.target.value); setCurrentPage(1); }}
-                                style={{ padding: '0.4rem 0.8rem' }}
-                            />
+                            <input className="form-input" type="date" value={dateFrom}
+                                onChange={e => { setDateFrom(e.target.value); setCurrentPage(1); }} style={{ padding: '0.4rem 0.8rem' }} />
                         </div>
                     </div>
                 </div>
@@ -306,12 +248,7 @@ const Assets = () => {
                     <table>
                         <thead>
                             <tr>
-                                <th>ID</th>
-                                <th>Name</th>
-                                <th>Type</th>
-                                <th>Property</th>
-                                <th>Photos</th>
-                                <th>Actions</th>
+                                <th>ID</th><th>Name</th><th>Type</th><th>Property</th><th>Photos</th><th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -324,14 +261,11 @@ const Assets = () => {
                                     <td>
                                         <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap' }}>
                                             {(assetImages[asset.id] || []).slice(0, 3).map(img => (
-                                                <img key={img.id} src={img.imageData} alt="" onClick={() => setLightboxSrc(img.imageData)} style={{ width: 40, height: 40, objectFit: 'cover', borderRadius: 4, cursor: 'pointer', border: '1px solid var(--border)' }} />
+                                                <img key={img.id} src={`${API}${img.imageData}`} alt="" onClick={() => setLightboxSrc(`${API}${img.imageData}`)}
+                                                    style={{ width: 40, height: 40, objectFit: 'cover', borderRadius: 4, cursor: 'pointer', border: '1px solid var(--border)' }} />
                                             ))}
-                                            {(assetImages[asset.id] || []).length > 3 && (
-                                                <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', display: 'flex', alignItems: 'center' }}>+{(assetImages[asset.id] || []).length - 3}</span>
-                                            )}
-                                            {(assetImages[asset.id] || []).length === 0 && (
-                                                <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>—</span>
-                                            )}
+                                            {(assetImages[asset.id] || []).length > 3 && <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', display: 'flex', alignItems: 'center' }}>+{(assetImages[asset.id] || []).length - 3}</span>}
+                                            {(assetImages[asset.id] || []).length === 0 && <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>—</span>}
                                         </div>
                                     </td>
                                     <td style={{ display: 'flex', gap: '0.5rem' }}>
@@ -340,13 +274,10 @@ const Assets = () => {
                                     </td>
                                 </tr>
                             ))}
-                            {filteredAssets.length === 0 && (
-                                <tr><td colSpan={6} style={{ textAlign: 'center', color: 'var(--text-muted)' }}>No assets match searches.</td></tr>
-                            )}
+                            {filteredAssets.length === 0 && <tr><td colSpan={6} style={{ textAlign: 'center', color: 'var(--text-muted)' }}>No assets match searches.</td></tr>}
                         </tbody>
                     </table>
                 </div>
-
                 {totalPages > 1 && (
                     <div style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem', marginTop: '1rem' }}>
                         <button className="btn" disabled={currentPage === 1} onClick={() => setCurrentPage(p => p - 1)} style={{ width: 'auto', padding: '0.3rem 0.8rem' }}>Prev</button>

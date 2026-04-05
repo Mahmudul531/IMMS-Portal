@@ -27,21 +27,19 @@ interface Property {
 
 interface PropertyImage {
     id: number;
-    imageData: string;
+    imageData: string; // URL like /uploads/properties/prop_1_xxx.jpg
 }
 
 const MapSelector = ({ onSelectPosition }: { onSelectPosition: (lat: number, lng: number) => void }) => {
     useMapEvents({
-        click(e) {
-            onSelectPosition(e.latlng.lat, e.latlng.lng);
-        },
+        click(e) { onSelectPosition(e.latlng.lat, e.latlng.lng); },
     });
     return null;
 };
 
-// Compress image to < 1MB using Canvas API and return base64
-const compressAndConvert = (file: File): Promise<string> => {
-    return new Promise((resolve, reject) => {
+// Compress image file using Canvas and return a Blob < 1MB
+const compressFile = (file: File): Promise<File> => {
+    return new Promise((resolve) => {
         const reader = new FileReader();
         reader.onload = (e) => {
             const img = new window.Image();
@@ -55,21 +53,22 @@ const compressAndConvert = (file: File): Promise<string> => {
                 }
                 canvas.width = width;
                 canvas.height = height;
-                const ctx = canvas.getContext('2d')!;
-                ctx.drawImage(img, 0, 0, width, height);
+                canvas.getContext('2d')!.drawImage(img, 0, 0, width, height);
                 let quality = 0.85;
-                let dataUrl = canvas.toDataURL('image/jpeg', quality);
-                // If still > 1MB approx (base64 ~1.37x raw) iterate down
-                while (dataUrl.length > 1_300_000 && quality > 0.2) {
-                    quality -= 0.1;
-                    dataUrl = canvas.toDataURL('image/jpeg', quality);
-                }
-                resolve(dataUrl);
+                const tryBlob = (q: number) => {
+                    canvas.toBlob((blob) => {
+                        if (!blob) { resolve(file); return; }
+                        if (blob.size > 900_000 && q > 0.2) {
+                            tryBlob(q - 0.1);
+                        } else {
+                            resolve(new File([blob], file.name.replace(/\.[^.]+$/, '.jpg'), { type: 'image/jpeg' }));
+                        }
+                    }, 'image/jpeg', q);
+                };
+                tryBlob(quality);
             };
-            img.onerror = reject;
             img.src = e.target!.result as string;
         };
-        reader.onerror = reject;
         reader.readAsDataURL(file);
     });
 };
@@ -91,7 +90,8 @@ const Properties = () => {
     const [latitude, setLatitude] = useState('');
     const [longitude, setLongitude] = useState('');
     const [editingId, setEditingId] = useState<number | null>(null);
-    const [pendingImages, setPendingImages] = useState<string[]>([]);
+    const [pendingFiles, setPendingFiles] = useState<File[]>([]);
+    const [pendingPreviews, setPendingPreviews] = useState<string[]>([]);
     const [uploading, setUploading] = useState(false);
 
     // Map Modals
@@ -107,14 +107,10 @@ const Properties = () => {
             const { data } = await axios.get(`${API}/api/properties`);
             const propData = Array.isArray(data) ? data : [];
             setProperties([...propData].reverse());
-        } catch (error) {
-            console.error(error);
-        }
+        } catch (error) { console.error(error); }
     };
 
-    useEffect(() => {
-        fetchProperties();
-    }, []);
+    useEffect(() => { fetchProperties(); }, []);
 
     const fetchImagesForProperty = async (propId: number) => {
         try {
@@ -124,31 +120,35 @@ const Properties = () => {
     };
 
     const resetForm = () => {
-        setName('');
-        setAddress('');
-        setLatitude('');
-        setLongitude('');
-        setEditingId(null);
-        setMarkerPos(null);
-        setPendingImages([]);
+        setName(''); setAddress(''); setLatitude(''); setLongitude('');
+        setEditingId(null); setMarkerPos(null);
+        setPendingFiles([]); setPendingPreviews([]);
     };
 
     const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const files = Array.from(e.target.files || []);
-        const converted = await Promise.all(files.map(compressAndConvert));
-        setPendingImages(prev => [...prev, ...converted]);
+        const compressed = await Promise.all(files.map(compressFile));
+        const previews = compressed.map(f => URL.createObjectURL(f));
+        setPendingFiles(prev => [...prev, ...compressed]);
+        setPendingPreviews(prev => [...prev, ...previews]);
         e.target.value = '';
     };
 
     const removePending = (idx: number) => {
-        setPendingImages(prev => prev.filter((_, i) => i !== idx));
+        URL.revokeObjectURL(pendingPreviews[idx]);
+        setPendingFiles(prev => prev.filter((_, i) => i !== idx));
+        setPendingPreviews(prev => prev.filter((_, i) => i !== idx));
     };
 
-    const uploadPendingImages = async (propId: number) => {
-        for (const imgData of pendingImages) {
-            await axios.post(`${API}/api/properties/${propId}/images`, { imageData: imgData });
+    const uploadFiles = async (propId: number) => {
+        for (const file of pendingFiles) {
+            const form = new FormData();
+            form.append('file', file);
+            await axios.post(`${API}/api/properties/${propId}/images`, form, {
+                headers: { 'Content-Type': 'multipart/form-data' }
+            });
         }
-        setPendingImages([]);
+        setPendingFiles([]); setPendingPreviews([]);
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -164,17 +164,12 @@ const Properties = () => {
                 const { data } = await axios.post(`${API}/api/properties`, payload);
                 savedId = data.id;
             }
-            if (pendingImages.length > 0) {
-                await uploadPendingImages(savedId);
-            }
+            if (pendingFiles.length > 0) await uploadFiles(savedId);
             await fetchProperties();
             await fetchImagesForProperty(savedId);
             resetForm();
-        } catch (error) {
-            console.error(error);
-        } finally {
-            setUploading(false);
-        }
+        } catch (error) { console.error(error); }
+        finally { setUploading(false); }
     };
 
     const handleEdit = (prop: Property) => {
@@ -183,11 +178,8 @@ const Properties = () => {
         setAddress(prop.address || '');
         setLatitude(prop.locLat || '');
         setLongitude(prop.locLon || '');
-        if (prop.locLat && prop.locLon) {
-            setMarkerPos([parseFloat(prop.locLat), parseFloat(prop.locLon)]);
-        } else {
-            setMarkerPos(null);
-        }
+        if (prop.locLat && prop.locLon) setMarkerPos([parseFloat(prop.locLat), parseFloat(prop.locLon)]);
+        else setMarkerPos(null);
         fetchImagesForProperty(prop.id);
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
@@ -197,9 +189,7 @@ const Properties = () => {
         try {
             await axios.delete(`${API}/api/properties/${id}`);
             fetchProperties();
-        } catch (error) {
-            console.error(error);
-        }
+        } catch (error) { console.error(error); }
     };
 
     const handleDeleteImage = async (propId: number, imageId: number) => {
@@ -208,52 +198,39 @@ const Properties = () => {
     };
 
     const handleMapClick = (lat: number, lng: number) => {
-        setMarkerPos([lat, lng]);
-        setLatitude(lat.toString());
-        setLongitude(lng.toString());
+        setMarkerPos([lat, lng]); setLatitude(lat.toString()); setLongitude(lng.toString());
     };
 
     const viewAddressMap = (prop: Property) => {
-        if (!prop.locLat || !prop.locLon) {
-            alert('This property does not have GPS coordinates mapped!');
-            return;
-        }
+        if (!prop.locLat || !prop.locLon) { alert('This property does not have GPS coordinates!'); return; }
         setViewingProperty(prop);
     };
 
     const filteredProps = properties.filter(prop => {
         if (searchTerm) {
-            const term = searchTerm.toLowerCase();
-            if (!prop.name?.toLowerCase().includes(term) && !prop.address?.toLowerCase().includes(term)) return false;
+            const t = searchTerm.toLowerCase();
+            if (!prop.name?.toLowerCase().includes(t) && !prop.address?.toLowerCase().includes(t)) return false;
         }
-        if (dateFrom) {
-            if (!prop.createdAt || new Date(prop.createdAt) < new Date(dateFrom)) return false;
-        }
+        if (dateFrom && (!prop.createdAt || new Date(prop.createdAt) < new Date(dateFrom))) return false;
         return true;
     });
 
     const totalPages = Math.ceil(filteredProps.length / ITEMS_PER_PAGE);
     const paginatedProps = filteredProps.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE);
 
-    // Load images for visible properties
     useEffect(() => {
-        paginatedProps.forEach(p => {
-            if (!propertyImages[p.id]) fetchImagesForProperty(p.id);
-        });
+        paginatedProps.forEach(p => { if (!propertyImages[p.id]) fetchImagesForProperty(p.id); });
     }, [paginatedProps.map(p => p.id).join(',')]);
 
     const existingImages = editingId ? (propertyImages[editingId] || []) : [];
 
     return (
         <div>
-            <div className="page-header">
-                <h2>Manage Properties</h2>
-            </div>
+            <div className="page-header"><h2>Manage Properties</h2></div>
 
             <div className="card" style={{ marginBottom: '2rem' }}>
                 <h3 style={{ marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                    <Plus size={20} />
-                    {editingId ? 'Edit Property' : 'Add Property'}
+                    <Plus size={20} />{editingId ? 'Edit Property' : 'Add Property'}
                 </h3>
                 <form onSubmit={handleSubmit} style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1fr)', gap: '1rem' }}>
                     <div className="form-group">
@@ -264,11 +241,11 @@ const Properties = () => {
                         <label className="form-label">Address</label>
                         <input className="form-input" value={address} onChange={e => setAddress(e.target.value)} />
                     </div>
-                    <div className="form-group" style={{ position: 'relative' }}>
+                    <div className="form-group">
                         <label className="form-label">Latitude</label>
                         <input className="form-input" type="number" step="any" value={latitude} onChange={e => setLatitude(e.target.value)} />
                     </div>
-                    <div className="form-group" style={{ position: 'relative' }}>
+                    <div className="form-group">
                         <label className="form-label">Longitude</label>
                         <div style={{ display: 'flex', gap: '0.5rem' }}>
                             <input className="form-input" type="number" step="any" value={longitude} onChange={e => setLongitude(e.target.value)} />
@@ -281,44 +258,27 @@ const Properties = () => {
                     {/* Image Upload Section */}
                     <div className="form-group" style={{ gridColumn: '1 / -1' }}>
                         <label className="form-label" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                            <Image size={16} /> Photos (compressed to &lt;1MB each)
+                            <Image size={16} /> Photos (auto-compressed to &lt;1MB)
                         </label>
-                        <input
-                            className="form-input"
-                            type="file"
-                            accept="image/*"
-                            multiple
-                            onChange={handleFileSelect}
-                            style={{ padding: '0.4rem' }}
-                        />
-                        {/* Pending new images preview */}
-                        {pendingImages.length > 0 && (
+                        <input className="form-input" type="file" accept="image/*" multiple onChange={handleFileSelect} style={{ padding: '0.4rem' }} />
+                        {pendingPreviews.length > 0 && (
                             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginTop: '8px' }}>
-                                {pendingImages.map((src, idx) => (
+                                {pendingPreviews.map((src, idx) => (
                                     <div key={idx} style={{ position: 'relative' }}>
                                         <img src={src} alt="" style={{ width: 80, height: 80, objectFit: 'cover', borderRadius: 6, border: '2px solid var(--primary)' }} />
-                                        <button
-                                            type="button"
-                                            onClick={() => removePending(idx)}
-                                            style={{ position: 'absolute', top: -6, right: -6, background: 'var(--danger)', color: 'white', border: 'none', borderRadius: '50%', width: 20, height: 20, cursor: 'pointer', fontSize: 12, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-                                        ><X size={12} /></button>
+                                        <button type="button" onClick={() => removePending(idx)} style={{ position: 'absolute', top: -6, right: -6, background: 'var(--danger)', color: 'white', border: 'none', borderRadius: '50%', width: 20, height: 20, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><X size={12} /></button>
                                     </div>
                                 ))}
                             </div>
                         )}
-                        {/* Existing images (edit mode) */}
                         {editingId && existingImages.length > 0 && (
                             <div style={{ marginTop: '10px' }}>
                                 <small style={{ color: 'var(--text-muted)' }}>Already uploaded:</small>
                                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginTop: '6px' }}>
                                     {existingImages.map(img => (
                                         <div key={img.id} style={{ position: 'relative' }}>
-                                            <img src={img.imageData} alt="" style={{ width: 80, height: 80, objectFit: 'cover', borderRadius: 6, border: '2px solid var(--border)', cursor: 'pointer' }} onClick={() => setLightboxSrc(img.imageData)} />
-                                            <button
-                                                type="button"
-                                                onClick={() => handleDeleteImage(editingId, img.id)}
-                                                style={{ position: 'absolute', top: -6, right: -6, background: 'var(--danger)', color: 'white', border: 'none', borderRadius: '50%', width: 20, height: 20, cursor: 'pointer', fontSize: 12, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-                                            ><X size={12} /></button>
+                                            <img src={`${API}${img.imageData}`} alt="" style={{ width: 80, height: 80, objectFit: 'cover', borderRadius: 6, border: '2px solid var(--border)', cursor: 'pointer' }} onClick={() => setLightboxSrc(`${API}${img.imageData}`)} />
+                                            <button type="button" onClick={() => handleDeleteImage(editingId, img.id)} style={{ position: 'absolute', top: -6, right: -6, background: 'var(--danger)', color: 'white', border: 'none', borderRadius: '50%', width: 20, height: 20, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><X size={12} /></button>
                                         </div>
                                     ))}
                                 </div>
@@ -330,19 +290,13 @@ const Properties = () => {
                         <button type="submit" className="btn btn-primary" style={{ width: 'auto' }} disabled={uploading}>
                             {uploading ? 'Saving...' : (editingId ? 'Update Property' : 'Save Property')}
                         </button>
-                        {editingId && (
-                            <button type="button" className="btn" onClick={resetForm} style={{ width: 'auto', background: 'var(--border)' }}>
-                                Cancel
-                            </button>
-                        )}
-                        <button type="button" className="btn" onClick={resetForm} style={{ width: 'auto', background: 'var(--danger)', color: 'white', marginLeft: 'auto' }}>
-                            Clear Form
-                        </button>
+                        {editingId && <button type="button" className="btn" onClick={resetForm} style={{ width: 'auto', background: 'var(--border)' }}>Cancel</button>}
+                        <button type="button" className="btn" onClick={resetForm} style={{ width: 'auto', background: 'var(--danger)', color: 'white', marginLeft: 'auto' }}>Clear Form</button>
                     </div>
                 </form>
             </div>
 
-            {/* Modal for Picking location */}
+            {/* Map picker modal */}
             {showPickerMap && (
                 <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', background: 'rgba(0,0,0,0.5)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <div style={{ background: 'white', padding: '1rem', borderRadius: '8px', width: '80%', maxWidth: '800px', height: '600px', display: 'flex', flexDirection: 'column' }}>
@@ -364,7 +318,7 @@ const Properties = () => {
                 </div>
             )}
 
-            {/* Modal for Viewing existing property on map */}
+            {/* View address map modal */}
             {viewingProperty && (
                 <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', background: 'rgba(0,0,0,0.5)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <div style={{ background: 'white', padding: '1rem', borderRadius: '8px', width: '80%', maxWidth: '800px', height: '600px', display: 'flex', flexDirection: 'column' }}>
@@ -391,10 +345,7 @@ const Properties = () => {
 
             {/* Lightbox */}
             {lightboxSrc && (
-                <div
-                    onClick={() => setLightboxSrc(null)}
-                    style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', background: 'rgba(0,0,0,0.9)', zIndex: 2000, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'zoom-out' }}
-                >
+                <div onClick={() => setLightboxSrc(null)} style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', background: 'rgba(0,0,0,0.9)', zIndex: 2000, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'zoom-out' }}>
                     <img src={lightboxSrc} alt="Full view" style={{ maxWidth: '90vw', maxHeight: '90vh', objectFit: 'contain', borderRadius: 8 }} />
                 </div>
             )}
@@ -404,24 +355,15 @@ const Properties = () => {
                     <h3 style={{ margin: 0 }}>Registered Properties</h3>
                     <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
                         <div className="form-group" style={{ marginBottom: 0 }}>
-                            <input
-                                className="form-input"
-                                type="text"
-                                placeholder="Search properties..."
-                                value={searchTerm}
+                            <input className="form-input" type="text" placeholder="Search properties..." value={searchTerm}
                                 onChange={e => { setSearchTerm(e.target.value); setCurrentPage(1); }}
-                                style={{ padding: '0.4rem 0.8rem', minWidth: '220px' }}
-                            />
+                                style={{ padding: '0.4rem 0.8rem', minWidth: '220px' }} />
                         </div>
                         <div className="form-group" style={{ marginBottom: 0, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                             <span style={{ fontSize: '0.85rem', fontWeight: 600 }}>Date From:</span>
-                            <input
-                                className="form-input"
-                                type="date"
-                                value={dateFrom}
+                            <input className="form-input" type="date" value={dateFrom}
                                 onChange={e => { setDateFrom(e.target.value); setCurrentPage(1); }}
-                                style={{ padding: '0.4rem 0.8rem' }}
-                            />
+                                style={{ padding: '0.4rem 0.8rem' }} />
                         </div>
                     </div>
                 </div>
@@ -431,7 +373,7 @@ const Properties = () => {
                             <tr>
                                 <th>ID</th>
                                 <th>Name</th>
-                                <th>Images</th>
+                                <th>Photos</th>
                                 <th>Address & Location</th>
                                 <th>Actions</th>
                             </tr>
@@ -441,28 +383,21 @@ const Properties = () => {
                                 <tr key={prop.id}>
                                     <td>{prop.id}</td>
                                     <td>
-                                        <span
-                                            onClick={() => navigate(`/properties/${prop.id}`)}
+                                        <span onClick={() => navigate(`/properties/${prop.id}`)}
                                             style={{ color: 'var(--primary)', fontWeight: 700, cursor: 'pointer', textDecoration: 'underline', display: 'flex', alignItems: 'center', gap: '4px' }}
-                                            title="View property detail"
-                                        >
-                                            <ExternalLink size={14} />
-                                            {prop.name}
+                                            title="View property detail">
+                                            <ExternalLink size={14} />{prop.name}
                                         </span>
                                     </td>
                                     <td>
                                         <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap' }}>
                                             {(propertyImages[prop.id] || []).slice(0, 3).map(img => (
-                                                <img
-                                                    key={img.id}
-                                                    src={img.imageData}
-                                                    alt=""
-                                                    onClick={() => setLightboxSrc(img.imageData)}
-                                                    style={{ width: 40, height: 40, objectFit: 'cover', borderRadius: 4, cursor: 'pointer', border: '1px solid var(--border)' }}
-                                                />
+                                                <img key={img.id} src={`${API}${img.imageData}`} alt=""
+                                                    onClick={() => setLightboxSrc(`${API}${img.imageData}`)}
+                                                    style={{ width: 40, height: 40, objectFit: 'cover', borderRadius: 4, cursor: 'pointer', border: '1px solid var(--border)' }} />
                                             ))}
                                             {(propertyImages[prop.id] || []).length > 3 && (
-                                                <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', alignItems: 'center', display: 'flex' }}>
+                                                <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', display: 'flex', alignItems: 'center' }}>
                                                     +{(propertyImages[prop.id] || []).length - 3} more
                                                 </span>
                                             )}
@@ -473,12 +408,8 @@ const Properties = () => {
                                     </td>
                                     <td>
                                         {prop.locLat && prop.locLon ? (
-                                            <span
-                                                onClick={() => viewAddressMap(prop)}
-                                                style={{ color: 'var(--primary)', textDecoration: 'underline', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}
-                                            >
-                                                <MapIcon size={14} />
-                                                {prop.address || 'View on Map'}
+                                            <span onClick={() => viewAddressMap(prop)} style={{ color: 'var(--primary)', textDecoration: 'underline', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                                <MapIcon size={14} />{prop.address || 'View on Map'}
                                             </span>
                                         ) : (
                                             <span>{prop.address} <small style={{ color: 'var(--danger)' }}>(No GPS Map)</small></span>

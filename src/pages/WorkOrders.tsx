@@ -58,6 +58,8 @@ const WorkOrders = () => {
 
     const [workOrders, setWorkOrders] = useState<WorkOrder[]>([]);
     const [assets, setAssets] = useState<Asset[]>([]);
+    const [properties, setProperties] = useState<Property[]>([]);
+    const [selectedPropertyId, setSelectedPropertyId] = useState('');
     
     const [searchTerm, setSearchTerm] = useState('');
     const [dateFrom, setDateFrom] = useState('');
@@ -83,10 +85,14 @@ const WorkOrders = () => {
             setWorkOrders([...woData].reverse()); // LIFO order
             
             if (isAdmin) {
-                const assetRes = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:8080'}/api/assets`);
+                const [assetRes, propRes] = await Promise.all([
+                    axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:8080'}/api/assets`),
+                    axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:8080'}/api/properties`)
+                ]);
                 const assetData = Array.isArray(assetRes.data) ? assetRes.data : [];
+                const propData = Array.isArray(propRes.data) ? propRes.data : [];
                 setAssets(assetData);
-                if (assetData.length > 0) setAssetId(String(assetData[0].id));
+                setProperties(propData);
             } else if (user?.id) {
                 const appsRes = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:8080'}/api/work-orders/my-applications?vendorId=${user.id}`);
                 const appliedIds = new Set<number>((appsRes.data || []).map((app: any) => app.workOrder?.id).filter(Boolean));
@@ -238,21 +244,58 @@ const WorkOrders = () => {
                     <h3 style={{ marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                         <Hammer size={20} /> Deploy Technical Duty
                     </h3>
-                    <form onSubmit={handleCreateWorkOrder} style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '1rem' }}>
-                        <div className="form-group">
+                    <form onSubmit={handleCreateWorkOrder} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                        <div className="form-group" style={{ gridColumn: '1 / -1' }}>
                             <label className="form-label">Describe Operational Scope</label>
                             <input className="form-input" value={description} onChange={e => setDescription(e.target.value)} required />
                         </div>
+
+                        {/* Step 1: Select Property */}
                         <div className="form-group">
-                            <label className="form-label">Link Sub-Asset</label>
-                            <select className="form-input" value={assetId} onChange={e => setAssetId(e.target.value)}>
-                                {assets.map(a => (
-                                    <option key={a.id} value={a.id}>{a.name}</option>
+                            <label className="form-label">1. Select Property</label>
+                            <select
+                                className="form-input"
+                                value={selectedPropertyId}
+                                onChange={e => {
+                                    setSelectedPropertyId(e.target.value);
+                                    setAssetId(''); // reset asset when property changes
+                                }}
+                                required
+                            >
+                                <option value="">-- Choose a property --</option>
+                                {properties.map(p => (
+                                    <option key={p.id} value={p.id}>{p.name}</option>
                                 ))}
                             </select>
                         </div>
-                        <div>
-                            <button type="submit" className="btn btn-primary" style={{ width: 'auto' }}>
+
+                        {/* Step 2: Select Asset filtered by property */}
+                        <div className="form-group">
+                            <label className="form-label">2. Link Sub-Asset</label>
+                            <select
+                                className="form-input"
+                                value={assetId}
+                                onChange={e => setAssetId(e.target.value)}
+                                required
+                                disabled={!selectedPropertyId}
+                            >
+                                <option value="">
+                                    {selectedPropertyId ? '-- Choose an asset --' : '-- Select a property first --'}
+                                </option>
+                                {assets
+                                    .filter(a => String(a.property?.id) === selectedPropertyId)
+                                    .map(a => (
+                                        <option key={a.id} value={a.id}>{a.name}</option>
+                                    ))
+                                }
+                            </select>
+                            {selectedPropertyId && assets.filter(a => String(a.property?.id) === selectedPropertyId).length === 0 && (
+                                <small style={{ color: 'var(--danger)', marginTop: '4px', display: 'block' }}>No assets registered for this property.</small>
+                            )}
+                        </div>
+
+                        <div style={{ gridColumn: '1 / -1' }}>
+                            <button type="submit" className="btn btn-primary" style={{ width: 'auto' }} disabled={!assetId}>
                                 Broadcast Work Order Request
                             </button>
                         </div>
