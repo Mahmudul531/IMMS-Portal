@@ -117,10 +117,6 @@ const Dashboard = () => {
                                 attribution="&copy; OpenStreetMap contributors"
                             />
                             {mappableProperties.map(prop => {
-                                const propertyAssets = assets.filter(a => a.property?.id === prop.id);
-                                const propertyAssetIds = propertyAssets.map(a => a.id);
-                                const propertyWorkOrders = workOrders.filter(wo => wo.asset && propertyAssetIds.includes(wo.asset.id));
-
                                 return (
                                     <Marker 
                                         key={prop.id} 
