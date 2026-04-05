@@ -3,6 +3,8 @@ package com.imms.model.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.util.List;
 
 @Entity
 @Table(name = "work_order")
@@ -17,11 +19,11 @@ public class WorkOrder {
     @Column(nullable = false)
     private String description;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "asset_id", nullable = false)
     private Asset asset;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "vendor_id")
     private User vendor;
 
@@ -31,6 +33,10 @@ public class WorkOrder {
     private Double amount;
 
     @org.hibernate.annotations.CreationTimestamp
-    @jakarta.persistence.Column(updatable = false)
+    @Column(updatable = false)
     private java.time.LocalDate createdAt;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "workOrder", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<WorkOrderApplication> applications;
 }

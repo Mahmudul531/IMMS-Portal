@@ -3,7 +3,8 @@ package com.imms.model.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.util.List;
 
 @Entity
 @Table(name = "property")
@@ -23,6 +24,10 @@ public class Property {
     private String locLon;
 
     @org.hibernate.annotations.CreationTimestamp
-    @jakarta.persistence.Column(updatable = false)
+    @Column(updatable = false)
     private java.time.LocalDate createdAt;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "property", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Asset> assets;
 }

@@ -36,8 +36,10 @@ const Assets = () => {
                 axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:8080'}/api/assets`),
                 axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:8080'}/api/properties`)
             ]);
-            setAssets(assetsRes.data.reverse());
-            setProperties(propsRes.data);
+            const assetData = Array.isArray(assetsRes.data) ? assetsRes.data : [];
+            const propData = Array.isArray(propsRes.data) ? propsRes.data : [];
+            setAssets([...assetData].reverse());
+            setProperties(propData);
         } catch (error) {
             console.error(error);
         }
@@ -95,9 +97,10 @@ const Assets = () => {
     const filteredAssets = assets.filter(asset => {
         if (searchTerm) {
             const term = searchTerm.toLowerCase();
-            if (!asset.name.toLowerCase().includes(term) && 
-                (!asset.type || !asset.type.toLowerCase().includes(term)) &&
-                (!asset.property?.name || !asset.property.name.toLowerCase().includes(term))) {
+            const nameMatch = asset.name?.toLowerCase().includes(term);
+            const typeMatch = asset.type?.toLowerCase().includes(term);
+            const propMatch = asset.property?.name?.toLowerCase().includes(term);
+            if (!nameMatch && !typeMatch && !propMatch) {
                 return false;
             }
         }

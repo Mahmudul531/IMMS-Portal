@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
@@ -41,6 +42,7 @@ interface WorkOrder {
 
 const Dashboard = () => {
     const { user } = useAuth();
+    const navigate = useNavigate();
     const [properties, setProperties] = useState<Property[]>([]);
     const [assets, setAssets] = useState<Asset[]>([]);
 
@@ -55,9 +57,10 @@ const Dashboard = () => {
                     axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:8080'}/api/assets`),
                     axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:8080'}/api/work-orders`)
                 ]);
-                setProperties(propsRes.data);
-                setAssets(assetsRes.data);
-                setWorkOrders(woRes.data.reverse());
+                setProperties(Array.isArray(propsRes.data) ? propsRes.data : []);
+                setAssets(Array.isArray(assetsRes.data) ? assetsRes.data : []);
+                const woData = Array.isArray(woRes.data) ? woRes.data : [];
+                setWorkOrders([...woData].reverse());
             } catch (error) {
                 console.error('Error fetching dashboard data:', error);
             }
@@ -66,8 +69,12 @@ const Dashboard = () => {
         fetchDashboardData();
     }, []);
 
-    // Filter properties that actually have locLat / locLon mapped
-    const mappableProperties = properties.filter(p => p.locLat && p.locLon);
+    // Filter properties that actually have valid numerical locLat / locLon mapped
+    const mappableProperties = properties.filter(p => {
+        const lat = parseFloat(p.locLat || '');
+        const lon = parseFloat(p.locLon || '');
+        return !isNaN(lat) && !isNaN(lon);
+    });
 
     return (
         <div>
@@ -112,39 +119,25 @@ const Dashboard = () => {
                             {mappableProperties.map(prop => {
                                 const propertyAssets = assets.filter(a => a.property?.id === prop.id);
                                 const propertyAssetIds = propertyAssets.map(a => a.id);
-                                const propertyWorkOrders = workOrders.filter(wo => propertyAssetIds.includes(wo.asset.id));
+                                const propertyWorkOrders = workOrders.filter(wo => wo.asset && propertyAssetIds.includes(wo.asset.id));
 
                                 return (
                                     <Marker 
                                         key={prop.id} 
                                         position={[parseFloat(prop.locLat!), parseFloat(prop.locLon!)]}
                                     >
-                                        <Popup minWidth={250}>
+                                        <Popup>
                                             <div style={{ margin: 0 }}>
                                                 <h3 style={{ margin: '0 0 4px 0', color: 'var(--primary)', fontSize: '16px' }}>{prop.name}</h3>
                                                 <p style={{ margin: '0 0 12px 0', color: '#666', fontSize: '13px' }}>{prop.address}</p>
                                                 
-                                                <div style={{ borderTop: '1px solid #eee', paddingTop: '8px' }}>
-                                                    <strong style={{ fontSize: '12px', color: '#444' }}>Linked Assets ({propertyAssets.length})</strong>
-                                                    <ul style={{ margin: '4px 0 0 0', paddingLeft: '20px', fontSize: '13px', color: '#333' }}>
-                                                        {propertyAssets.map(asset => (
-                                                            <li key={asset.id}>{asset.name} <span style={{ color: '#888', fontSize:'11px' }}>({asset.type})</span></li>
-                                                        ))}
-                                                        {propertyAssets.length === 0 && <li style={{listStyle:'none', marginLeft:'-20px', color:'#999'}}>No assets mapped.</li>}
-                                                    </ul>
-                                                </div>
-
-                                                {propertyWorkOrders.length > 0 && (
-                                                    <div style={{ marginTop: '12px' }}>
-                                                        <button 
-                                                            className="btn btn-primary" 
-                                                            style={{ width: '100%', padding: '0.4rem', fontSize: '12px', background: '#f57c00' }}
-                                                            onClick={() => setActiveWoPopup(propertyWorkOrders)}
-                                                        >
-                                                            View Associated Work Orders ({propertyWorkOrders.length})
-                                                        </button>
-                                                    </div>
-                                                )}
+                                                <button 
+                                                    className="btn btn-primary" 
+                                                    style={{ width: '100%', padding: '0.5rem', fontSize: '12px' }}
+                                                    onClick={() => navigate(`/properties/${prop.id}`)}
+                                                >
+                                                    View Property Details
+                                                </button>
                                             </div>
                                         </Popup>
                                     </Marker>
@@ -180,14 +173,14 @@ const Dashboard = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {activeWoPopup.map(wo => (
-                                        <tr key={wo.id} style={{borderBottom: '1px solid #efefef'}}>
-                                            <td style={{padding: '0.8rem'}}>#{wo.id}</td>
-                                            <td style={{padding: '0.8rem', color: 'var(--primary)', fontWeight: 'bold'}}>{wo.asset.name}</td>
-                                            <td style={{padding: '0.8rem'}}><strong>{wo.description}</strong></td>
+                                    {(activeWoPopup || []).map(wo => (
+                                        <tr key={wo?.id} style={{borderBottom: '1px solid #efefef'}}>
+                                            <td style={{padding: '0.8rem'}}>#{wo?.id}</td>
+                                            <td style={{padding: '0.8rem', color: 'var(--primary)', fontWeight: 'bold'}}>{wo?.asset?.name || 'Unknown Asset'}</td>
+                                            <td style={{padding: '0.8rem'}}><strong>{wo?.description}</strong></td>
                                             <td style={{padding: '0.8rem'}}>
                                                 <span style={{ padding: '0.2rem 0.5rem', background: '#ffebee', color: '#c62828', borderRadius: '4px', fontSize: '0.75rem', fontWeight:'bold' }}>
-                                                    {wo.status}
+                                                    {wo?.status}
                                                 </span>
                                             </td>
                                             <td style={{padding: '0.8rem'}}>{wo.vendor ? <span style={{color: '#2e7d32', fontWeight: 600}}>@{wo.vendor.username}</span> : '--'}</td>

@@ -7,6 +7,9 @@ import Properties from './pages/Properties';
 import Assets from './pages/Assets';
 import Users from './pages/Users';
 import WorkOrders from './pages/WorkOrders';
+import AssetTransfer from './pages/AssetTransfer';
+import Reports from './pages/Reports';
+import PropertyDetail from './pages/PropertyDetail';
 import Sidebar from './components/Sidebar';
 
 // Protected Route Component
@@ -61,6 +64,12 @@ function App() {
             </ProtectedRoute>
           } />
 
+          <Route path="/properties/:id" element={
+            <ProtectedRoute allowedRoles={['ADMIN', 'ENGINEER', 'TECHNICIAN']}>
+              <AppLayout><PropertyDetail /></AppLayout>
+            </ProtectedRoute>
+          } />
+
           <Route path="/assets" element={
             <ProtectedRoute allowedRoles={['ADMIN', 'ENGINEER', 'TECHNICIAN']}>
               <AppLayout><Assets /></AppLayout>
@@ -76,6 +85,18 @@ function App() {
           <Route path="/work-orders" element={
             <ProtectedRoute allowedRoles={['ADMIN', 'VENDOR']}>
               <AppLayout><WorkOrders /></AppLayout>
+            </ProtectedRoute>
+          } />
+
+          <Route path="/asset-transfer" element={
+            <ProtectedRoute allowedRoles={['ADMIN', 'ENGINEER']}>
+              <AppLayout><AssetTransfer /></AppLayout>
+            </ProtectedRoute>
+          } />
+
+          <Route path="/reports" element={
+            <ProtectedRoute allowedRoles={['ADMIN', 'ENGINEER']}>
+              <AppLayout><Reports /></AppLayout>
             </ProtectedRoute>
           } />
 

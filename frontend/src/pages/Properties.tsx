@@ -57,7 +57,8 @@ const Properties = () => {
     const fetchProperties = async () => {
         try {
             const { data } = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:8080'}/api/properties`);
-            setProperties(data.reverse());
+            const propData = Array.isArray(data) ? data : [];
+            setProperties([...propData].reverse());
         } catch (error) {
             console.error(error);
         }
@@ -138,7 +139,9 @@ const Properties = () => {
     const filteredProps = properties.filter(prop => {
         if (searchTerm) {
             const term = searchTerm.toLowerCase();
-            if (!prop.name.toLowerCase().includes(term) && (!prop.address || !prop.address.toLowerCase().includes(term))) {
+            const nameMatch = prop.name?.toLowerCase().includes(term);
+            const addressMatch = prop.address?.toLowerCase().includes(term);
+            if (!nameMatch && !addressMatch) {
                 return false;
             }
         }
@@ -233,14 +236,21 @@ const Properties = () => {
                             <button onClick={() => setViewingProperty(null)} style={{ background: 'none', border: 'none', cursor: 'pointer' }}><X size={24} /></button>
                         </div>
                         <div style={{ flex: 1, borderRadius: '8px', overflow: 'hidden' }}>
-                            <MapContainer
-                                center={[parseFloat(viewingProperty.locLat!), parseFloat(viewingProperty.locLon!)]}
-                                zoom={15}
-                                style={{ height: '100%', width: '100%' }}
-                            >
-                                <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" attribution="&copy; OpenStreetMap contributors" />
-                                <Marker position={[parseFloat(viewingProperty.locLat!), parseFloat(viewingProperty.locLon!)]} />
-                            </MapContainer>
+                            {(() => {
+                                const lat = parseFloat(viewingProperty.locLat || 'NaN');
+                                const lon = parseFloat(viewingProperty.locLon || 'NaN');
+                                if (isNaN(lat) || isNaN(lon)) return <div style={{ padding: '2rem', textAlign: 'center' }}>Invalid Coordinates</div>;
+                                return (
+                                    <MapContainer
+                                        center={[lat, lon]}
+                                        zoom={15}
+                                        style={{ height: '100%', width: '100%' }}
+                                    >
+                                        <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" attribution="&copy; OpenStreetMap contributors" />
+                                        <Marker position={[lat, lon]} />
+                                    </MapContainer>
+                                );
+                            })()}
                         </div>
                     </div>
                 </div>
