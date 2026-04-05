@@ -79,15 +79,17 @@ const WorkOrders = () => {
     const fetchData = async () => {
         try {
             const woRes = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:8080'}/api/work-orders`);
-            setWorkOrders(woRes.data.reverse()); // LIFO order
+            const woData = Array.isArray(woRes.data) ? woRes.data : [];
+            setWorkOrders([...woData].reverse()); // LIFO order
             
             if (isAdmin) {
                 const assetRes = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:8080'}/api/assets`);
-                setAssets(assetRes.data);
-                if (assetRes.data.length > 0) setAssetId(String(assetRes.data[0].id));
+                const assetData = Array.isArray(assetRes.data) ? assetRes.data : [];
+                setAssets(assetData);
+                if (assetData.length > 0) setAssetId(String(assetData[0].id));
             } else if (user?.id) {
                 const appsRes = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:8080'}/api/work-orders/my-applications?vendorId=${user.id}`);
-                const appliedIds = new Set<number>(appsRes.data.map((app: any) => app.workOrder?.id).filter(Boolean));
+                const appliedIds = new Set<number>((appsRes.data || []).map((app: any) => app.workOrder?.id).filter(Boolean));
                 setAppliedWoIds(appliedIds);
             }
         } catch (error) {
@@ -171,8 +173,13 @@ const WorkOrders = () => {
     };
 
     const openMap = (lat: string, lon: string, name: string) => {
-        if (!lat || !lon) return;
-        setMapParams({ lat: parseFloat(lat), lon: parseFloat(lon), title: name });
+        const pLat = parseFloat(lat);
+        const pLon = parseFloat(lon);
+        if (isNaN(pLat) || isNaN(pLon)) {
+            alert('This property does not have valid geographical coordinates mapped.');
+            return;
+        }
+        setMapParams({ lat: pLat, lon: pLon, title: name });
         setShowMapModal(true);
     };
 
@@ -190,7 +197,9 @@ const WorkOrders = () => {
 
         if (searchTerm) {
             const term = searchTerm.toLowerCase();
-            if (!wo.description.toLowerCase().includes(term) && !wo.asset.name.toLowerCase().includes(term)) {
+            const descMatch = wo.description?.toLowerCase().includes(term);
+            const assetMatch = wo.asset?.name?.toLowerCase().includes(term);
+            if (!descMatch && !assetMatch) {
                 return false;
             }
         }
@@ -306,8 +315,8 @@ const WorkOrders = () => {
                                 <td>
                                     {isAdmin && wo.asset?.property?.locLat ? (
                                         <button className="btn" style={{ padding: '0.2rem 0.5rem', fontSize:'0.8rem', display:'inline-flex', alignItems:'center', background:'transparent', color:'var(--primary)' }} 
-                                            onClick={() => openMap(wo.asset.property?.locLat || '', wo.asset.property?.locLon || '', wo.asset.name)}>
-                                            <MapPin size={14} style={{ marginRight:'4px' }} /> {wo.asset.name}
+                                            onClick={() => openMap(wo.asset.property?.locLat || '', wo.asset.property?.locLon || '', wo.asset?.name || 'Asset')}>
+                                            <MapPin size={14} style={{ marginRight:'4px' }} /> {wo.asset?.name || 'Asset'}
                                         </button>
                                     ) : (
                                         wo.asset?.name || 'Unknown'
@@ -322,7 +331,7 @@ const WorkOrders = () => {
                                         )}
                                     </td>
                                 )}
-                                <td>{wo.amount ? `৳${wo.amount.toFixed(2)}` : '--'}</td>
+                                <td>{wo.amount != null ? `৳${Number(wo.amount).toFixed(2)}` : '--'}</td>
                                 <td>
                                     {!isAdmin && ['PENDING', 'APPLIED'].includes(wo.status) && (
                                         appliedWoIds.has(wo.id) ? (

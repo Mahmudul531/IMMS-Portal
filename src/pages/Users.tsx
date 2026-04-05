@@ -31,7 +31,8 @@ const Users = () => {
     const fetchUsers = async () => {
         try {
             const { data } = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:8080'}/api/users`);
-            setUsers(data.reverse());
+            const userData = Array.isArray(data) ? data : [];
+            setUsers(userData.reverse());
         } catch (error) {
             console.error('Failed to fetch users', error);
         }

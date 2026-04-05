@@ -1,6 +1,6 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { LayoutDashboard, Building2, MapPin, Wrench, LogOut, Users, Briefcase } from 'lucide-react';
+import { LayoutDashboard, Building2, MapPin, Wrench, LogOut, Users, Briefcase, ArrowRightLeft, FileText } from 'lucide-react';
 
 const Sidebar = () => {
   const { user, logout } = useAuth();
@@ -40,6 +40,20 @@ const Sidebar = () => {
           <Link to="/work-orders" className={`nav-item ${isActive('/work-orders') ? 'active' : ''}`}>
             <Briefcase size={20} />
             Work Orders
+          </Link>
+        )}
+
+        {['ADMIN', 'ENGINEER'].includes(user.role) && (
+          <Link to="/asset-transfer" className={`nav-item ${isActive('/asset-transfer') ? 'active' : ''}`}>
+            <ArrowRightLeft size={20} />
+            Transfer Asset
+          </Link>
+        )}
+
+        {['ADMIN', 'ENGINEER'].includes(user.role) && (
+          <Link to="/reports" className={`nav-item ${isActive('/reports') ? 'active' : ''}`}>
+            <FileText size={20} />
+            Reports
           </Link>
         )}
 
