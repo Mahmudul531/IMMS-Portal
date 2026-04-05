@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Trash2, Edit2, Plus, Map as MapIcon, X } from 'lucide-react';
+import { Trash2, Edit2, Plus, Map as MapIcon, X, Image, ExternalLink } from 'lucide-react';
 import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
+import { useNavigate } from 'react-router-dom';
 
 // Fix leaflet icon issue in react-leaflet
 delete (L.Icon.Default.prototype as any)._getIconUrl;
@@ -12,6 +13,8 @@ L.Icon.Default.mergeOptions({
     iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
     shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
 });
+
+const API = import.meta.env.VITE_API_URL || 'http://localhost:8080';
 
 interface Property {
     id: number;
@@ -22,7 +25,11 @@ interface Property {
     createdAt?: string;
 }
 
-// Click listener component for picking map
+interface PropertyImage {
+    id: number;
+    imageData: string;
+}
+
 const MapSelector = ({ onSelectPosition }: { onSelectPosition: (lat: number, lng: number) => void }) => {
     useMapEvents({
         click(e) {
@@ -32,8 +39,45 @@ const MapSelector = ({ onSelectPosition }: { onSelectPosition: (lat: number, lng
     return null;
 };
 
+// Compress image to < 1MB using Canvas API and return base64
+const compressAndConvert = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const img = new window.Image();
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                let { width, height } = img;
+                const MAX_DIM = 1400;
+                if (width > MAX_DIM || height > MAX_DIM) {
+                    if (width > height) { height = Math.round(height * MAX_DIM / width); width = MAX_DIM; }
+                    else { width = Math.round(width * MAX_DIM / height); height = MAX_DIM; }
+                }
+                canvas.width = width;
+                canvas.height = height;
+                const ctx = canvas.getContext('2d')!;
+                ctx.drawImage(img, 0, 0, width, height);
+                let quality = 0.85;
+                let dataUrl = canvas.toDataURL('image/jpeg', quality);
+                // If still > 1MB approx (base64 ~1.37x raw) iterate down
+                while (dataUrl.length > 1_300_000 && quality > 0.2) {
+                    quality -= 0.1;
+                    dataUrl = canvas.toDataURL('image/jpeg', quality);
+                }
+                resolve(dataUrl);
+            };
+            img.onerror = reject;
+            img.src = e.target!.result as string;
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+    });
+};
+
 const Properties = () => {
+    const navigate = useNavigate();
     const [properties, setProperties] = useState<Property[]>([]);
+    const [propertyImages, setPropertyImages] = useState<Record<number, PropertyImage[]>>({});
 
     // Search & Pagination
     const [searchTerm, setSearchTerm] = useState('');
@@ -47,16 +91,20 @@ const Properties = () => {
     const [latitude, setLatitude] = useState('');
     const [longitude, setLongitude] = useState('');
     const [editingId, setEditingId] = useState<number | null>(null);
+    const [pendingImages, setPendingImages] = useState<string[]>([]);
+    const [uploading, setUploading] = useState(false);
 
     // Map Modals
     const [showPickerMap, setShowPickerMap] = useState(false);
     const [markerPos, setMarkerPos] = useState<[number, number] | null>(null);
-
     const [viewingProperty, setViewingProperty] = useState<Property | null>(null);
+
+    // Lightbox
+    const [lightboxSrc, setLightboxSrc] = useState<string | null>(null);
 
     const fetchProperties = async () => {
         try {
-            const { data } = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:8080'}/api/properties`);
+            const { data } = await axios.get(`${API}/api/properties`);
             const propData = Array.isArray(data) ? data : [];
             setProperties([...propData].reverse());
         } catch (error) {
@@ -68,6 +116,13 @@ const Properties = () => {
         fetchProperties();
     }, []);
 
+    const fetchImagesForProperty = async (propId: number) => {
+        try {
+            const { data } = await axios.get(`${API}/api/properties/${propId}/images`);
+            setPropertyImages(prev => ({ ...prev, [propId]: data }));
+        } catch (_) { /* ignore */ }
+    };
+
     const resetForm = () => {
         setName('');
         setAddress('');
@@ -75,27 +130,50 @@ const Properties = () => {
         setLongitude('');
         setEditingId(null);
         setMarkerPos(null);
+        setPendingImages([]);
+    };
+
+    const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const files = Array.from(e.target.files || []);
+        const converted = await Promise.all(files.map(compressAndConvert));
+        setPendingImages(prev => [...prev, ...converted]);
+        e.target.value = '';
+    };
+
+    const removePending = (idx: number) => {
+        setPendingImages(prev => prev.filter((_, i) => i !== idx));
+    };
+
+    const uploadPendingImages = async (propId: number) => {
+        for (const imgData of pendingImages) {
+            await axios.post(`${API}/api/properties/${propId}/images`, { imageData: imgData });
+        }
+        setPendingImages([]);
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        const payload = {
-            name,
-            address,
-            locLat: latitude,
-            locLon: longitude
-        };
-
+        setUploading(true);
+        const payload = { name, address, locLat: latitude, locLon: longitude };
         try {
+            let savedId: number;
             if (editingId) {
-                await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:8080'}/api/properties/${editingId}`, payload);
+                await axios.put(`${API}/api/properties/${editingId}`, payload);
+                savedId = editingId;
             } else {
-                await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:8080'}/api/properties`, payload);
+                const { data } = await axios.post(`${API}/api/properties`, payload);
+                savedId = data.id;
             }
-            fetchProperties();
+            if (pendingImages.length > 0) {
+                await uploadPendingImages(savedId);
+            }
+            await fetchProperties();
+            await fetchImagesForProperty(savedId);
             resetForm();
         } catch (error) {
             console.error(error);
+        } finally {
+            setUploading(false);
         }
     };
 
@@ -110,16 +188,23 @@ const Properties = () => {
         } else {
             setMarkerPos(null);
         }
+        fetchImagesForProperty(prop.id);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
     const handleDelete = async (id: number) => {
         if (!confirm('Are you sure you want to delete this property?')) return;
         try {
-            await axios.delete(`${import.meta.env.VITE_API_URL || 'http://localhost:8080'}/api/properties/${id}`);
+            await axios.delete(`${API}/api/properties/${id}`);
             fetchProperties();
         } catch (error) {
             console.error(error);
         }
+    };
+
+    const handleDeleteImage = async (propId: number, imageId: number) => {
+        await axios.delete(`${API}/api/properties/${propId}/images/${imageId}`);
+        fetchImagesForProperty(propId);
     };
 
     const handleMapClick = (lat: number, lng: number) => {
@@ -139,22 +224,25 @@ const Properties = () => {
     const filteredProps = properties.filter(prop => {
         if (searchTerm) {
             const term = searchTerm.toLowerCase();
-            const nameMatch = prop.name?.toLowerCase().includes(term);
-            const addressMatch = prop.address?.toLowerCase().includes(term);
-            if (!nameMatch && !addressMatch) {
-                return false;
-            }
+            if (!prop.name?.toLowerCase().includes(term) && !prop.address?.toLowerCase().includes(term)) return false;
         }
         if (dateFrom) {
-            if (!prop.createdAt || new Date(prop.createdAt) < new Date(dateFrom)) {
-                return false;
-            }
+            if (!prop.createdAt || new Date(prop.createdAt) < new Date(dateFrom)) return false;
         }
         return true;
     });
 
     const totalPages = Math.ceil(filteredProps.length / ITEMS_PER_PAGE);
     const paginatedProps = filteredProps.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE);
+
+    // Load images for visible properties
+    useEffect(() => {
+        paginatedProps.forEach(p => {
+            if (!propertyImages[p.id]) fetchImagesForProperty(p.id);
+        });
+    }, [paginatedProps.map(p => p.id).join(',')]);
+
+    const existingImages = editingId ? (propertyImages[editingId] || []) : [];
 
     return (
         <div>
@@ -189,9 +277,58 @@ const Properties = () => {
                             </button>
                         </div>
                     </div>
+
+                    {/* Image Upload Section */}
+                    <div className="form-group" style={{ gridColumn: '1 / -1' }}>
+                        <label className="form-label" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                            <Image size={16} /> Photos (compressed to &lt;1MB each)
+                        </label>
+                        <input
+                            className="form-input"
+                            type="file"
+                            accept="image/*"
+                            multiple
+                            onChange={handleFileSelect}
+                            style={{ padding: '0.4rem' }}
+                        />
+                        {/* Pending new images preview */}
+                        {pendingImages.length > 0 && (
+                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginTop: '8px' }}>
+                                {pendingImages.map((src, idx) => (
+                                    <div key={idx} style={{ position: 'relative' }}>
+                                        <img src={src} alt="" style={{ width: 80, height: 80, objectFit: 'cover', borderRadius: 6, border: '2px solid var(--primary)' }} />
+                                        <button
+                                            type="button"
+                                            onClick={() => removePending(idx)}
+                                            style={{ position: 'absolute', top: -6, right: -6, background: 'var(--danger)', color: 'white', border: 'none', borderRadius: '50%', width: 20, height: 20, cursor: 'pointer', fontSize: 12, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                                        ><X size={12} /></button>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                        {/* Existing images (edit mode) */}
+                        {editingId && existingImages.length > 0 && (
+                            <div style={{ marginTop: '10px' }}>
+                                <small style={{ color: 'var(--text-muted)' }}>Already uploaded:</small>
+                                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginTop: '6px' }}>
+                                    {existingImages.map(img => (
+                                        <div key={img.id} style={{ position: 'relative' }}>
+                                            <img src={img.imageData} alt="" style={{ width: 80, height: 80, objectFit: 'cover', borderRadius: 6, border: '2px solid var(--border)', cursor: 'pointer' }} onClick={() => setLightboxSrc(img.imageData)} />
+                                            <button
+                                                type="button"
+                                                onClick={() => handleDeleteImage(editingId, img.id)}
+                                                style={{ position: 'absolute', top: -6, right: -6, background: 'var(--danger)', color: 'white', border: 'none', borderRadius: '50%', width: 20, height: 20, cursor: 'pointer', fontSize: 12, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                                            ><X size={12} /></button>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+                    </div>
+
                     <div style={{ gridColumn: '1 / -1', display: 'flex', gap: '1rem' }}>
-                        <button type="submit" className="btn btn-primary" style={{ width: 'auto' }}>
-                            {editingId ? 'Update Property' : 'Save Property'}
+                        <button type="submit" className="btn btn-primary" style={{ width: 'auto' }} disabled={uploading}>
+                            {uploading ? 'Saving...' : (editingId ? 'Update Property' : 'Save Property')}
                         </button>
                         {editingId && (
                             <button type="button" className="btn" onClick={resetForm} style={{ width: 'auto', background: 'var(--border)' }}>
@@ -227,7 +364,7 @@ const Properties = () => {
                 </div>
             )}
 
-            {/* Modal for Viewing existing property Address logic */}
+            {/* Modal for Viewing existing property on map */}
             {viewingProperty && (
                 <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', background: 'rgba(0,0,0,0.5)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <div style={{ background: 'white', padding: '1rem', borderRadius: '8px', width: '80%', maxWidth: '800px', height: '600px', display: 'flex', flexDirection: 'column' }}>
@@ -241,11 +378,7 @@ const Properties = () => {
                                 const lon = parseFloat(viewingProperty.locLon || 'NaN');
                                 if (isNaN(lat) || isNaN(lon)) return <div style={{ padding: '2rem', textAlign: 'center' }}>Invalid Coordinates</div>;
                                 return (
-                                    <MapContainer
-                                        center={[lat, lon]}
-                                        zoom={15}
-                                        style={{ height: '100%', width: '100%' }}
-                                    >
+                                    <MapContainer center={[lat, lon]} zoom={15} style={{ height: '100%', width: '100%' }}>
                                         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" attribution="&copy; OpenStreetMap contributors" />
                                         <Marker position={[lat, lon]} />
                                     </MapContainer>
@@ -253,6 +386,16 @@ const Properties = () => {
                             })()}
                         </div>
                     </div>
+                </div>
+            )}
+
+            {/* Lightbox */}
+            {lightboxSrc && (
+                <div
+                    onClick={() => setLightboxSrc(null)}
+                    style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', background: 'rgba(0,0,0,0.9)', zIndex: 2000, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'zoom-out' }}
+                >
+                    <img src={lightboxSrc} alt="Full view" style={{ maxWidth: '90vw', maxHeight: '90vh', objectFit: 'contain', borderRadius: 8 }} />
                 </div>
             )}
 
@@ -288,6 +431,7 @@ const Properties = () => {
                             <tr>
                                 <th>ID</th>
                                 <th>Name</th>
+                                <th>Images</th>
                                 <th>Address & Location</th>
                                 <th>Actions</th>
                             </tr>
@@ -296,7 +440,37 @@ const Properties = () => {
                             {paginatedProps.map(prop => (
                                 <tr key={prop.id}>
                                     <td>{prop.id}</td>
-                                    <td><strong>{prop.name}</strong></td>
+                                    <td>
+                                        <span
+                                            onClick={() => navigate(`/properties/${prop.id}`)}
+                                            style={{ color: 'var(--primary)', fontWeight: 700, cursor: 'pointer', textDecoration: 'underline', display: 'flex', alignItems: 'center', gap: '4px' }}
+                                            title="View property detail"
+                                        >
+                                            <ExternalLink size={14} />
+                                            {prop.name}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap' }}>
+                                            {(propertyImages[prop.id] || []).slice(0, 3).map(img => (
+                                                <img
+                                                    key={img.id}
+                                                    src={img.imageData}
+                                                    alt=""
+                                                    onClick={() => setLightboxSrc(img.imageData)}
+                                                    style={{ width: 40, height: 40, objectFit: 'cover', borderRadius: 4, cursor: 'pointer', border: '1px solid var(--border)' }}
+                                                />
+                                            ))}
+                                            {(propertyImages[prop.id] || []).length > 3 && (
+                                                <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', alignItems: 'center', display: 'flex' }}>
+                                                    +{(propertyImages[prop.id] || []).length - 3} more
+                                                </span>
+                                            )}
+                                            {(propertyImages[prop.id] || []).length === 0 && (
+                                                <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>No photos</span>
+                                            )}
+                                        </div>
+                                    </td>
                                     <td>
                                         {prop.locLat && prop.locLon ? (
                                             <span
@@ -317,7 +491,7 @@ const Properties = () => {
                                 </tr>
                             ))}
                             {filteredProps.length === 0 && (
-                                <tr><td colSpan={4} style={{ textAlign: 'center', color: 'var(--text-muted)' }}>No properties match searches.</td></tr>
+                                <tr><td colSpan={5} style={{ textAlign: 'center', color: 'var(--text-muted)' }}>No properties match searches.</td></tr>
                             )}
                         </tbody>
                     </table>
