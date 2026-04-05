@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
-import { ArrowRightLeft, Search, Building2, Package } from 'lucide-react';
+import { ArrowRightLeft, Building2, Package } from 'lucide-react';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
 
 const AssetTransfer = () => {
-  const { user } = useAuth();
+  const { user: _user } = useAuth();
   const [assets, setAssets] = useState<any[]>([]);
   const [properties, setProperties] = useState<any[]>([]);
   const [selectedAssetId, setSelectedAssetId] = useState('');
