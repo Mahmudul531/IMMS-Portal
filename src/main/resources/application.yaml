@@ -2,7 +2,7 @@ spring:
   application:
     name: imms-backend
   profiles:
-    active: dev # Change this to 'prod' when you are ready to switch to Supabase
+    active: prod # Change this to 'prod' when you are ready to switch to Supabase
 
 server:
   port: ${PORT:8080}
