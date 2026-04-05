@@ -17,7 +17,7 @@ public class AssetImage {
     @Column(name = "asset_id", nullable = false)
     private Long assetId;
 
-    @Lob
     @Column(columnDefinition = "TEXT", nullable = false)
     private String imageData;
 }
+

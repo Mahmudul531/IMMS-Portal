@@ -17,7 +17,7 @@ public class PropertyImage {
     @Column(name = "property_id", nullable = false)
     private Long propertyId;
 
-    @Lob
     @Column(columnDefinition = "TEXT", nullable = false)
     private String imageData;
 }
+

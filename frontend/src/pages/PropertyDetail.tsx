@@ -30,10 +30,9 @@ interface WorkOrder {
 
 interface ImageRecord {
   id: number;
-  imageData: string;
+  imageData: string; // URL like /uploads/properties/prop_1_xxx.jpg
 }
 
-// Simple image gallery / carousel strip with lightbox
 const ImageGallery = ({ images }: { images: ImageRecord[] }) => {
   const [lightbox, setLightbox] = useState<number | null>(null);
 
@@ -49,52 +48,27 @@ const ImageGallery = ({ images }: { images: ImageRecord[] }) => {
 
   return (
     <>
-      {/* Thumbnail strip */}
       <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
         {images.map((img, idx) => (
           <img
             key={img.id}
-            src={img.imageData}
+            src={`${API}${img.imageData}`}
             alt={`photo-${idx + 1}`}
             onClick={() => setLightbox(idx)}
-            style={{
-              width: 100,
-              height: 100,
-              objectFit: 'cover',
-              borderRadius: 8,
-              cursor: 'pointer',
-              border: '2px solid var(--border)',
-              transition: 'transform 0.15s, border-color 0.15s',
-              boxShadow: '0 2px 4px rgba(0,0,0,0.08)'
-            }}
-            onMouseEnter={e => { (e.target as HTMLImageElement).style.transform = 'scale(1.04)'; (e.target as HTMLImageElement).style.borderColor = 'var(--primary)'; }}
+            style={{ width: 100, height: 100, objectFit: 'cover', borderRadius: 8, cursor: 'pointer', border: '2px solid var(--border)', transition: 'transform 0.15s, border-color 0.15s', boxShadow: '0 2px 4px rgba(0,0,0,0.08)' }}
+            onMouseEnter={e => { (e.target as HTMLImageElement).style.transform = 'scale(1.05)'; (e.target as HTMLImageElement).style.borderColor = 'var(--primary)'; }}
             onMouseLeave={e => { (e.target as HTMLImageElement).style.transform = 'scale(1)'; (e.target as HTMLImageElement).style.borderColor = 'var(--border)'; }}
           />
         ))}
       </div>
 
-      {/* Lightbox */}
       {lightbox !== null && (
-        <div
-          style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', background: 'rgba(0,0,0,0.92)', zIndex: 3000, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-          onClick={() => setLightbox(null)}
-        >
-          <button
-            onClick={e => { e.stopPropagation(); prev(); }}
-            style={{ position: 'absolute', left: 20, background: 'rgba(255,255,255,0.15)', border: 'none', borderRadius: '50%', width: 48, height: 48, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white' }}
-          >
+        <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', background: 'rgba(0,0,0,0.92)', zIndex: 3000, display: 'flex', alignItems: 'center', justifyContent: 'center' }} onClick={() => setLightbox(null)}>
+          <button onClick={e => { e.stopPropagation(); prev(); }} style={{ position: 'absolute', left: 20, background: 'rgba(255,255,255,0.15)', border: 'none', borderRadius: '50%', width: 48, height: 48, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white' }}>
             <ChevronLeft size={28} />
           </button>
-          <img
-            src={images[lightbox].imageData}
-            alt=""
-            onClick={e => e.stopPropagation()}
-            style={{ maxWidth: '85vw', maxHeight: '88vh', objectFit: 'contain', borderRadius: 8, boxShadow: '0 8px 40px rgba(0,0,0,0.6)' }}
-          />
-          <button
-            onClick={e => { e.stopPropagation(); next(); }}
-            style={{ position: 'absolute', right: 20, background: 'rgba(255,255,255,0.15)', border: 'none', borderRadius: '50%', width: 48, height: 48, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white' }}
-          >
+          <img src={`${API}${images[lightbox].imageData}`} alt="" onClick={e => e.stopPropagation()} style={{ maxWidth: '85vw', maxHeight: '88vh', objectFit: 'contain', borderRadius: 8, boxShadow: '0 8px 40px rgba(0,0,0,0.6)' }} />
+          <button onClick={e => { e.stopPropagation(); next(); }} style={{ position: 'absolute', right: 20, background: 'rgba(255,255,255,0.15)', border: 'none', borderRadius: '50%', width: 48, height: 48, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white' }}>
             <ChevronRight size={28} />
           </button>
           <div style={{ position: 'absolute', bottom: 20, color: 'rgba(255,255,255,0.6)', fontSize: '0.9rem' }}>
@@ -126,18 +100,14 @@ const PropertyDetail = () => {
         ]);
 
         const currentProp = propsRes.data.find((p: any) => p.id === parseInt(id!));
-        if (!currentProp) {
-          navigate('/dashboard');
-          return;
-        }
+        if (!currentProp) { navigate('/dashboard'); return; }
         setProperty(currentProp);
 
         const propAssets = (assetsRes.data || []).filter((a: any) => a.property?.id === currentProp.id);
         setAssets(propAssets);
 
         const assetIds = propAssets.map((a: any) => a.id);
-        const propWOs = (woRes.data || []).filter((wo: any) => wo.asset && assetIds.includes(wo.asset.id));
-        setWorkOrders(propWOs);
+        setWorkOrders((woRes.data || []).filter((wo: any) => wo.asset && assetIds.includes(wo.asset.id)));
 
         // Load property images
         const imgRes = await axios.get(`${API}/api/properties/${currentProp.id}/images`);
@@ -145,10 +115,14 @@ const PropertyDetail = () => {
 
         // Load images for each asset in parallel
         const assetImgResults = await Promise.all(
-          propAssets.map((a: any) => axios.get(`${API}/api/assets/${a.id}/images`).then(r => ({ id: a.id, images: r.data })))
+          propAssets.map((a: any) =>
+            axios.get(`${API}/api/assets/${a.id}/images`)
+              .then(r => ({ id: a.id, images: Array.isArray(r.data) ? r.data : [] }))
+              .catch(() => ({ id: a.id, images: [] }))
+          )
         );
         const imgMap: Record<number, ImageRecord[]> = {};
-        assetImgResults.forEach(r => { imgMap[r.id] = Array.isArray(r.images) ? r.images : []; });
+        assetImgResults.forEach(r => { imgMap[r.id] = r.images; });
         setAssetImages(imgMap);
 
       } catch (error) {
@@ -160,13 +134,11 @@ const PropertyDetail = () => {
     fetchData();
   }, [id, navigate]);
 
-  if (loading) {
-    return (
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '400px' }}>
-        <Loader2 style={{ animation: 'spin 1s linear infinite' }} size={48} />
-      </div>
-    );
-  }
+  if (loading) return (
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '400px' }}>
+      <Loader2 style={{ animation: 'spin 1s linear infinite' }} size={48} />
+    </div>
+  );
 
   if (!property) return null;
 
@@ -178,15 +150,14 @@ const PropertyDetail = () => {
         </button>
       </div>
 
-      {/* ── Property Header ── */}
+      {/* Property Header Card */}
       <div className="card" style={{ marginBottom: '1.5rem' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: '1rem' }}>
           <Building2 size={30} color="var(--primary)" />
           <h1 style={{ margin: 0, fontSize: '1.6rem' }}>{property.name}</h1>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8, color: 'var(--text-muted)', marginBottom: '1rem' }}>
-          <MapPin size={16} />
-          <span>{property.address}</span>
+          <MapPin size={16} /><span>{property.address}</span>
         </div>
         <div style={{ display: 'flex', gap: '2rem' }}>
           <div style={{ textAlign: 'center' }}>
@@ -204,7 +175,7 @@ const PropertyDetail = () => {
         </div>
       </div>
 
-      {/* ── Property Photos ── */}
+      {/* Property Photos Gallery */}
       <div className="card" style={{ marginBottom: '1.5rem' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
           <Image size={20} color="var(--primary)" />
@@ -214,7 +185,7 @@ const PropertyDetail = () => {
         <ImageGallery images={propertyImages} />
       </div>
 
-      {/* ── Linked Assets ── */}
+      {/* Linked Assets with per-asset images */}
       <div className="card" style={{ marginBottom: '1.5rem' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
           <Inbox size={20} color="var(--primary)" />
@@ -228,7 +199,7 @@ const PropertyDetail = () => {
               <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>
                 <Package size={18} color="var(--success)" />
                 <strong>#{asset.id} — {asset.name}</strong>
-                <span className="badge badge-info" style={{ marginLeft: 4 }}>{asset.type}</span>
+                <span style={{ background: 'rgba(0,180,100,0.1)', color: 'var(--success)', borderRadius: 6, padding: '1px 8px', fontSize: '0.8rem' }}>{asset.type}</span>
               </div>
               <ImageGallery images={assetImages[asset.id] || []} />
             </div>
@@ -236,20 +207,16 @@ const PropertyDetail = () => {
         )}
       </div>
 
-      {/* ── Work Orders ── */}
+      {/* Work Orders */}
       <div className="card">
         <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
           <Briefcase size={20} color="var(--warning)" />
           <h2 style={{ margin: 0, fontSize: '1.1rem' }}>Current Maintenance Work Orders</h2>
         </div>
-        <table className="data-table">
+        <table>
           <thead>
             <tr>
-              <th>Duty ID</th>
-              <th>Asset</th>
-              <th>Description</th>
-              <th>Status</th>
-              <th>Vendor</th>
+              <th>Duty ID</th><th>Asset</th><th>Description</th><th>Status</th><th>Vendor</th>
             </tr>
           </thead>
           <tbody>
@@ -259,7 +226,7 @@ const PropertyDetail = () => {
                 <td style={{ fontWeight: 600 }}>{wo.asset?.name || 'Unknown Asset'}</td>
                 <td>{wo.description}</td>
                 <td>
-                  <span className={`badge ${wo.status === 'ASSIGNED' ? 'badge-success' : 'badge-warning'}`}>
+                  <span style={{ background: wo.status === 'ASSIGNED' ? 'rgba(0,180,100,0.1)' : 'rgba(255,180,0,0.1)', color: wo.status === 'ASSIGNED' ? 'var(--success)' : 'var(--warning)', borderRadius: 6, padding: '2px 8px', fontSize: '0.8rem' }}>
                     {wo.status}
                   </span>
                 </td>
@@ -267,11 +234,7 @@ const PropertyDetail = () => {
               </tr>
             ))}
             {workOrders.length === 0 && (
-              <tr>
-                <td colSpan={5} style={{ textAlign: 'center', padding: '2rem', color: 'var(--text-muted)' }}>
-                  No active maintenance work orders.
-                </td>
-              </tr>
+              <tr><td colSpan={5} style={{ textAlign: 'center', padding: '2rem', color: 'var(--text-muted)' }}>No active maintenance work orders.</td></tr>
             )}
           </tbody>
         </table>
