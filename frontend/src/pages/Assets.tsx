@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { Trash2, Edit2, Plus, X, Image } from 'lucide-react';
+import { Trash2, Edit2, Plus, X, Image, History, ExternalLink } from 'lucide-react';
 
 const API = import.meta.env.VITE_API_URL || 'http://localhost:8080';
 
@@ -40,6 +41,7 @@ const compressFile = (file: File): Promise<File> => {
 };
 
 const Assets = () => {
+    const navigate = useNavigate();
     const [assets, setAssets] = useState<Asset[]>([]);
     const [properties, setProperties] = useState<Property[]>([]);
     const [assetImages, setAssetImages] = useState<Record<number, AssetImage[]>>({});
@@ -205,7 +207,7 @@ const Assets = () => {
                                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginTop: '6px' }}>
                                     {existingImages.map(img => (
                                         <div key={img.id} style={{ position: 'relative' }}>
-                                            <img src={`${API}${img.imageData}`} alt="" style={{ width: 80, height: 80, objectFit: 'cover', borderRadius: 6, border: '2px solid var(--border)', cursor: 'pointer' }} onClick={() => setLightboxSrc(`${API}${img.imageData}`)} />
+                                            <img src={`${img.imageData}`} alt="" style={{ width: 80, height: 80, objectFit: 'cover', borderRadius: 6, border: '2px solid var(--border)', cursor: 'pointer' }} onClick={() => setLightboxSrc(`${img.imageData}`)} />
                                             <button type="button" onClick={() => handleDeleteImage(editingId, img.id)} style={{ position: 'absolute', top: -6, right: -6, background: 'var(--danger)', color: 'white', border: 'none', borderRadius: '50%', width: 20, height: 20, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><X size={12} /></button>
                                         </div>
                                     ))}
@@ -255,22 +257,30 @@ const Assets = () => {
                             {paginatedAssets.map(asset => (
                                 <tr key={asset.id}>
                                     <td>{asset.id}</td>
-                                    <td>{asset.name}</td>
+                                    <td>
+                                        <span
+                                            onClick={() => navigate(`/assets/${asset.id}`)}
+                                            style={{ color: 'var(--primary)', fontWeight: 700, cursor: 'pointer', textDecoration: 'underline', display: 'flex', alignItems: 'center', gap: 4 }}
+                                            title="View asset detail">
+                                            <ExternalLink size={13} />{asset.name}
+                                        </span>
+                                    </td>
                                     <td>{asset.type}</td>
                                     <td>{asset.property?.name || 'N/A'}</td>
                                     <td>
                                         <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap' }}>
                                             {(assetImages[asset.id] || []).slice(0, 3).map(img => (
-                                                <img key={img.id} src={`${API}${img.imageData}`} alt="" onClick={() => setLightboxSrc(`${API}${img.imageData}`)}
+                                                <img key={img.id} src={`${img.imageData}`} alt="" onClick={() => setLightboxSrc(`${img.imageData}`)}
                                                     style={{ width: 40, height: 40, objectFit: 'cover', borderRadius: 4, cursor: 'pointer', border: '1px solid var(--border)' }} />
                                             ))}
                                             {(assetImages[asset.id] || []).length > 3 && <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', display: 'flex', alignItems: 'center' }}>+{(assetImages[asset.id] || []).length - 3}</span>}
                                             {(assetImages[asset.id] || []).length === 0 && <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>—</span>}
                                         </div>
                                     </td>
-                                    <td style={{ display: 'flex', gap: '0.5rem' }}>
-                                        <button className="action-btn" onClick={() => handleEdit(asset)}><Edit2 size={18} /></button>
-                                        <button className="action-btn" style={{ color: 'var(--danger)' }} onClick={() => handleDelete(asset.id)}><Trash2 size={18} /></button>
+                                    <td style={{ display: 'flex', gap: '0.4rem' }}>
+                                        <button className="action-btn" title="Edit" onClick={() => handleEdit(asset)}><Edit2 size={18} /></button>
+                                        <button className="action-btn" title="View History" onClick={() => navigate(`/assets/${asset.id}`)} style={{ color: 'var(--warning)' }}><History size={18} /></button>
+                                        <button className="action-btn" title="Delete" style={{ color: 'var(--danger)' }} onClick={() => handleDelete(asset.id)}><Trash2 size={18} /></button>
                                     </td>
                                 </tr>
                             ))}

@@ -7,6 +7,12 @@ spring:
 server:
   port: ${PORT:8080}
 
+# Cloudinary - shared across all profiles (same account for dev & prod)
+cloudinary:
+  cloud-name: di6r3oggs
+  api-key: "624134459765584"
+  api-secret: Um6QoySn8er6aK5vm_0gWv5XB3I
+
 # --- DEVELOPMENT CONFIGURATION ---
 ---
 spring:
@@ -25,9 +31,6 @@ spring:
     multipart:
       max-file-size: 10MB
       max-request-size: 10MB
-
-app:
-  upload-dir: ./uploads
 
 # --- PRODUCTION CONFIGURATION (SUPABASE) ---
 ---
@@ -52,6 +55,3 @@ spring:
     multipart:
       max-file-size: 10MB
       max-request-size: 10MB
-
-app:
-  upload-dir: /var/imms/uploads

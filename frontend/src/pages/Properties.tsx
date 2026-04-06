@@ -277,7 +277,7 @@ const Properties = () => {
                                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginTop: '6px' }}>
                                     {existingImages.map(img => (
                                         <div key={img.id} style={{ position: 'relative' }}>
-                                            <img src={`${API}${img.imageData}`} alt="" style={{ width: 80, height: 80, objectFit: 'cover', borderRadius: 6, border: '2px solid var(--border)', cursor: 'pointer' }} onClick={() => setLightboxSrc(`${API}${img.imageData}`)} />
+                                            <img src={`${img.imageData}`} alt="" style={{ width: 80, height: 80, objectFit: 'cover', borderRadius: 6, border: '2px solid var(--border)', cursor: 'pointer' }} onClick={() => setLightboxSrc(`${img.imageData}`)} />
                                             <button type="button" onClick={() => handleDeleteImage(editingId, img.id)} style={{ position: 'absolute', top: -6, right: -6, background: 'var(--danger)', color: 'white', border: 'none', borderRadius: '50%', width: 20, height: 20, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><X size={12} /></button>
                                         </div>
                                     ))}
@@ -392,8 +392,8 @@ const Properties = () => {
                                     <td>
                                         <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap' }}>
                                             {(propertyImages[prop.id] || []).slice(0, 3).map(img => (
-                                                <img key={img.id} src={`${API}${img.imageData}`} alt=""
-                                                    onClick={() => setLightboxSrc(`${API}${img.imageData}`)}
+                                                <img key={img.id} src={`${img.imageData}`} alt=""
+                                                    onClick={() => setLightboxSrc(`${img.imageData}`)}
                                                     style={{ width: 40, height: 40, objectFit: 'cover', borderRadius: 4, cursor: 'pointer', border: '1px solid var(--border)' }} />
                                             ))}
                                             {(propertyImages[prop.id] || []).length > 3 && (

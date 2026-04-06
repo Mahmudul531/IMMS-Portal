@@ -52,7 +52,7 @@ const ImageGallery = ({ images }: { images: ImageRecord[] }) => {
         {images.map((img, idx) => (
           <img
             key={img.id}
-            src={`${API}${img.imageData}`}
+            src={`${img.imageData}`}
             alt={`photo-${idx + 1}`}
             onClick={() => setLightbox(idx)}
             style={{ width: 100, height: 100, objectFit: 'cover', borderRadius: 8, cursor: 'pointer', border: '2px solid var(--border)', transition: 'transform 0.15s, border-color 0.15s', boxShadow: '0 2px 4px rgba(0,0,0,0.08)' }}
@@ -67,7 +67,7 @@ const ImageGallery = ({ images }: { images: ImageRecord[] }) => {
           <button onClick={e => { e.stopPropagation(); prev(); }} style={{ position: 'absolute', left: 20, background: 'rgba(255,255,255,0.15)', border: 'none', borderRadius: '50%', width: 48, height: 48, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white' }}>
             <ChevronLeft size={28} />
           </button>
-          <img src={`${API}${images[lightbox].imageData}`} alt="" onClick={e => e.stopPropagation()} style={{ maxWidth: '85vw', maxHeight: '88vh', objectFit: 'contain', borderRadius: 8, boxShadow: '0 8px 40px rgba(0,0,0,0.6)' }} />
+          <img src={`${images[lightbox].imageData}`} alt="" onClick={e => e.stopPropagation()} style={{ maxWidth: '85vw', maxHeight: '88vh', objectFit: 'contain', borderRadius: 8, boxShadow: '0 8px 40px rgba(0,0,0,0.6)' }} />
           <button onClick={e => { e.stopPropagation(); next(); }} style={{ position: 'absolute', right: 20, background: 'rgba(255,255,255,0.15)', border: 'none', borderRadius: '50%', width: 48, height: 48, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white' }}>
             <ChevronRight size={28} />
           </button>
