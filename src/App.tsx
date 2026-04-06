@@ -10,6 +10,7 @@ import WorkOrders from './pages/WorkOrders';
 import AssetTransfer from './pages/AssetTransfer';
 import Reports from './pages/Reports';
 import PropertyDetail from './pages/PropertyDetail';
+import AssetDetail from './pages/AssetDetail';
 import Sidebar from './components/Sidebar';
 
 // Protected Route Component
@@ -73,6 +74,12 @@ function App() {
           <Route path="/assets" element={
             <ProtectedRoute allowedRoles={['ADMIN', 'ENGINEER', 'TECHNICIAN']}>
               <AppLayout><Assets /></AppLayout>
+            </ProtectedRoute>
+          } />
+
+          <Route path="/assets/:id" element={
+            <ProtectedRoute allowedRoles={['ADMIN', 'ENGINEER', 'TECHNICIAN']}>
+              <AppLayout><AssetDetail /></AppLayout>
             </ProtectedRoute>
           } />
 
