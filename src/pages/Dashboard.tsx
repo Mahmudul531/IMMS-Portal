@@ -1,11 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, Tooltip } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
-import { Building2, MapPin } from 'lucide-react';
+import { Building2, MapPin, Eye, EyeOff } from 'lucide-react';
 import WorkOrders from './WorkOrders';
 
 // Fix leaflet icon issue in react-leaflet
@@ -14,6 +14,17 @@ L.Icon.Default.mergeOptions({
   iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
   iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
   shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+});
+
+// Create a labeled marker icon with property name
+const createLabelIcon = (name: string) => L.divIcon({
+    className: 'property-label-marker',
+    html: `<div class="property-label-pin">
+              <div class="property-label-dot"></div>
+              <div class="property-label-tag">${name}</div>
+           </div>`,
+    iconSize: [0, 0],
+    iconAnchor: [0, 24],
 });
 
 interface Property {
@@ -36,6 +47,7 @@ const Dashboard = () => {
     const navigate = useNavigate();
     const [properties, setProperties] = useState<Property[]>([]);
     const [assets, setAssets] = useState<Asset[]>([]);
+    const [showLabels, setShowLabels] = useState(true);
 
     useEffect(() => {
         const fetchDashboardData = async () => {
@@ -59,6 +71,13 @@ const Dashboard = () => {
         const lon = parseFloat(p.locLon || '');
         return !isNaN(lat) && !isNaN(lon);
     });
+
+    // Memoize label icons so they don't get recreated every render
+    const labelIcons = useMemo(() => {
+        const map: Record<number, L.DivIcon> = {};
+        mappableProperties.forEach(p => { map[p.id] = createLabelIcon(p.name); });
+        return map;
+    }, [mappableProperties]);
 
     return (
         <div>
@@ -87,8 +106,24 @@ const Dashboard = () => {
 
             {user?.role !== 'VENDOR' && (
                 <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
-                    <div style={{ padding: '1rem 1.5rem', borderBottom: '1px solid var(--border)', background: '#f8fafc' }}>
+                    <div style={{ padding: '1rem 1.5rem', borderBottom: '1px solid var(--border)', background: '#f8fafc', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                         <h3 style={{ margin: 0, fontSize: '1.1rem' }}>Spatial Registry Map</h3>
+                        <button
+                            onClick={() => setShowLabels(prev => !prev)}
+                            title={showLabels ? 'Hide property names' : 'Show property names'}
+                            style={{
+                                display: 'flex', alignItems: 'center', gap: '0.4rem',
+                                background: showLabels ? 'var(--primary)' : 'transparent',
+                                color: showLabels ? 'white' : 'var(--text-muted)',
+                                border: showLabels ? 'none' : '1px solid var(--border)',
+                                borderRadius: '6px', padding: '0.4rem 0.75rem',
+                                cursor: 'pointer', fontSize: '0.8rem', fontWeight: 500,
+                                transition: 'all 0.2s ease',
+                            }}
+                        >
+                            {showLabels ? <EyeOff size={16} /> : <Eye size={16} />}
+                            {showLabels ? 'Hide Labels' : 'Show Labels'}
+                        </button>
                     </div>
                     <div style={{ height: '600px', width: '100%' }}>
                         <MapContainer 
@@ -102,8 +137,9 @@ const Dashboard = () => {
                             />
                             {mappableProperties.map(prop => (
                                 <Marker 
-                                    key={prop.id} 
+                                    key={`${prop.id}-${showLabels}`} 
                                     position={[parseFloat(prop.locLat!), parseFloat(prop.locLon!)]}
+                                    icon={showLabels ? labelIcons[prop.id] : new L.Icon.Default()}
                                 >
                                     <Popup>
                                         <div style={{ margin: 0 }}>
