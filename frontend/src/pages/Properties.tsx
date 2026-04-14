@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Trash2, Edit2, Plus, Map as MapIcon, X, Image, ExternalLink } from 'lucide-react';
-import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
+import { Trash2, Edit2, Plus, Map as MapIcon, X, Image, ExternalLink, Search } from 'lucide-react';
+import { MapContainer, TileLayer, Marker, useMapEvents, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import { useNavigate } from 'react-router-dom';
@@ -34,6 +34,15 @@ const MapSelector = ({ onSelectPosition }: { onSelectPosition: (lat: number, lng
     useMapEvents({
         click(e) { onSelectPosition(e.latlng.lat, e.latlng.lng); },
     });
+    return null;
+};
+
+// Flies the map to a given coordinate
+const FlyToLocation = ({ position }: { position: [number, number] | null }) => {
+    const map = useMap();
+    useEffect(() => {
+        if (position) map.flyTo(position, 16, { duration: 1.5 });
+    }, [position, map]);
     return null;
 };
 
@@ -98,6 +107,12 @@ const Properties = () => {
     // Map Modals
     const [showPickerMap, setShowPickerMap] = useState(false);
     const [markerPos, setMarkerPos] = useState<[number, number] | null>(null);
+    const [flyTarget, setFlyTarget] = useState<[number, number] | null>(null);
+
+    // Map search
+    const [mapSearchQuery, setMapSearchQuery] = useState('');
+    const [mapSearching, setMapSearching] = useState(false);
+    const [mapSearchResults, setMapSearchResults] = useState<{display_name: string; lat: string; lon: string}[]>([]);
     const [viewingProperty, setViewingProperty] = useState<Property | null>(null);
 
     // Lightbox
@@ -208,6 +223,42 @@ const Properties = () => {
         setViewingProperty(prop);
     };
 
+    const handleMapSearch = async () => {
+        if (!mapSearchQuery.trim()) return;
+        setMapSearching(true);
+        setMapSearchResults([]);
+        try {
+            const res = await axios.get('https://nominatim.openstreetmap.org/search', {
+                params: { q: mapSearchQuery, format: 'json', limit: 5 }
+            });
+            if (res.data.length > 0) {
+                setMapSearchResults(res.data);
+                // Auto-fly to the first result
+                const first = res.data[0];
+                const lat = parseFloat(first.lat);
+                const lon = parseFloat(first.lon);
+                setFlyTarget([lat, lon]);
+                setMarkerPos([lat, lon]);
+                setLatitude(lat.toString());
+                setLongitude(lon.toString());
+            } else {
+                setMapSearchResults([]);
+                alert('No places found. Try a different search term.');
+            }
+        } catch { alert('Search failed. Please try again.'); }
+        finally { setMapSearching(false); }
+    };
+
+    const selectSearchResult = (lat: string, lon: string) => {
+        const pLat = parseFloat(lat);
+        const pLon = parseFloat(lon);
+        setFlyTarget([pLat, pLon]);
+        setMarkerPos([pLat, pLon]);
+        setLatitude(pLat.toString());
+        setLongitude(pLon.toString());
+        setMapSearchResults([]);
+    };
+
     const filteredProps = properties.filter(prop => {
         if (searchTerm) {
             const t = searchTerm.toLowerCase();
@@ -301,20 +352,63 @@ const Properties = () => {
             {/* Map picker modal */}
             {showPickerMap && (
                 <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', background: 'rgba(0,0,0,0.5)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <div style={{ background: 'white', padding: '1rem', borderRadius: '8px', width: '80%', maxWidth: '800px', height: '600px', display: 'flex', flexDirection: 'column' }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem' }}>
+                    <div style={{ background: 'white', padding: '1rem', borderRadius: '8px', width: '80%', maxWidth: '800px', height: '650px', display: 'flex', flexDirection: 'column' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
                             <h3 style={{ margin: 0 }}>Click to Select Location</h3>
-                            <button onClick={() => setShowPickerMap(false)} style={{ background: 'none', border: 'none', cursor: 'pointer' }}><X size={24} /></button>
+                            <button onClick={() => { setShowPickerMap(false); setMapSearchQuery(''); setMapSearchResults([]); }} style={{ background: 'none', border: 'none', cursor: 'pointer' }}><X size={24} /></button>
                         </div>
+
+                        {/* Place search bar */}
+                        <div style={{ position: 'relative', marginBottom: '0.75rem' }}>
+                            <div style={{ display: 'flex', gap: '0.5rem' }}>
+                                <input
+                                    className="form-input"
+                                    type="text"
+                                    placeholder="Search a place (e.g. Dhaka, Gulshan 2)..."
+                                    value={mapSearchQuery}
+                                    onChange={e => setMapSearchQuery(e.target.value)}
+                                    onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); handleMapSearch(); } }}
+                                    style={{ flex: 1 }}
+                                />
+                                <button
+                                    type="button"
+                                    className="btn btn-primary"
+                                    onClick={handleMapSearch}
+                                    disabled={mapSearching}
+                                    style={{ width: 'auto', padding: '0.5rem 1rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}
+                                >
+                                    {mapSearching ? <span className="btn-spinner" /> : <Search size={16} />}
+                                    {mapSearching ? 'Searching...' : 'Search'}
+                                </button>
+                            </div>
+                            {/* Dropdown results */}
+                            {mapSearchResults.length > 1 && (
+                                <div style={{ position: 'absolute', top: '100%', left: 0, right: 0, background: 'white', border: '1px solid var(--border)', borderRadius: '0 0 8px 8px', zIndex: 10, maxHeight: '180px', overflowY: 'auto', boxShadow: 'var(--shadow)' }}>
+                                    {mapSearchResults.map((r, i) => (
+                                        <div
+                                            key={i}
+                                            onClick={() => selectSearchResult(r.lat, r.lon)}
+                                            style={{ padding: '0.6rem 0.8rem', cursor: 'pointer', fontSize: '0.85rem', borderBottom: '1px solid var(--border)', transition: 'background 0.15s' }}
+                                            onMouseEnter={e => (e.currentTarget.style.background = '#f1f5f9')}
+                                            onMouseLeave={e => (e.currentTarget.style.background = 'white')}
+                                        >
+                                            📍 {r.display_name}
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+
                         <div style={{ flex: 1, borderRadius: '8px', overflow: 'hidden' }}>
                             <MapContainer center={markerPos || [23.8103, 90.4125]} zoom={13} style={{ height: '100%', width: '100%' }}>
                                 <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" attribution="&copy; OpenStreetMap contributors" />
                                 <MapSelector onSelectPosition={handleMapClick} />
+                                <FlyToLocation position={flyTarget} />
                                 {markerPos && <Marker position={markerPos} />}
                             </MapContainer>
                         </div>
-                        <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '1rem' }}>
-                            <button className="btn btn-primary" onClick={() => setShowPickerMap(false)}>Confirm</button>
+                        <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '0.75rem' }}>
+                            <button className="btn btn-primary" onClick={() => { setShowPickerMap(false); setMapSearchQuery(''); setMapSearchResults([]); }}>Confirm</button>
                         </div>
                     </div>
                 </div>
