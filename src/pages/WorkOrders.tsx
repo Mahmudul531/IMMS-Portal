@@ -57,6 +57,7 @@ const WorkOrders = () => {
     const isAdmin = user?.role === 'ADMIN';
 
     const [workOrders, setWorkOrders] = useState<WorkOrder[]>([]);
+    const [listLoading, setListLoading] = useState(true);
     const [assets, setAssets] = useState<Asset[]>([]);
     const [properties, setProperties] = useState<Property[]>([]);
     const [selectedPropertyId, setSelectedPropertyId] = useState('');
@@ -100,6 +101,8 @@ const WorkOrders = () => {
             }
         } catch (error) {
             console.error('Error fetching data', error);
+        } finally {
+            setListLoading(false);
         }
     };
 
@@ -330,6 +333,12 @@ const WorkOrders = () => {
                     </div>
                 </div>
                 
+                {listLoading ? (
+                    <div className="page-loader">
+                        <span className="page-spinner" />
+                        <span>Loading work orders...</span>
+                    </div>
+                ) : (
                 <div className="table-container">
                     <table>
                         <thead>
@@ -408,6 +417,7 @@ const WorkOrders = () => {
                     </tbody>
                 </table>
             </div>
+                )}
 
             {totalPages > 1 && (
                 <div style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem', marginTop: '1rem' }}>

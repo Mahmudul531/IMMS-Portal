@@ -43,6 +43,7 @@ const compressFile = (file: File): Promise<File> => {
 const Assets = () => {
     const navigate = useNavigate();
     const [assets, setAssets] = useState<Asset[]>([]);
+    const [listLoading, setListLoading] = useState(true);
     const [properties, setProperties] = useState<Property[]>([]);
     const [assetImages, setAssetImages] = useState<Record<number, AssetImage[]>>({});
 
@@ -69,6 +70,7 @@ const Assets = () => {
             setAssets([...((Array.isArray(assetsRes.data) ? assetsRes.data : []))].reverse());
             setProperties(Array.isArray(propsRes.data) ? propsRes.data : []);
         } catch (err) { console.error(err); }
+        finally { setListLoading(false); }
     };
 
     useEffect(() => { fetchData(); }, []);
@@ -246,6 +248,12 @@ const Assets = () => {
                         </div>
                     </div>
                 </div>
+                {listLoading ? (
+                    <div className="page-loader">
+                        <span className="page-spinner" />
+                        <span>Loading assets...</span>
+                    </div>
+                ) : (
                 <div className="table-container">
                     <table>
                         <thead>
@@ -288,6 +296,7 @@ const Assets = () => {
                         </tbody>
                     </table>
                 </div>
+                )}
                 {totalPages > 1 && (
                     <div style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem', marginTop: '1rem' }}>
                         <button className="btn" disabled={currentPage === 1} onClick={() => setCurrentPage(p => p - 1)} style={{ width: 'auto', padding: '0.3rem 0.8rem' }}>Prev</button>

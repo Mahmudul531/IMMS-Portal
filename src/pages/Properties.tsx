@@ -76,6 +76,7 @@ const compressFile = (file: File): Promise<File> => {
 const Properties = () => {
     const navigate = useNavigate();
     const [properties, setProperties] = useState<Property[]>([]);
+    const [listLoading, setListLoading] = useState(true);
     const [propertyImages, setPropertyImages] = useState<Record<number, PropertyImage[]>>({});
 
     // Search & Pagination
@@ -108,6 +109,7 @@ const Properties = () => {
             const propData = Array.isArray(data) ? data : [];
             setProperties([...propData].reverse());
         } catch (error) { console.error(error); }
+        finally { setListLoading(false); }
     };
 
     useEffect(() => { fetchProperties(); }, []);
@@ -367,6 +369,12 @@ const Properties = () => {
                         </div>
                     </div>
                 </div>
+                {listLoading ? (
+                    <div className="page-loader">
+                        <span className="page-spinner" />
+                        <span>Loading properties...</span>
+                    </div>
+                ) : (
                 <div className="table-container">
                     <table>
                         <thead>
@@ -427,6 +435,7 @@ const Properties = () => {
                         </tbody>
                     </table>
                 </div>
+                )}
 
                 {totalPages > 1 && (
                     <div style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem', marginTop: '1rem' }}>
