@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
-import { ArrowRightLeft, Building2, Package } from 'lucide-react';
+import { ArrowRightLeft, Building2, Package, CheckCircle, XCircle } from 'lucide-react';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
 
@@ -42,7 +42,7 @@ const AssetTransfer = () => {
     setMessage({ type: '', text: '' });
 
     try {
-      await axios.post(`${API_BASE_URL}/api/assets/${selectedAssetId}/transfer`, {
+      await axios.post(`${API_BASE_URL}/api/assets/${selectedAssetId}/transfer?username=${encodeURIComponent(_user?.username || '')}`, {
         targetPropertyId: parseInt(targetPropertyId),
         transferNote: note
       });
@@ -75,8 +75,46 @@ const AssetTransfer = () => {
       <div className="card" style={{ maxWidth: '600px', margin: '0 auto' }}>
         <form onSubmit={handleTransfer} className="asset-form">
           {message.text && (
-            <div className={`alert ${message.type === 'success' ? 'alert-success' : 'alert-error'}`} style={{ marginBottom: '20px' }}>
-              {message.text}
+            <div style={{
+              display: 'flex', alignItems: 'center', gap: '12px',
+              padding: '14px 18px',
+              borderRadius: '10px',
+              marginBottom: '20px',
+              animation: 'slideDown 0.35s ease',
+              background: message.type === 'success'
+                ? 'linear-gradient(135deg, #ecfdf5, #d1fae5)'
+                : 'linear-gradient(135deg, #fef2f2, #fee2e2)',
+              border: message.type === 'success'
+                ? '1px solid #a7f3d0'
+                : '1px solid #fecaca',
+              boxShadow: message.type === 'success'
+                ? '0 4px 12px rgba(16, 185, 129, 0.15)'
+                : '0 4px 12px rgba(239, 68, 68, 0.15)',
+            }}>
+              <div style={{
+                width: '36px', height: '36px', borderRadius: '50%',
+                display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+                background: message.type === 'success' ? '#10b981' : '#ef4444',
+              }}>
+                {message.type === 'success'
+                  ? <CheckCircle size={20} color="white" />
+                  : <XCircle size={20} color="white" />
+                }
+              </div>
+              <div>
+                <div style={{
+                  fontWeight: 700, fontSize: '0.95rem',
+                  color: message.type === 'success' ? '#065f46' : '#991b1b',
+                }}>
+                  {message.type === 'success' ? 'Transfer Successful!' : 'Transfer Failed'}
+                </div>
+                <div style={{
+                  fontSize: '0.82rem', marginTop: '2px',
+                  color: message.type === 'success' ? '#047857' : '#b91c1c',
+                }}>
+                  {message.text}
+                </div>
+              </div>
             </div>
           )}
 
