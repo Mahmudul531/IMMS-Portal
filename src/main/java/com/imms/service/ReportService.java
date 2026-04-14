@@ -108,6 +108,6 @@ public class ReportService {
         if (propertyId != null) {
             return transferLogRepository.findByFromPropertyIdOrToPropertyIdOrderByTransferDateDesc(propertyId, propertyId);
         }
-        return transferLogRepository.findAll();
+        return transferLogRepository.findAllByOrderByTransferDateDesc();
     }
 }

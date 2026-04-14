@@ -15,7 +15,6 @@ import com.imms.service.CloudinaryService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -91,9 +90,9 @@ public class AssetController {
     public ResponseEntity<Asset> transferAsset(
             @PathVariable Long id,
             @RequestBody AssetTransferRequest request,
-            Authentication authentication) {
-        String username = authentication != null ? authentication.getName() : "System";
-        return ResponseEntity.ok(assetService.transferAsset(id, request, username));
+            @RequestParam(required = false) String username) {
+        String transferredBy = (username != null && !username.isBlank()) ? username : "System";
+        return ResponseEntity.ok(assetService.transferAsset(id, request, transferredBy));
     }
 
     @GetMapping("/transfer-logs")

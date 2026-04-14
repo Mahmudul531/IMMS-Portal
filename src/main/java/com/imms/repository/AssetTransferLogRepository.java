@@ -9,4 +9,5 @@ import java.util.List;
 public interface AssetTransferLogRepository extends JpaRepository<AssetTransferLog, Long> {
     List<AssetTransferLog> findByFromPropertyIdOrToPropertyIdOrderByTransferDateDesc(Long fromPropertyId, Long toPropertyId);
     List<AssetTransferLog> findByAssetIdOrderByTransferDateDesc(Long assetId);
+    List<AssetTransferLog> findAllByOrderByTransferDateDesc();
 }

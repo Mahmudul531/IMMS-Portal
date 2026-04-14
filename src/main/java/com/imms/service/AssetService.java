@@ -62,6 +62,6 @@ public class AssetService {
         if (propertyId != null) {
             return transferLogRepository.findByFromPropertyIdOrToPropertyIdOrderByTransferDateDesc(propertyId, propertyId);
         }
-        return transferLogRepository.findAll();
+        return transferLogRepository.findAllByOrderByTransferDateDesc();
     }
 }
