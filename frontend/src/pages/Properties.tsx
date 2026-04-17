@@ -115,6 +115,26 @@ const Properties = () => {
     const [mapSearchResults, setMapSearchResults] = useState<{display_name: string; lat: string; lon: string}[]>([]);
     const [viewingProperty, setViewingProperty] = useState<Property | null>(null);
 
+    // Auto-hints for map search
+    useEffect(() => {
+        if (mapSearchQuery.trim().length < 3) {
+            // Only clear if we are not actively searching
+            if (!mapSearching) {
+                setMapSearchResults([]);
+            }
+            return;
+        }
+        const delayFn = setTimeout(async () => {
+            try {
+                const res = await axios.get('https://nominatim.openstreetmap.org/search', {
+                    params: { q: mapSearchQuery, format: 'json', limit: 5, countrycodes: 'bd' }
+                });
+                setMapSearchResults(res.data);
+            } catch (ignore) {}
+        }, 500);
+        return () => clearTimeout(delayFn);
+    }, [mapSearchQuery, mapSearching]);
+
     // Lightbox
     const [lightboxSrc, setLightboxSrc] = useState<string | null>(null);
 
@@ -229,7 +249,7 @@ const Properties = () => {
         setMapSearchResults([]);
         try {
             const res = await axios.get('https://nominatim.openstreetmap.org/search', {
-                params: { q: mapSearchQuery, format: 'json', limit: 5 }
+                params: { q: mapSearchQuery, format: 'json', limit: 5, countrycodes: 'bd' }
             });
             if (res.data.length > 0) {
                 setMapSearchResults(res.data);
@@ -359,7 +379,7 @@ const Properties = () => {
                         </div>
 
                         {/* Place search bar */}
-                        <div style={{ position: 'relative', marginBottom: '0.75rem' }}>
+                        <div style={{ position: 'relative', marginBottom: '0.75rem', zIndex: 2000 }}>
                             <div style={{ display: 'flex', gap: '0.5rem' }}>
                                 <input
                                     className="form-input"
@@ -382,7 +402,7 @@ const Properties = () => {
                                 </button>
                             </div>
                             {/* Dropdown results */}
-                            {mapSearchResults.length > 1 && (
+                            {mapSearchResults.length > 0 && (
                                 <div style={{ position: 'absolute', top: '100%', left: 0, right: 0, background: 'white', border: '1px solid var(--border)', borderRadius: '0 0 8px 8px', zIndex: 10, maxHeight: '180px', overflowY: 'auto', boxShadow: 'var(--shadow)' }}>
                                     {mapSearchResults.map((r, i) => (
                                         <div
