@@ -6,8 +6,11 @@ import axios from 'axios';
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [isRegister, setIsRegister] = useState(false);
+  const [regSuccess, setRegSuccess] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
 
@@ -39,14 +42,35 @@ const Login = () => {
     }
   };
 
+  const handleRegister = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(''); setRegSuccess(false); setLoading(true);
+    try {
+      await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:8080'}/api/users/register`, {
+        username,
+        password,
+        email,
+        role: 'VENDOR'
+      });
+      setRegSuccess(true);
+      setUsername(''); setPassword(''); setEmail('');
+      setIsRegister(false);
+    } catch (err: any) {
+      setError(err.response?.data?.message || err.response?.data || 'Failed to register vendor.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="auth-container">
       <div className="auth-card">
-        <h2 className="auth-title">Welcome to IMMS</h2>
+        <h2 className="auth-title">{isRegister ? 'Vendor Registration' : 'Welcome to IMMS'}</h2>
         
         {error && <div style={{color: 'var(--danger)', marginBottom: '1rem', fontSize: '0.875rem', textAlign:'center'}}>{error}</div>}
+        {regSuccess && <div style={{color: 'var(--success)', marginBottom: '1rem', fontSize: '0.875rem', textAlign:'center'}}>Registration successful! Please wait for Admin approval to login.</div>}
 
-        <form onSubmit={handleLogin}>
+        <form onSubmit={isRegister ? handleRegister : handleLogin}>
           <div className="form-group">
             <label className="form-label">Username</label>
             <input 
@@ -70,6 +94,20 @@ const Login = () => {
               required 
             />
           </div>
+          
+          {isRegister && (
+            <div className="form-group">
+              <label className="form-label">Email</label>
+              <input 
+                type="email" 
+                className="form-input"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                disabled={loading}
+                required 
+              />
+            </div>
+          )}
 
           <button 
             type="submit" 
@@ -78,9 +116,17 @@ const Login = () => {
             disabled={loading}
           >
             {loading && <span className="btn-spinner" />}
-            {loading ? 'Signing in...' : 'Login'}
+            {loading ? (isRegister ? 'Registering...' : 'Signing in...') : (isRegister ? 'Complete Registration' : 'Login')}
           </button>
         </form>
+        
+        <div style={{ marginTop: '1.5rem', textAlign: 'center', fontSize: '0.9rem' }}>
+          {isRegister ? (
+             <span>Already have an account? <a href="#" style={{ color: 'var(--primary)', fontWeight: 600 }} onClick={(e) => { e.preventDefault(); setIsRegister(false); setError(''); }}>Login here</a></span>
+          ) : (
+             <span>Are you a Vendor? <a href="#" style={{ color: 'var(--primary)', fontWeight: 600 }} onClick={(e) => { e.preventDefault(); setIsRegister(true); setError(''); setRegSuccess(false); }}>Register here</a></span>
+          )}
+        </div>
       </div>
     </div>
   );

@@ -11,6 +11,7 @@ import AssetTransfer from './pages/AssetTransfer';
 import Reports from './pages/Reports';
 import PropertyDetail from './pages/PropertyDetail';
 import AssetDetail from './pages/AssetDetail';
+import AssetPreferences from './pages/AssetPreferences';
 import Sidebar from './components/Sidebar';
 
 // Protected Route Component
@@ -73,6 +74,18 @@ function App() {
 
           <Route path="/assets" element={
             <ProtectedRoute allowedRoles={['ADMIN', 'ENGINEER', 'TECHNICIAN']}>
+              <Navigate to="/assets/list" replace />
+            </ProtectedRoute>
+          } />
+
+          <Route path="/assets/add" element={
+            <ProtectedRoute allowedRoles={['ADMIN', 'ENGINEER', 'TECHNICIAN']}>
+              <AppLayout><Assets /></AppLayout>
+            </ProtectedRoute>
+          } />
+
+          <Route path="/assets/list" element={
+            <ProtectedRoute allowedRoles={['ADMIN', 'ENGINEER', 'TECHNICIAN']}>
               <AppLayout><Assets /></AppLayout>
             </ProtectedRoute>
           } />
@@ -89,7 +102,25 @@ function App() {
             </ProtectedRoute>
           } />
 
+          <Route path="/asset-preferences" element={
+            <ProtectedRoute allowedRoles={['ADMIN']}>
+              <AppLayout><AssetPreferences /></AppLayout>
+            </ProtectedRoute>
+          } />
+
           <Route path="/work-orders" element={
+            <ProtectedRoute allowedRoles={['ADMIN', 'VENDOR']}>
+              <Navigate to="/work-orders/list" replace />
+            </ProtectedRoute>
+          } />
+
+          <Route path="/work-orders/add" element={
+            <ProtectedRoute allowedRoles={['ADMIN', 'VENDOR']}>
+              <AppLayout><WorkOrders /></AppLayout>
+            </ProtectedRoute>
+          } />
+
+          <Route path="/work-orders/list" element={
             <ProtectedRoute allowedRoles={['ADMIN', 'VENDOR']}>
               <AppLayout><WorkOrders /></AppLayout>
             </ProtectedRoute>
@@ -102,6 +133,12 @@ function App() {
           } />
 
           <Route path="/reports" element={
+            <ProtectedRoute allowedRoles={['ADMIN', 'ENGINEER']}>
+              <Navigate to="/reports/transfers" replace />
+            </ProtectedRoute>
+          } />
+
+          <Route path="/reports/transfers" element={
             <ProtectedRoute allowedRoles={['ADMIN', 'ENGINEER']}>
               <AppLayout><Reports /></AppLayout>
             </ProtectedRoute>

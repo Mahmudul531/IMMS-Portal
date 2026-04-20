@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 import { Hammer, CheckCircle, Clock, Users, MapPin, X } from 'lucide-react';
@@ -55,6 +56,11 @@ interface WorkOrderApplication {
 const WorkOrders = () => {
     const { user } = useAuth();
     const isAdmin = user?.role === 'ADMIN';
+    const location = useLocation();
+    const navigate = useNavigate();
+    
+    const isAddMode = location.pathname.includes('/add');
+    const isListMode = location.pathname.includes('/list');
 
     const [workOrders, setWorkOrders] = useState<WorkOrder[]>([]);
     const [listLoading, setListLoading] = useState(true);
@@ -120,7 +126,7 @@ const WorkOrders = () => {
             });
             setDescription('');
             fetchData();
-            alert('Work Order Broadcasted Successfully!');
+            navigate('/work-orders/list');
         } catch (error) {
             console.error(error);
         }
@@ -239,10 +245,10 @@ const WorkOrders = () => {
     return (
         <div>
             <div className="page-header">
-                <h2>{isAdmin ? 'Administrative Work Orders' : 'Vendor Service Bidding'}</h2>
+                <h2>{isAdmin ? (isAddMode ? 'Deploy New Work Order' : 'Administrative Work Orders') : 'Vendor Service Bidding'}</h2>
             </div>
 
-            {isAdmin && (
+            {isAdmin && isAddMode && (
                 <div className="card" style={{ marginBottom: '2rem' }}>
                     <h3 style={{ marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                         <Hammer size={20} /> Deploy Technical Duty
@@ -306,6 +312,7 @@ const WorkOrders = () => {
                 </div>
             )}
 
+            {isListMode && (
             <div className="card" style={{ marginBottom: '2rem' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem', flexWrap: 'wrap', gap: '1rem' }}>
                     <h3 style={{ margin: 0 }}>Task Directives Timeline</h3>
@@ -428,6 +435,7 @@ const WorkOrders = () => {
             )}
 
             </div>
+            )}
 
             {/* Applications Modal */}
             {showAppsModal && (

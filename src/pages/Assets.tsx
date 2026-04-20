@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import { Trash2, Edit2, Plus, X, Image, History, ExternalLink } from 'lucide-react';
 
@@ -42,6 +42,11 @@ const compressFile = (file: File): Promise<File> => {
 
 const Assets = () => {
     const navigate = useNavigate();
+    const location = useLocation();
+    
+    const isAddMode = location.pathname.includes('/add');
+    const isListMode = location.pathname.includes('/list');
+    
     const [assets, setAssets] = useState<Asset[]>([]);
     const [listLoading, setListLoading] = useState(true);
     const [properties, setProperties] = useState<Property[]>([]);
@@ -56,6 +61,19 @@ const Assets = () => {
     const [type, setType] = useState('');
     const [propertyId, setPropertyId] = useState('');
     const [editingId, setEditingId] = useState<number | null>(null);
+    const [supplierName, setSupplierName] = useState('');
+    const [assetCode, setAssetCode] = useState('');
+    const [purchaseDate, setPurchaseDate] = useState('');
+    const [purchaseValue, setPurchaseValue] = useState('');
+    const [depreciationPercentage, setDepreciationPercentage] = useState('');
+    const [longDescription, setLongDescription] = useState('');
+    const [remarks, setRemarks] = useState('');
+    const [category, setCategory] = useState('');
+    const [invoiceFile, setInvoiceFile] = useState<File | null>(null);
+
+    const [typesLookup, setTypesLookup] = useState<any[]>([]);
+    const [categoriesLookup, setCategoriesLookup] = useState<any[]>([]);
+
     const [pendingFiles, setPendingFiles] = useState<File[]>([]);
     const [pendingPreviews, setPendingPreviews] = useState<string[]>([]);
     const [uploading, setUploading] = useState(false);
@@ -63,12 +81,18 @@ const Assets = () => {
 
     const fetchData = async () => {
         try {
-            const [assetsRes, propsRes] = await Promise.all([
+            const [assetsRes, propsRes, prefRes] = await Promise.all([
                 axios.get(`${API}/api/assets`),
-                axios.get(`${API}/api/properties`)
+                axios.get(`${API}/api/properties`),
+                axios.get(`${API}/api/preferences/assets`)
             ]);
             setAssets([...((Array.isArray(assetsRes.data) ? assetsRes.data : []))].reverse());
             setProperties(Array.isArray(propsRes.data) ? propsRes.data : []);
+            
+            if (Array.isArray(prefRes.data)) {
+                setTypesLookup(prefRes.data.filter(p => p.prefType === 'TYPE'));
+                setCategoriesLookup(prefRes.data.filter(p => p.prefType === 'CATEGORY'));
+            }
         } catch (err) { console.error(err); }
         finally { setListLoading(false); }
     };
@@ -83,7 +107,11 @@ const Assets = () => {
     };
 
     const resetForm = () => {
-        setName(''); setType(''); setPropertyId(''); setEditingId(null);
+        setName(''); setType(''); setPropertyId(''); setCategory('');
+        setSupplierName(''); setAssetCode(''); setPurchaseDate('');
+        setPurchaseValue(''); setDepreciationPercentage('');
+        setLongDescription(''); setRemarks(''); setInvoiceFile(null);
+        setEditingId(null);
         setPendingFiles([]); setPendingPreviews([]);
     };
 
@@ -106,13 +134,24 @@ const Assets = () => {
         setUploading(true);
         try {
             let savedId: number;
-            const payload = { name, type, propertyId: parseInt(propertyId) };
+            const payload = { 
+                name, type, propertyId: parseInt(propertyId), category,
+                supplierName, assetCode, purchaseDate, purchaseValue, depreciationPercentage,
+                longDescription, remarks 
+            };
+            
             if (editingId) {
                 await axios.put(`${API}/api/assets/${editingId}`, payload);
                 savedId = editingId;
             } else {
                 const { data } = await axios.post(`${API}/api/assets`, payload);
                 savedId = data.id;
+            }
+            
+            if (invoiceFile) {
+                const invForm = new FormData();
+                invForm.append('file', invoiceFile);
+                await axios.post(`${API}/api/assets/${savedId}/invoice`, invForm, { headers: { 'Content-Type': 'multipart/form-data' } });
             }
             for (const file of pendingFiles) {
                 const form = new FormData();
@@ -122,16 +161,24 @@ const Assets = () => {
             await fetchData();
             await fetchImagesForAsset(savedId);
             resetForm();
+            navigate('/assets/list');
         } catch (err) { console.error(err); }
         finally { setUploading(false); }
     };
 
-    const handleEdit = (asset: Asset) => {
-        setEditingId(asset.id);
-        setName(asset.name); setType(asset.type || '');
-        setPropertyId(asset.property?.id?.toString() || '');
-        fetchImagesForAsset(asset.id);
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+    const handleEdit = (asset: any) => {
+        navigate('/assets/add');
+        setTimeout(() => {
+            setEditingId(asset.id);
+            setName(asset.name); setType(asset.type || ''); setCategory(asset.category || '');
+            setPropertyId(asset.property?.id?.toString() || '');
+            setSupplierName(asset.supplierName || ''); setAssetCode(asset.assetCode || '');
+            setPurchaseDate(asset.purchaseDate || ''); setPurchaseValue(asset.purchaseValue || '');
+            setDepreciationPercentage(asset.depreciationPercentage || '');
+            setLongDescription(asset.longDescription || ''); setRemarks(asset.remarks || '');
+            fetchImagesForAsset(asset.id);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }, 50);
     };
 
     const handleDelete = async (id: number) => {
@@ -165,7 +212,9 @@ const Assets = () => {
 
     return (
         <div>
-            <div className="page-header"><h2>Manage Assets</h2></div>
+            <div className="page-header"><h2>{isAddMode ? (editingId ? 'Edit Asset' : 'Add Asset') : 'Registered Assets'}</h2></div>
+            
+            {isAddMode && (
             <div className="card" style={{ marginBottom: '2rem' }}>
                 <h3 style={{ marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                     <Plus size={20} />{editingId ? 'Edit Asset' : 'Add Asset'}
@@ -177,7 +226,17 @@ const Assets = () => {
                     </div>
                     <div className="form-group">
                         <label className="form-label">Type</label>
-                        <input className="form-input" value={type} onChange={e => setType(e.target.value)} />
+                        <select className="form-input" value={type} onChange={e => setType(e.target.value)} required>
+                            <option value="">Select a type...</option>
+                            {typesLookup.map(t => <option key={t.id} value={t.prefValue}>{t.prefValue}</option>)}
+                        </select>
+                    </div>
+                    <div className="form-group">
+                        <label className="form-label">Category</label>
+                        <select className="form-input" value={category} onChange={e => setCategory(e.target.value)} required>
+                            <option value="">Select a category...</option>
+                            {categoriesLookup.map(c => <option key={c.id} value={c.prefValue}>{c.prefValue}</option>)}
+                        </select>
                     </div>
                     <div className="form-group">
                         <label className="form-label">Assign to Property</label>
@@ -185,6 +244,39 @@ const Assets = () => {
                             <option value="">Select a property...</option>
                             {properties.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
                         </select>
+                    </div>
+                    <div className="form-group">
+                        <label className="form-label">Supplier Name</label>
+                        <input className="form-input" value={supplierName} onChange={e => setSupplierName(e.target.value)} />
+                    </div>
+                    <div className="form-group">
+                        <label className="form-label">Asset Code</label>
+                        <input className="form-input" value={assetCode} onChange={e => setAssetCode(e.target.value)} />
+                    </div>
+                    <div className="form-group">
+                        <label className="form-label">Purchase Date</label>
+                        <input className="form-input" type="date" value={purchaseDate} onChange={e => setPurchaseDate(e.target.value)} max={new Date().toISOString().split('T')[0]} />
+                    </div>
+                    <div className="form-group">
+                        <label className="form-label">Purchase Value</label>
+                        <input className="form-input" type="number" step="0.01" value={purchaseValue} onChange={e => setPurchaseValue(e.target.value)} />
+                    </div>
+                    <div className="form-group">
+                        <label className="form-label">Depreciation% / Year</label>
+                        <input className="form-input" type="number" step="0.1" value={depreciationPercentage} onChange={e => setDepreciationPercentage(e.target.value)} />
+                    </div>
+                    <div className="form-group" style={{ gridColumn: 'span 2' }}>
+                        <label className="form-label">Long Description</label>
+                        <textarea className="form-input" value={longDescription} onChange={e => setLongDescription(e.target.value)} rows={2} />
+                    </div>
+                    <div className="form-group">
+                        <label className="form-label">Remarks</label>
+                        <textarea className="form-input" value={remarks} onChange={e => setRemarks(e.target.value)} rows={2} />
+                    </div>
+                    <div className="form-group">
+                        <label className="form-label">Invoice Upload (PDF/IMG)</label>
+                        <input className="form-input" type="file" onChange={e => setInvoiceFile(e.target.files?.[0] || null)} style={{ padding: '0.3rem' }} />
+                        {invoiceFile && <small style={{ color: 'var(--primary)' }}>Ready to upload: {invoiceFile.name}</small>}
                     </div>
 
                     {/* Image Upload */}
@@ -226,6 +318,7 @@ const Assets = () => {
                     </div>
                 </form>
             </div>
+            )}
 
             {lightboxSrc && (
                 <div onClick={() => setLightboxSrc(null)} style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', background: 'rgba(0,0,0,0.9)', zIndex: 2000, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'zoom-out' }}>
@@ -233,6 +326,7 @@ const Assets = () => {
                 </div>
             )}
 
+            {isListMode && (
             <div className="card" style={{ marginBottom: '2rem' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem', flexWrap: 'wrap', gap: '1rem' }}>
                     <h3 style={{ margin: 0 }}>Registered Assets</h3>
@@ -305,6 +399,7 @@ const Assets = () => {
                     </div>
                 )}
             </div>
+            )}
         </div>
     );
 };
