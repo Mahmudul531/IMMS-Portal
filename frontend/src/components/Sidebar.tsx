@@ -1,6 +1,6 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { LayoutDashboard, Building2, MapPin, Wrench, LogOut, Users, Briefcase, ArrowRightLeft, FileText, Settings, ChevronDown, ChevronRight } from 'lucide-react';
+import { LayoutDashboard, Building2, MapPin, Wrench, LogOut, Users, Briefcase, ArrowRightLeft, FileText, ChevronDown, ChevronRight } from 'lucide-react';
 import { useState } from 'react';
 
 const Sidebar = () => {
