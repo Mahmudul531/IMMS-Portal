@@ -25,6 +25,10 @@ public class UserController {
         user.setPassword(request.getPassword());   // Service will hash it
         user.setRole(request.getRole());
         user.setEmail(request.getEmail());
+        if ("VENDOR".equalsIgnoreCase(request.getRole())) {
+            user.setActive(false);
+            user.setInactiveNote("Pending Admin Approval");
+        }
 
         User savedUser = userService.registerUser(user);
         return ResponseEntity.ok(savedUser);

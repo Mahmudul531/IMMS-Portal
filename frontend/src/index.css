@@ -1,18 +1,20 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 :root {
-  --primary: #3b82f6;
-  --primary-hover: #2563eb;
-  --secondary: #1e293b;
-  --background: #f8fafc;
+  --primary: #10b981;
+  --primary-hover: #059669;
+  --primary-light: #ecfdf5;
+  --secondary: #ffffff;
+  --background: #f1f5f9;
   --surface: #ffffff;
-  --text: #0f172a;
+  --text: #334155;
   --text-muted: #64748b;
   --border: #e2e8f0;
   --danger: #ef4444;
   --success: #10b981;
-  --radius: 8px;
-  --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --warning: #f59e0b;
+  --radius: 12px;
+  --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
 }
 
 * {
@@ -76,9 +78,9 @@ body {
 .form-label {
   display: block;
   font-size: 0.875rem;
-  font-weight: 500;
+  font-weight: 600;
   margin-bottom: 0.5rem;
-  color: var(--secondary);
+  color: var(--text);
 }
 
 .form-input {
@@ -125,21 +127,23 @@ body {
 .sidebar {
   width: 250px;
   background-color: var(--secondary);
-  color: white;
+  color: var(--text);
+  border-right: 1px solid var(--border);
   height: 100vh;
   position: fixed;
   left: 0;
   top: 0;
   padding: 1.5rem;
-  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
 }
 
 .sidebar-title {
-  font-size: 1.25rem;
-  font-weight: 700;
+  font-size: 1.5rem;
+  font-weight: 800;
   margin-bottom: 2rem;
   padding-bottom: 1rem;
-  border-bottom: 1px solid rgba(255,255,255,0.1);
+  color: var(--primary);
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -152,7 +156,7 @@ body {
 }
 
 .nav-item {
-  color: rgba(255,255,255,0.7);
+  color: var(--text-muted);
   text-decoration: none;
   padding: 0.75rem 1rem;
   border-radius: var(--radius);
@@ -160,12 +164,18 @@ body {
   align-items: center;
   gap: 0.75rem;
   transition: all 0.2s ease;
-  font-weight: 500;
+  font-weight: 600;
 }
 
-.nav-item:hover, .nav-item.active {
-  background-color: rgba(255,255,255,0.1);
-  color: white;
+.nav-item:hover {
+  background-color: var(--primary-light);
+  color: var(--primary);
+}
+
+.nav-item.active {
+  background-color: var(--primary-light);
+  color: var(--primary);
+  border-left: 4px solid var(--primary);
 }
 
 .logout-btn {

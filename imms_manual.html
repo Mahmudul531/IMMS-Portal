@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IMMS User Manual</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f0f2f5;
+            margin: 0;
+            padding: 20px;
+        }
+        .page {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 50px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        h1 {
+            color: #0f766e;
+            text-align: center;
+            border-bottom: 2px solid #0f766e;
+            padding-bottom: 20px;
+        }
+        h2 {
+            color: #2dd4bf;
+            margin-top: 40px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+        ul {
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 10px;
+        }
+        .note {
+            background: #fffbeb;
+            border-left: 4px solid #f59e0b;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        footer {
+            margin-top: 50px;
+            text-align: center;
+            color: #888;
+            font-size: 0.9em;
+            border-top: 1px solid #eee;
+            padding-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <h1>IMMS Portal: Comprehensive User Manual</h1>
+        <p><strong>Version:</strong> 1.0.0 | <strong>Format:</strong> Digital Document HTML</p>
+        
+        <h2>1. Authentication & Roles</h2>
+        <p>The IMMS platform operates on a strict multi-tier role-based access system:</p>
+        <ul>
+            <li><strong>Admin</strong>: Complete system visibility. Can manage users, create properties, assign work orders, and oversee spatial assets.</li>
+            <li><strong>Engineer / Technician</strong>: Can register and map assets, initiate field transfers, and inspect property registries.</li>
+            <li><strong>Vendor</strong>: Dedicated access to view available Work Orders. Can exclusively bid securely on operational maintenance tasks.</li>
+        </ul>
+
+        <h2>2. Property GIS Mapping</h2>
+        <p>Properties form the foundational registry of the IMMS architecture. Ensure precise <strong>Latitude and Longitude</strong> coordinates are configured to automatically trigger spatial mapping across the system.</p>
+
+        <h2>3. Asset Lifecycle & Financial Depreciation</h2>
+        <p>When registering an asset, you must link it directly to an active Property zone.</p>
+        <p>The platform mathematically calculates an asset's <strong>Value Drop</strong> strictly <em>after the 1st year of purchase</em> dynamically against the current date based on standard depreciation inputs.</p>
+
+        <h2>4. Secured Internal Transfers</h2>
+        <p>Assets can be digitally transferred between verified properties. A robust historical transfer ledger tracks the authorizing personnel and securely timestamps every movement for complete auditing capability.</p>
+
+        <h2>5. Operational Bidding (Work Orders)</h2>
+        <p>Administrators broadcast targeted technical tasks against specific sub-assets via the Work Orders module. Third-party maintenance personnel (Vendors) log in uniquely to review task scopes and submit competitive financial bids.</p>
+        
+        <div class="note">
+            <strong>Security Notice:</strong> Invoices (PDF/IMG files) accompanying high-value assets are uploaded directly via an exclusive raw-bypass protocol towards regional Cloud CDN servers. Always ensure your PDFs are verified before linking.
+        </div>
+
+        <footer>
+            &copy; IMMS Intelligent Maintenance Management System. Digitally processed and approved.
+        </footer>
+    </div>
+</body>
+</html>

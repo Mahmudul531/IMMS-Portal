@@ -20,6 +20,20 @@ public class Asset {
     private String name;
 
     private String type;
+    
+    private String category;
+    private String supplierName;
+    private String assetCode;
+    private java.time.LocalDate purchaseDate;
+    private java.math.BigDecimal purchaseValue;
+    private Double depreciationPercentage;
+    private String invoiceUrl;
+    
+    @Column(columnDefinition = "TEXT")
+    private String longDescription;
+    
+    @Column(columnDefinition = "TEXT")
+    private String remarks;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "property_id", nullable = false)

@@ -3,13 +3,39 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import {
   ArrowLeft, Package, Building2, Image, ChevronLeft, ChevronRight,
-  Loader2, ArrowRightLeft, Hammer, Clock, CheckCircle, User, MapPin
+  Loader2, ArrowRightLeft, Hammer, Clock, CheckCircle, User, MapPin, 
+  Download, FileText, FileSpreadsheet, DollarSign, Calendar
 } from 'lucide-react';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
+import * as XLSX from 'xlsx';
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
+import L from 'leaflet';
+import iconUrl from 'leaflet/dist/images/marker-icon.png';
+import iconRetinaUrl from 'leaflet/dist/images/marker-icon-2x.png';
+import shadowUrl from 'leaflet/dist/images/marker-shadow.png';
+
+L.Icon.Default.mergeOptions({ iconUrl, iconRetinaUrl, shadowUrl });
+
+const createLabelIcon = (name: string) => L.divIcon({
+    className: 'property-label-marker',
+    html: `<div class="property-label-pin" style="cursor: pointer;" title="Click to view property">
+              <div class="property-label-tag">${name}</div>
+           </div>`,
+    iconSize: [0, 0],
+    iconAnchor: [0, 50], // Push label high enough to sit exactly above the default blue marker
+});
 
 const API = import.meta.env.VITE_API_URL || 'http://localhost:8080';
 
-interface Property { id: number; name: string; address?: string; }
-interface Asset { id: number; name: string; type: string; property: Property; createdAt?: string; }
+interface Property { id: number; name: string; address?: string; locLat?: string; locLon?: string; }
+interface Asset { 
+  id: number; name: string; type: string; category?: string; property: Property; createdAt?: string;
+  supplierName?: string; assetCode?: string; purchaseDate?: string; 
+  purchaseValue?: number; depreciationPercentage?: number; invoiceUrl?: string;
+  longDescription?: string; remarks?: string;
+}
 interface AssetImage { id: number; imageData: string; }
 interface TransferLog {
   id: number; assetId: number; assetName: string;
@@ -108,6 +134,86 @@ const AssetDetail = () => {
   );
   if (!asset) return null;
 
+  const getExportData = () => {
+    const data: any[] = [];
+    const sorted = [...history].reverse();
+    const originProp = sorted.length > 0 ? sorted[0].fromPropertyName : asset.property?.name;
+    
+    data.push({
+      Date: asset.createdAt ? new Date(asset.createdAt).toLocaleDateString() : 'Unknown',
+      Activity: 'Asset Created',
+      'Action By': 'System',
+      'From': '—',
+      'To': originProp || '—',
+      Note: 'Initial registration'
+    });
+
+    sorted.forEach(h => {
+      data.push({
+        Date: new Date(h.transferDate).toLocaleDateString(),
+        Activity: 'Transferred',
+        'Action By': h.transferredBy,
+        'From': h.fromPropertyName,
+        'To': h.toPropertyName,
+        Note: h.transferNote || '-'
+      });
+    });
+    return data;
+  };
+
+  const exportPdf = () => {
+    const doc = new jsPDF();
+    doc.text(`Asset Activity History - ${asset.name}`, 14, 15);
+    const data = getExportData();
+    autoTable(doc, {
+      startY: 20,
+      head: [['Date', 'Activity', 'Action By', 'From Property', 'To Property', 'Note']],
+      body: data.map(d => [d.Date, d.Activity, d['Action By'], d.From, d.To, d.Note])
+    });
+    doc.save(`${asset.name.replace(/\s+/g, '_')}_History.pdf`);
+  };
+
+  const exportXls = () => {
+    const data = getExportData();
+    const ws = XLSX.utils.json_to_sheet(data);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Activity_Log");
+    XLSX.writeFile(wb, `${asset.name.replace(/\s+/g, '_')}_History.xlsx`);
+  };
+
+  const handleDownloadInvoice = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (!asset.invoiceUrl) return;
+    try {
+      const response = await fetch(asset.invoiceUrl);
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `${asset.name.replace(/\s+/g, '_')}_invoice.pdf`);
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode?.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch (err) {
+      window.open(asset.invoiceUrl, '_blank');
+    }
+  };
+
+  const calcDepreciation = () => {
+    if (!asset.purchaseValue || !asset.purchaseDate || !asset.depreciationPercentage) return null;
+    const years = (new Date().getTime() - new Date(asset.purchaseDate).getTime()) / (1000 * 60 * 60 * 24 * 365.25);
+    
+    // Depreciation only starts after 1 year
+    const effectiveYears = years >= 1 ? years : 0;
+    const drop = asset.purchaseValue * (asset.depreciationPercentage / 100) * effectiveYears;
+    const actual = Math.max(0, asset.purchaseValue - drop);
+    
+    return { actual, drop, years, effectiveYears };
+  };
+
+  const depCalc = calcDepreciation();
+
   // Build a timeline: creation event + all transfers (oldest first for display)
   const timelineEntries: { date: string; icon: React.ReactNode; title: string; subtitle: string; color: string }[] = [];
 
@@ -173,6 +279,83 @@ const AssetDetail = () => {
         </div>
       </div>
 
+      <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 2fr) minmax(0, 1fr)', gap: '1.5rem', marginBottom: '1.5rem' }}>
+        {/* Finances & Details */}
+        <div className="card">
+          <h2 style={{ fontSize: '1.1rem', margin: '0 0 1rem 0' }}>Financial & Description</h2>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
+            <div>
+              <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', margin: '0 0 4px' }}>Supplier</p>
+              <p style={{ margin: 0, fontWeight: 600 }}>{asset.supplierName || '—'}</p>
+            </div>
+            <div>
+              <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', margin: '0 0 4px' }}>Asset Code</p>
+              <p style={{ margin: 0, fontWeight: 600 }}>{asset.assetCode || '—'}</p>
+            </div>
+            <div style={{ background: '#f8fafc', padding: '10px', borderRadius: 8 }}>
+              <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', margin: '0 0 4px', display: 'flex', alignItems: 'center', gap: 4 }}><Calendar size={14}/> Purchase Date</p>
+              <p style={{ margin: 0, fontWeight: 600 }}>{asset.purchaseDate || '—'}</p>
+            </div>
+            <div style={{ background: '#f8fafc', padding: '10px', borderRadius: 8 }}>
+              <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', margin: '0 0 4px', display: 'flex', alignItems: 'center', gap: 4 }}><DollarSign size={14}/> Purchase Value</p>
+              <p style={{ margin: 0, fontWeight: 600 }}>{asset.purchaseValue ? `৳${asset.purchaseValue.toLocaleString()}` : '—'}</p>
+            </div>
+          </div>
+          
+          {depCalc && (
+            <div style={{ background: 'var(--primary-light)', color: 'var(--primary)', padding: '1rem', borderRadius: 8, marginTop: '1rem' }}>
+              <p style={{ fontSize: '0.85rem', margin: '0 0 8px', fontWeight: 600 }}>Current Value Estimate (Depreciation: {asset.depreciationPercentage}%/yr)</p>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'end' }}>
+                <div>
+                  <span style={{ fontSize: '2rem', fontWeight: 800 }}>৳{depCalc.actual.toLocaleString(undefined, {maximumFractionDigits: 0})}</span>
+                </div>
+                <div style={{ textAlign: 'right' }}>
+                  <p style={{ margin: 0, fontSize: '0.8rem', opacity: 0.8 }}>Age: {depCalc.years.toFixed(1)} yrs</p>
+                  <p style={{ margin: 0, fontSize: '0.8rem', opacity: 0.8 }}>
+                    {depCalc.effectiveYears >= 1 
+                      ? `Value dropped: ৳${depCalc.drop.toLocaleString(undefined, {maximumFractionDigits: 0})}` 
+                      : 'No depreciation applied yet'}
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+          
+          {asset.invoiceUrl && (
+            <div style={{ marginTop: '1rem' }}>
+              <button className="btn btn-secondary" onClick={handleDownloadInvoice} style={{ display: 'inline-flex', padding: '0.4rem 0.8rem', fontSize: '0.85rem' }}>
+                <Download size={16} style={{ marginRight: 6 }}/> View / Download Invoice
+              </button>
+            </div>
+          )}
+        </div>
+
+        {/* Map */}
+        <div className="card">
+          <h2 style={{ fontSize: '1.1rem', margin: '0 0 1rem 0' }}>Property Location</h2>
+          {asset.property?.locLat && asset.property?.locLon ? (
+            <div style={{ height: '240px', borderRadius: 8, overflow: 'hidden' }}>
+              <MapContainer center={[parseFloat(asset.property.locLat), parseFloat(asset.property.locLon)]} zoom={15} style={{ height: '100%', width: '100%' }}>
+                <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+                {/* Default Map marker */}
+                <Marker position={[parseFloat(asset.property.locLat), parseFloat(asset.property.locLon)]} />
+                {/* Floating label marker above the default pin */}
+                <Marker 
+                  position={[parseFloat(asset.property.locLat), parseFloat(asset.property.locLon)]}
+                  icon={createLabelIcon(asset.property.name)}
+                  eventHandlers={{ click: () => navigate(`/properties/${asset.property.id}`) }}
+                />
+              </MapContainer>
+            </div>
+          ) : (
+            <div style={{ height: '240px', background: '#f1f5f9', borderRadius: 8, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: '#94a3b8' }}>
+              <MapPin size={40} style={{ marginBottom: 10, opacity: 0.5 }} />
+              <span>Location Not Available</span>
+            </div>
+          )}
+        </div>
+      </div>
+
       {/* ── Photos ── */}
       <div className="card" style={{ marginBottom: '1.5rem' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 14 }}>
@@ -185,9 +368,15 @@ const AssetDetail = () => {
 
       {/* ── Activity Timeline ── */}
       <div className="card" style={{ marginBottom: '1.5rem' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
-          <Clock size={18} color="var(--warning)" />
-          <h2 style={{ margin: 0, fontSize: '1.05rem' }}>Activity & Transfer History</h2>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <Clock size={18} color="var(--warning)" />
+            <h2 style={{ margin: 0, fontSize: '1.05rem' }}>Activity & Transfer History</h2>
+          </div>
+          <div style={{ display: 'flex', gap: 8 }}>
+            <button className="btn btn-secondary" onClick={exportPdf} style={{ padding: '0.3rem 0.6rem', fontSize: '0.8rem', display: 'flex', alignItems: 'center', gap: 4 }}><FileText size={14}/> PDF</button>
+            <button className="btn btn-secondary" onClick={exportXls} style={{ padding: '0.3rem 0.6rem', fontSize: '0.8rem', display: 'flex', alignItems: 'center', gap: 4 }}><FileSpreadsheet size={14}/> XLS</button>
+          </div>
         </div>
         <div style={{ position: 'relative', paddingLeft: 32 }}>
           {/* Vertical line */}

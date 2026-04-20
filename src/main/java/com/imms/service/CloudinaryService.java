@@ -27,11 +27,15 @@ public class CloudinaryService {
      * @return secure HTTPS URL (e.g. https://res.cloudinary.com/di6r3oggs/...)
      */
     public String upload(MultipartFile file, String folder) throws IOException {
+        return upload(file, folder, "auto");
+    }
+
+    public String upload(MultipartFile file, String folder, String resourceType) throws IOException {
         Map<?, ?> result = cloudinary.uploader().upload(
                 file.getBytes(),
                 ObjectUtils.asMap(
                         "folder", folder,
-                        "resource_type", "image"
+                        "resource_type", resourceType
                 )
         );
         return (String) result.get("secure_url");
@@ -45,11 +49,21 @@ public class CloudinaryService {
     public void delete(String secureUrl) {
         try {
             // Extract public_id from URL:
-            // https://res.cloudinary.com/<cloud>/image/upload/v12345/imms/properties/filename.jpg
+            // https://res.cloudinary.com/<cloud>/(image|raw|video)/upload/v12345/imms/properties/filename.jpg
             // → imms/properties/filename  (strip extension)
-            String path = secureUrl.replaceAll("https://res.cloudinary.com/[^/]+/image/upload/v[0-9]+/", "");
+            String path = secureUrl.replaceAll("https://res.cloudinary.com/[^/]+/(image|raw|video)/upload/v[0-9]+/", "");
             String publicId = path.replaceAll("\\.[^.]+$", ""); // strip extension
-            cloudinary.uploader().destroy(publicId, ObjectUtils.emptyMap());
+            
+            // For 'raw' files (like PDFs often are in auto), resource_type might need to be specified in destroy
+            // But Cloudinary's default is 'image'. By default it tries to delete an image. 
+            // Better to specify resource_type auto or raw if possible.
+            // But we can just try both image and raw explicitly because destroy() only accepts string options?
+            // "destroy" actually lets you pass resource_type:
+            cloudinary.uploader().destroy(publicId, ObjectUtils.asMap("resource_type", "image"));
+            cloudinary.uploader().destroy(publicId, ObjectUtils.asMap("resource_type", "raw"));
+            // (Note: we also keep the extension for raw files according to some Cloudinary docs, 
+            // but let's just attempt it with extension too)
+            cloudinary.uploader().destroy(path, ObjectUtils.asMap("resource_type", "raw"));
         } catch (Exception e) {
             // log but never fail a delete request because of CDN issues
             System.err.println("Cloudinary delete warning: " + e.getMessage());

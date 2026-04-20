@@ -15,13 +15,14 @@ interface User {
 const Users = () => {
     const { user: currentUser } = useAuth();
     const [users, setUsers] = useState<User[]>([]);
-    
-    // Search & Pagination
+
     const [searchTerm, setSearchTerm] = useState('');
     const [dateFrom, setDateFrom] = useState('');
+    const [statusFilter, setStatusFilter] = useState('ALL');
+    const [roleFilter, setRoleFilter] = useState('ALL');
     const [currentPage, setCurrentPage] = useState(1);
     const ITEMS_PER_PAGE = 5;
-    
+
     // Form fields
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
@@ -84,6 +85,16 @@ const Users = () => {
     const filteredUsers = users.filter(usr => {
         if (currentUser && usr.id === currentUser.id) return false;
 
+        if (statusFilter !== 'ALL') {
+            const isActive = usr.active !== false;
+            if (statusFilter === 'ACTIVE' && !isActive) return false;
+            if (statusFilter === 'INACTIVE' && isActive) return false;
+        }
+
+        if (roleFilter !== 'ALL' && usr.role !== roleFilter) {
+            return false;
+        }
+
         if (searchTerm) {
             const term = searchTerm.toLowerCase();
             if (!usr.username.toLowerCase().includes(term) && !usr.email.toLowerCase().includes(term)) {
@@ -106,7 +117,7 @@ const Users = () => {
             <div className="page-header">
                 <h2>User Management Hub</h2>
             </div>
-            
+
             <div className="card" style={{ marginBottom: '2rem' }}>
                 <h3 style={{ marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                     <Plus size={20} />
@@ -146,20 +157,37 @@ const Users = () => {
                     <h3 style={{ margin: 0 }}>Active System Users</h3>
                     <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
                         <div className="form-group" style={{ marginBottom: 0 }}>
-                            <input 
-                                className="form-input" 
-                                type="text" 
-                                placeholder="Search users by name or email..." 
+                            <input
+                                className="form-input"
+                                type="text"
+                                placeholder="Search by name/email..."
                                 value={searchTerm}
                                 onChange={e => { setSearchTerm(e.target.value); setCurrentPage(1); }}
-                                style={{ padding: '0.4rem 0.8rem', minWidth: '250px' }}
+                                style={{ padding: '0.4rem 0.8rem', minWidth: '200px' }}
                             />
                         </div>
                         <div className="form-group" style={{ marginBottom: 0, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                            <span style={{ fontSize: '0.85rem', fontWeight: 600 }}>Date From:</span>
-                            <input 
-                                className="form-input" 
-                                type="date" 
+                            <span style={{ fontSize: '0.85rem', fontWeight: 600 }}>Status:</span>
+                            <select className="form-input" value={statusFilter} onChange={e => { setStatusFilter(e.target.value); setCurrentPage(1); }} style={{ padding: '0.4rem 0.8rem' }}>
+                                <option value="ALL">All</option>
+                                <option value="ACTIVE">Active</option>
+                                <option value="INACTIVE">Deactivated</option>
+                            </select>
+                        </div>
+                        <div className="form-group" style={{ marginBottom: 0, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                            <span style={{ fontSize: '0.85rem', fontWeight: 600 }}>Role:</span>
+                            <select className="form-input" value={roleFilter} onChange={e => { setRoleFilter(e.target.value); setCurrentPage(1); }} style={{ padding: '0.4rem 0.8rem' }}>
+                                <option value="ALL">All Roles</option>
+                                <option value="ADMIN">ADMIN</option>
+                                <option value="ENGINEER">ENGINEER</option>
+                                <option value="VENDOR">VENDOR</option>
+                            </select>
+                        </div>
+                        <div className="form-group" style={{ marginBottom: 0, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                            <span style={{ fontSize: '0.85rem', fontWeight: 600 }}>From:</span>
+                            <input
+                                className="form-input"
+                                type="date"
                                 value={dateFrom}
                                 onChange={e => { setDateFrom(e.target.value); setCurrentPage(1); }}
                                 style={{ padding: '0.4rem 0.8rem' }}
@@ -168,43 +196,43 @@ const Users = () => {
                     </div>
                 </div>
                 <div className="table-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>User ID</th>
-                            <th>Username</th>
-                            <th>Email Address</th>
-                            <th>System Role</th>
-                            <th>Access Switch</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {paginatedUsers.map(u => (
-                            <tr key={u.id}>
-                                <td>{u.id}</td>
-                                <td><strong>{u.username}</strong></td>
-                                <td>{u.email}</td>
-                                <td><span style={{ padding: '0.2rem 0.5rem', background: 'var(--primary-light)', color: 'var(--primary)', borderRadius: '4px', fontSize: '0.85rem' }}>{u.role}</span></td>
-                                <td>
-                                    <span style={{ padding: '0.2rem 0.5rem', background: u.active === false ? '#ffebee' : '#e8f5e9', color: u.active === false ? '#c62828' : '#2e7d32', borderRadius: '4px', fontSize: '0.85rem', fontWeight:'bold' }}>
-                                        {u.active === false ? 'INACTIVE' : 'ACTIVE'}
-                                    </span>
-                                </td>
-                                <td>
-                                    {u.active !== false ? (
-                                        <button className="btn" style={{ padding: '0.3rem 0.6rem', fontSize: '0.8rem', background: '#f57c00', color: 'white', width: 'auto' }} onClick={() => handleToggleStatus(u.id, false)}>Deactivate</button>
-                                    ) : (
-                                        <button className="btn" style={{ padding: '0.3rem 0.6rem', fontSize: '0.8rem', background: '#2e7d32', color: 'white', width: 'auto' }} onClick={() => handleToggleStatus(u.id, true)}>Activate</button>
-                                    )}
-                                </td>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>User ID</th>
+                                <th>Username</th>
+                                <th>Email Address</th>
+                                <th>System Role</th>
+                                <th>Status</th>
+                                <th>Actions</th>
                             </tr>
-                        ))}
-                        {filteredUsers.length === 0 && (
-                            <tr><td colSpan={6} style={{textAlign: 'center', color: 'var(--text-muted)'}}>No users match searches.</td></tr>
-                        )}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            {paginatedUsers.map(u => (
+                                <tr key={u.id}>
+                                    <td>{u.id}</td>
+                                    <td><strong>{u.username}</strong></td>
+                                    <td>{u.email}</td>
+                                    <td><span style={{ padding: '0.2rem 0.5rem', background: 'var(--primary-light)', color: 'var(--primary)', borderRadius: '4px', fontSize: '0.85rem' }}>{u.role}</span></td>
+                                    <td>
+                                        <span style={{ padding: '0.2rem 0.5rem', background: u.active === false ? '#ffebee' : '#e8f5e9', color: u.active === false ? '#c62828' : '#2e7d32', borderRadius: '4px', fontSize: '0.85rem', fontWeight: 'bold' }}>
+                                            {u.active === false ? 'INACTIVE' : 'ACTIVE'}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        {u.active !== false ? (
+                                            <button className="btn" style={{ padding: '0.3rem 0.6rem', fontSize: '0.8rem', background: '#f57c00', color: 'white', width: 'auto' }} onClick={() => handleToggleStatus(u.id, false)}>Deactivate</button>
+                                        ) : (
+                                            <button className="btn" style={{ padding: '0.3rem 0.6rem', fontSize: '0.8rem', background: '#2e7d32', color: 'white', width: 'auto' }} onClick={() => handleToggleStatus(u.id, true)}>Activate</button>
+                                        )}
+                                    </td>
+                                </tr>
+                            ))}
+                            {filteredUsers.length === 0 && (
+                                <tr><td colSpan={6} style={{ textAlign: 'center', color: 'var(--text-muted)' }}>No users match searches.</td></tr>
+                            )}
+                        </tbody>
+                    </table>
                 </div>
 
                 {totalPages > 1 && (

@@ -65,6 +65,15 @@ public class AssetController {
         Asset asset = new Asset();
         asset.setName(request.getName());
         asset.setType(request.getType());
+        asset.setCategory(request.getCategory());
+        asset.setSupplierName(request.getSupplierName());
+        asset.setAssetCode(request.getAssetCode());
+        asset.setPurchaseDate(request.getPurchaseDate());
+        asset.setPurchaseValue(request.getPurchaseValue());
+        asset.setDepreciationPercentage(request.getDepreciationPercentage());
+        asset.setLongDescription(request.getLongDescription());
+        asset.setRemarks(request.getRemarks());
+        asset.setInvoiceUrl(request.getInvoiceUrl());
         asset.setProperty(property);
         return ResponseEntity.ok(assetRepository.save(asset));
     }
@@ -82,6 +91,15 @@ public class AssetController {
                 .orElseThrow(() -> new RuntimeException("Property not found"));
         asset.setName(request.getName());
         asset.setType(request.getType());
+        asset.setCategory(request.getCategory());
+        asset.setSupplierName(request.getSupplierName());
+        asset.setAssetCode(request.getAssetCode());
+        asset.setPurchaseDate(request.getPurchaseDate());
+        asset.setPurchaseValue(request.getPurchaseValue());
+        asset.setDepreciationPercentage(request.getDepreciationPercentage());
+        asset.setLongDescription(request.getLongDescription());
+        asset.setRemarks(request.getRemarks());
+        asset.setInvoiceUrl(request.getInvoiceUrl());
         asset.setProperty(property);
         return ResponseEntity.ok(assetRepository.save(asset));
     }
@@ -127,6 +145,22 @@ public class AssetController {
         img.setAssetId(id);
         img.setImageData(url); // full https://res.cloudinary.com/... URL
         return ResponseEntity.ok(assetImageRepository.save(img));
+    }
+
+    @PostMapping(value = "/{id}/invoice", consumes = "multipart/form-data")
+    public ResponseEntity<Asset> uploadInvoice(
+            @PathVariable Long id,
+            @RequestParam("file") MultipartFile file) throws IOException {
+
+        Asset asset = assetRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Asset not found"));
+
+        // Upload to Cloudinary. Force raw for PDFs so they are not blocked by Cloudinary Image Delivery security policies
+        String resourceType = file.getContentType() != null && file.getContentType().toLowerCase().contains("pdf") ? "raw" : "auto";
+        String url = cloudinaryService.upload(file, "imms/invoices", resourceType);
+
+        asset.setInvoiceUrl(url);
+        return ResponseEntity.ok(assetRepository.save(asset));
     }
 
     @GetMapping("/{id}/images")

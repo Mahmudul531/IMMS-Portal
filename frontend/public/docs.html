@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IMMS Platform - Comprehensive User Manual</title>
+    <style>
+        :root {
+            --primary: #0f766e;
+            --primary-light: #ccfbf1;
+            --text: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+        }
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            background: #f8fafc;
+            margin: 0;
+            padding: 40px 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 50px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            border-radius: 12px;
+        }
+        .header {
+            text-align: center;
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 30px;
+            margin-bottom: 40px;
+        }
+        .header h1 {
+            color: var(--primary);
+            margin: 0 0 10px 0;
+            font-size: 2.5rem;
+        }
+        .header p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            margin: 0;
+        }
+        h2 {
+            color: var(--primary);
+            margin-top: 50px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 10px;
+            font-size: 1.8rem;
+        }
+        h3 {
+            color: #334155;
+            margin-top: 30px;
+            font-size: 1.3rem;
+        }
+        ul {
+            padding-left: 20px;
+            color: #334155;
+        }
+        li {
+            margin-bottom: 12px;
+        }
+        .badge {
+            background: var(--primary-light);
+            color: var(--primary);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+        .notice {
+            background: #fff8eb;
+            border-left: 4px solid #f59e0b;
+            padding: 20px;
+            margin: 30px 0;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>IMMS Intelligent Maintenance Management System</h1>
+            <p>Comprehensive Platform User Manual & Administrator Guide</p>
+        </div>
+
+        <h2>Overview & Authentication</h2>
+        <p>The IMMS Portal is a full-scale Enterprise spatial registry and asset lifecycle management system.</p>
+        
+        <h3>Registration & Login</h3>
+        <ul>
+            <li><strong>Login System</strong>: Secure login requires an authorized Username and Password. Access is strictly audited.</li>
+            <li><strong>System Roles</strong>: The system evaluates you as <span class="badge">ADMIN</span>, <span class="badge">ENGINEER</span>, <span class="badge">TECHNICIAN</span>, or <span class="badge">VENDOR</span>. Features and data views are heavily restricted based on your access tier.</li>
+            <li><strong>New Users</strong>: Only an Administrator can create and assign roles to new users via the "User Access" hub.</li>
+        </ul>
+
+        <h2>1. Dashboard Analytics</h2>
+        <p>Upon successful authentication, the Dashboard provides an immediate analytical summary of the platform's health.</p>
+        <ul>
+            <li><strong>Metrics</strong>: Displays total active properties, aggregate asset count, and total open work volumes.</li>
+            <li><strong>Real-Time Spatial Map</strong>: Internally aggregates every single Property coordinate and displays a customized map layer (powered by Leaflet GIS capabilities). Hovering/clicking map pins identifies precise geographical properties instantly.</li>
+        </ul>
+
+        <h2>2. Property Management</h2>
+        <p>Properties act as the root spatial zones where all assets are housed.</p>
+        <ul>
+            <li><strong>Creation</strong>: Admins and Engineers can register new properties. It requires an exact address and exact Latitude/Longitude coordinates (used for the global map registry).</li>
+            <li><strong>GIS Searching</strong>: Easily search locations automatically via integrated Geolocation services.</li>
+            <li><strong>Property Detail View</strong>: Each property holds an independent gallery of structural photographs uploaded securely to the cloud.</li>
+        </ul>
+
+        <h2>3. Assets & Inventory Mapping</h2>
+        <p>Assets are the core mechanical, structural, or electronic items assigned identically to Properties.</p>
+        <ul>
+            <li><strong>Asset Addition</strong>: Assets are recorded with strict purchase financial data, categorical types, and specific supplier data. Adding future dates is systematically restricted.</li>
+            <li><strong>Financial Depreciation</strong>: When viewing a specific Asset internally, the system initiates mathematical calculations to derive real-time present value. <strong>Depreciation only takes effect strictly starting AFTER the first year of ownership.</strong></li>
+            <li><strong>Asset Gallery & Invoices</strong>: Users can natively attach image galleries of the mechanical asset natively, and securely attach raw PDF Invoices.</li>
+            <li><strong>Activity Timeline</strong>: Generates an automatic visual chain of custody tracing when the asset was created and exactly where it has been transferred.</li>
+            <li><strong>Exporting Data</strong>: Authorized users can instantly export complete historical chains to secure PDF documents or raw XLS spreadsheets.</li>
+        </ul>
+
+        <h2>4. Asset Setup (Preferences)</h2>
+        <p>A specialized configuration matrix designed solely for Administrators.</p>
+        <ul>
+            <li>Administrators dynamically create, delete, and manage universally selectable categories (e.g., HVAC, Electrical, Plumbing) and system Types.</li>
+        </ul>
+
+        <h2>5. Inter-Property Asset Transfers</h2>
+        <p>When physical assets are moved between regional locations, it must be digitally authorized.</p>
+        <ul>
+            <li>A streamlined tracking matrix allows Engineers to safely un-link an asset from "Property A" and officially register it to "Property B".</li>
+            <li>Mandatory digital signatures and notes are applied to create a foolproof historical ledger.</li>
+        </ul>
+
+        <h2>6. Work Orders & Vendor Application Bidding</h2>
+        <p>The central hub for resolving mechanical issues or initiating operational maintenance tasks.</p>
+        <ul>
+            <li><strong>Deploy Duty</strong>: Administrators create targeted Work Orders and map them uniquely to a root Property and sub-selected Asset.</li>
+            <li><strong>Vendor Bidding</strong>: External Third-Party Vendors log in directly to review "Pending" tasks. A Vendor can securely evaluate the scope and submit a competitive numerical bid (BDT ৳) for the job.</li>
+            <li><strong>Awarding Contracts</strong>: Administrators review submitted bids by multiple Vendors internally. Once a bid is approved, the vendor is structurally Locked in and the duty shifts to ACTIVE/ASSIGNED mode.</li>
+        </ul>
+
+        <h2>7. User Access Matrix</h2>
+        <p>Complete control interface over who holds organizational access.</p>
+        <ul>
+            <li><strong>Creation Matrix</strong>: Admins dynamically register operational staff.</li>
+            <li><strong>Power Toggles</strong>: Admins possess instantaneous override locks to temporally Suspend or fully Deactivate accounts without destroying historical logs connected to that user.</li>
+        </ul>
+
+        <div class="notice">
+            <strong>System Notification:</strong> PDF exports, XLS logs, and Cloud CDN image deliveries are directly powered by our secure regional infrastructure. Unauthorized downloading attempts or unauthorized API calls will instantly return 401 Unauthorized server traps.
+        </div>
+
+    </div>
+</body>
+</html>
