@@ -1,0 +1,881 @@
+INCEPTION REPORT
+FOR
+Hiring a Firm for Maintenance and Enhancement of Hosting InfrastructureDate- 06-04-2022
+Submitted to
+Project Director Aspire to Innovate (a2i) Programme ICT DivisionICT Tower, E-14/X, Agargaon, Dhaka 1207
+Submitted by
+BASE - TVNL - Kloud JV
+06 May 2022
+Table of Contents
+SL
+Description
+Page No.
+01.
+Introduction
+4-5
+02.
+Executive Summary
+6-6
+03.
+Engagement of Scope
+7-8
+04.
+Maintenance and Enhancement of Hosting Infrastructure
+8-12
+05.
+Standard Operating Procedure (SOP)
+13-19
+06.
+Operations & Maintenance (O&M) Approaches
+20-29
+07.
+Deliverables and Work plan
+29-32
+08.
+Committed SLA
+32-33
+09.
+PMT Composition
+33-35
+10.
+Out of Scope
+35-35
+11.
+Disclaimer
+36-36
+12.
+Errors and Omissions
+36-36
+13.
+Confidentiality
+36-36
+14.
+Conclusions
+36-36
+To
+Project Director,
+Aspire to Innovate (a2i) Programme 
+Information & Communication Technology (ICT) Division
+ICT Tower, E-14/X, Agargaon, Dhaka 1207
+Subject: Submission of Inception Report for Maintenance and Enhancement of Hosting Infrastructure.
+Dear Sir, 
+As part of our engagement to provide services for “Maintenance and Enhancement of Hosting Infrastructure", BASE - TVNL - Kloud JV hereby submits the Inception Report for your kind perusal.
+This Inception Report has been prepared in accordance with our engagement agreement dated April 06, 2022.
+As a part of overall scope of work, this report has been prepared by BASE - TVNL - Kloud JV to ensure that there is a clear and common understanding between A2I and BASE - TVNL - Kloud JV with regards to:
+Overall Project Objectives
+Engagement Scope and
+Timeline of the Project
+Deliverables and Milestones  
+This report is intended solely for sharing information with A2I. 
+BASE - TVNL - Kloud JV appreciates the cooperation and assistance provided by A2I team members to the BASE - TVNL - Kloud JV team during the preparation of this report. If you have any questions, please contact us.
+Kind Regards,
+A B Reazul Islam
+On Behalf of BASE - TVNL - Kloud JV
+1. Introduction
+1.1 Objective
+The purpose of this document is to present the fundamental principles which on a broader level, Maintenance and Enhancement of Hosting Infrastructure to be managed by BASE - TVNL - Kloud JV. which includes fundamentally:
+Work with A2i hosting infrastructure management team and current software development team.
+Management of hosting infrastructure includes infrastructure monitoring, manage, enhancement, backup management, new application hosting, resource scale-up.
+1.2 Document Control
+Assignment Name
+Maintenance and Enhancement of Hosting Infrastructure
+Client 
+Project Director
+Aspire to Innovate (a2i) Programme 
+ICT Division
+ICT Tower, E-14/X, Agargaon, Dhaka 1207
+RFP No
+56.42.0000.006.07.029.20.537 dated 17 June 2021
+Contract No
+56.42.0000.006.07.029.20.369 dated 06 April 2022
+Credit
+Participants to the meetings undertaken in the run up to preparation for this report
+Report No
+Inception Report 
+Start Date
+April 06, 2022
+Submission Date
+May 05, 2022
+Version
+1.0
+Last Modified
+May 05, 2022
+1.3 Document Amendment Procedure
+This document can be amended by the BASE - TVNL - Kloud JV further to any feedback from A2I team. Minor changes such as spelling corrections, content formatting or minor text re-organization not affecting the content and meaning of the document can be applied by the BASE - TVNL - Kloud JV without peer review. Other changes by either BASE - TVNL - Kloud JV or A2I must be submitted to peer review and for approval of A2I. Any hand written comments/ suggestions/instructions or in any form other than printed and signed by both parties will not be considered as agreed or approved contents.
+When the document is modified for any reason, its version number shall be incremented accordingly. The document version number shall follow the standard conventions for document versioning. The document shall be maintained in the BASE - TVNL - Kloud JV repository and be made accessible through the login credentials.
+2. Executive Summary 
+JV among BASE Limited, Kloud Technologies Limited & Tech Valley Limited being together will contribute towards technological development of the country and significantly support the Government to build a Digital Bangladesh. BASE as a renowned IT industry provide unique support in sustainable ICT and Development Solutions. Tech Valley Networks Ltd. is also having a positive impact on the Tech. market for over 2 decades. They have dedicated 100 employees serving for continuously. However, Kloud Technologies Limited as a newly formed ICT infrastructure operator taking part towards sustainable ICT development by providing data center, national wide internet services, nation wide internet exchange with the aim to establish Digital Bangladesh. So, having diversified portfolio these three companies are forming together as a joint venture entity and given the opportunity to operate, maintain and scaling of present A2I Hosting Infrastructure and its continuing improvement solutions. 
+Government of Bangladesh takes a holistic view of e-Governance initiatives across the country. E- Governance is the application of information and communication technology (ICT) for delivering government services, exchange of information, communication transactions, integration of various stand-alone systems and services between government-to-citizen (G2C), government-to-business (G2B), government-to-government (G2G), government-to-employees (G2E) as Through e-governance, government services are made available to citizens in a convenient, efficient, and transparent manner. This rapid development of government e-Service and internet infrastructure has created a great opportunity for e-Service providers of both public and private sectors to avail services to citizen’s fingertips.
+Aspire to Innovate (a2i), as the flagship program me of the Digital Bangladesh agenda, developing various e-Governance services. 100+ applications are deployed, some of them are nation-wide important and deployed in a central data center covering both domestic & international routing mechanism. Cloud infrastructure/cloud stack deployed in 80+ Physical hardware which are purely virtualized and clustered. Government and citizen are the main customer of the applications. A2i programme is coordinating the support. Now the programme expresses its interest to invite relevant service provider to render Managed Service for Data Center Management.
+3. Engagement of Scope
+The Information Technology Infrastructure of "A2I” at multiple data centers will be managed by BASE - TVNL - Kloud JV. The scope includes the day to day operational activities to proactive actions reduce the risk of service outage. The scope will cover interdependent areas and they are:
+1. National Portal
+2. Eksheba Gov doptor.gov.bd
+3. Eksheba Citizen mygov.bd
+4. Grs grs.gov.bd
+5. Online forms forms.gov.bd
+6. Isdp++
+7. isdplab
+8. SDG sdg.gov.bd
+9. OGD data.gov.bd
+10. Muktopaath muktopaath.gov.bd
+11. Teachers portal techers.gov.bd
+12. Konnect konnect.edu.bd
+13. MMCM mmcm.gov.bd
+14. Eduhub eduhub.gov.bd
+15. Virtual Classroom, https://virtualclass.gov.bd/
+16. CA Tool
+17. CAS https://cas.konnect.edu.bd/cas
+18. Judiciary Systems
+19. Ecourt
+20. E challan echallan.gov.bd
+21. NEPS http://123.49.47.64:8080/neps-api
+22. Corona dashboard
+23. Corona datawarehouse 10.10.11.144
+24. A2i website
+25. A2i dashboard
+26. Eksheba uddokta
+27. Constituency Tracker
+28. Imam Portal
+29. Migration portal http://migration.gov.bd/bn
+30. DFS Portal
+31. NISE
+32. Edirectory http://edirectory.apps.portal.gov.bd/
+33. SSN4PSI site
+34. Futureofworklab website
+35. Financialinclusion website
+36. DPG
+37. Upcoming up to 2 service will be included in this scope of work
+As required need to system migration from one data center to another data center.
+4. Maintenance and Enhancement of Hosting Infrastructure
+The overall objective of the assignment is to stable and maintain the current system and provide required support to the users and also enhance the current system based on different improvement requests, change requests and information demand as post-implementation user requirements in addition to the regular maintenance of the product.
+4.1Infrastructure Management
+4.1.1Infrastructure Administration:
+BASE - TVNL - Kloud JV will be managing the infrastructure deployed for the “A2I managed service which includes operating systems, databases, virtualization technologies, load balancer, database replicator, high availability and load balancing cluster solution, storage technology, middleware platforms etc. to availability, performance, cost effective utilization and security of the system.
+3 data center BTCL, NDC & 4TDC, 50+ service excluding eNothi, 700+ Virtual Machine (VM)
+4-tier/any other a2i nominated data center needs be integrated with the existing system to ensure cross site computing environment and cross site redundancy.
+Build Data Center (DC), Disaster Recovery (DR) for Production, Test and Development.
+Manage the operating system, database, application, application server and the integration among them to ensure the availability of “A2I" managed solution.
+Administrate the load balancer, database replicator, cluster software etc. to ensure high availability computing environment.
+Ensuring the 99% availability/uptime of service.
+Update the security settings and version of the operating system, database, application, application setting to ensure secured computing environment and service.
+Manage and update the Logical Architecture Diagram, Logical Design Diagram Manage, High Level Design, Low Level Design, Physical Architecture diagram, Physical Design Diagram etc. as appropriate from the base line.
+Manage IT inventory, configuration management database etc. to ensure the integrity and consistency of the computing environment.
+Backup of the database, application and server will be performed as per the predefined retention policy, Recovery Point Objective (RPO) and Recovery Time Objective (RTO).
+4.1.2 Network Administration
+To have redundant, improved quality of service, increase the capacity of A2I managed system as per service requirement, BASE - TVNL - Kloud JV will manage the network administration. 
+4.1.2.1 Network Equipment Management:
+Manage High end, High-capacity Edge Router for A2I managed system gateway Operation, Hosting and Other Server Network Support.
+Managed Services for the full built network for One Year including network level security, auto upstream, server and access network redundancy and access control mechanism.
+BASE - TVNL - Kloud JV will be responsible for managed solution including configuration and necessary software for network setting up:
+Internet and NIX including multiple upstream, load balancing (Eternal Border Gateway protocol (eBGP) / Internal Border gateway protocol (iBGP)), Border gateway protocol (BGP) & Network management system (NMS)
+DR/Secondary Site on demand integration
+Data Center Server Firm network deployment
+4.1.2.2 Bandwidth Manage:
+The Bandwidth manager has been up and properly configured as per A2I requirements by BASE - TVNL - Kloud JV. 
+Public IP. The service provider must provide necessary peering IP block including minimum Bangladesh internet Exchange (BDIX) and Bangladesh Telecommunication Limited (BTCL) National Internet Exchange (NIX) traffic. Necessary traffic engineering either through NIX or Internet need to be ensured by the provider.
+Support service for internet connection. BASE - TVNL - Kloud JV shall provide support for maintenance of the total A2I network at all times.
+Ensuring 99.5% network uptime.
+4.1.3 IT Service Management
+Information Technology infrastructure library (ITIL) service management processes and procedures are put in place and followed for IT operations management and to ensure measurable IT service and re-enforce compliance.
+4.1.4NOC Operation:
+A 24x7 NOC operation is ensured the continuous monitoring of the application availability, infrastructure performance etc. According to predefined escalation matrix NOC will escalate the event to respective person or team. Following NOC activities will be maintained actively:
+Monitoring the utilization of computing resources from the operating system layers which include CPU utilization, memory utilization, space utilization, server load average, network interface load etc.
+Monitoring the database utilization including availability of the database, utilization of space (data file, schema, log location etc.).
+Monitoring the availability and performance of the application including response time, URL availability etc.
+Monitoring the network appliance used as a part of “A2I” managed solution which includes load balancer, firewall appliances, etc.
+Monitoring the solution integrity including database and application connectivity, replication process, availability of the application over internet and local networks etc.
+Documentation of all the monitoring metric and parameter mapping with threshold point and escalation details.
+Set the Monitoring KPI in consultation with the Customer and provide report as mentioned in the reporting section
+Schedule maintenance for preventing incident.
+4.1.5 Incident Resolution
+The NOC escalated event or any incident escalated by any party are assessed by the service provider. Also, the event and incident will be resolved by the vendor when that is under the scope and for the event out for the scope the vendor should immediately notify the client.
+The events and/or incident will be resolved by the Service provider within predefined resolution time.
+The resolutions which are not under the scope of service should be jointly monitored by service provider and a2i
+The resolution history will be documented for further references in Known error database (KEDB).
+All the incidents will be recorded, and summary has to be reported monthly to the client.
+4.1.6 Root Cause Analysis:
+Reactive problem management focuses on solving problems in response to one or more incidents as they occur; proactive problem management focuses on identifying and solving problems and known errors that might otherwise be missed, thereby preventing future incidents. Should be looking for repeat incidents with the same category, affected service, and configuration item (Cl), cause, or resolution:
+Performing trend analysis of incident records;
+Detecting duplicate and recurring issues.
+During major incident management, identifying a risk that an incident could recur.
+4.1.7 Asset Registry and Configuration Items Database:
+Covers the identification, recording, and reporting of IT components, including their versions, constituent components and relationships. A series of reviews and audits that verify the physical existence of Configuration Items (Cl) and check that they are correctly recorded in the Configuration management system.
+Helps organizations in various activities: To plan, control, manage, monitor, evaluate and provide accountability for IT Assets. To provide accurate asset information for various business processes.
+Deals with maintaining up-to-date and verified database of all assets and CIs which are also made available to other service management processes.
+4.1.8 Change Control:
+Ensure that standardized methods and procedures are used for efficient and prompt handling of all changes to control IT infrastructure, in order to minimize the number and impact of any related incidents upon service
+Patch management
+Management and co-ordination of Change implementation.
+Assessing the impact, benefits and risk of changes
+Ensuring that changes are recorded, evaluated, authorized, prioritized, planned, tested, implemented, documented and reviewed in a controlled manner
+4.1.9 Service Extensions:
+Request for service extensions can be done directly through vendor’s business channel which will appropriately guide. The cost for additional services is guided by terms and conditions as agreed by both parties and/or contracts.
+4.1.10 Capacity Planning:
+Based on performance of the existing system, growth rate of the data and users, technology lifecycle, projection of new office, user integration etc. the service provider will analyze the requirement of capacity enhancement and share the technical suggestions with the client.
+The Service provider will prepare the requirement proposal for computing capacity enhancement (storage expansion, memory extension, node addition etc) in order to ensure performance and availability of the infrastructure based on existing growth rate, performance, incident trends, upcoming requirement etc.
+The expansion of capacity which could be done within the managed software and hardware environment without any financial involvement will be done by the service provider.
+4.1.11 Reporting:
+Service Provider will periodically share report with A2I which will depict the performance, utilization, capacity of the system, reason of incidents, required of preventive actions, deviation of the system from the baseline, history of corrective action etc. in order to ensure transparency of service and deliverables.
+The service provider will share report associated with availability, performance of system and SLA in a pre-approved format with the client
+The service provider will share the security assessment and gap report as per predefined standards
+The service provider will prepare the on-demand report as requested by the client on the managed devices and software
+5. Standard Operating Procedure (SOP)
+5.1. Purpose 
+This Standard Operating Procedure (SOP) will serve as guiding policy document to ensure smooth operations of Maintenance and Enhancement of Hosting Infrastructure. The objective is to achieve efficiency, quality output and uniformity of performance, while reducing miscommunication and failure to comply industry regulations.
+5.2 Scope
+This SOP shall apply to all staffs, government agencies, contractors, vendors and all the stakeholders who are availing Hosting Infrastructure services. This SOP shall also cover all computers, servers, storage, and all network terminal equipment connected to Hosting Infrastructure services that is being used to configure and manage service installation remotely and on site. 
+5.3 Role Definition
+Authorized Staff/User: Employees who are authorized to gain access to the Hosting Infrastructure services.
+Authorized Vendor/: Private contractor who, through contractual arrangement and appropriate approvals, have access to the Hosting Infrastructure services.
+Data Center Staff: Employees who work for 3 (three) a2i nominated data center BTCL, NDC & 4TDC.
+Visitors: All other personnel who may occasionally visit Hosting Infrastructure support services, but are not authorized to be in the Hosting Infrastructure facility without escort.
+5.4 Staff/Vendor
+Authorizations will only be approved for individual(s) who are responsible for installation and/or maintenance of equipment housed in the data center BTCL, NDC & 4TDC facilities. Approval processes are as follows:
+Concerned vendor/staff must fill up access authorization form (Annexure - A) and submit to A2I.
+Upon approval, the authorized staff member or vendor shall be issued access permit.
+Authorized staff/vendors shall be allowed entrance into the data center area by a data center employee upon producing access permit.
+Authorized staff/vendors are responsible for logging in/out when entering/exiting the data center. The purpose of the visit must be documented.
+5.5 Visitor 
+Anyone who is not a a2i employee, an authorized staff member, or authorized vendor is considered a visitor. All visitors to the data center must adhere to the following procedures:
+Visitors must be accompanied by either a data center employee or other authorized staff member at all times while in the data center.
+Visitors must log in/out when entering/exiting the data center. The purpose of the visit must be documented.
+Visits should be scheduled through A2I. Unscheduled visits to install equipment or perform other tasks shall not be entertained unless emergency situation.
+5.6 Remote Access
+5.6.1 Virtual Private Network (VPN)
+Only approved employees and authorized third parties (customers, vendors, etc.) shall be provided VPN clients credentials. Only one VPN access credentials will be provided. Authorized employees or third parties must adhere to following requirement:
+Fill up form Annexure - B and submit to A2I.
+It is the responsibility of employees/authorized party with VPN privileges to ensure that unauthorized users are not allowed access to the network.
+When actively connected to the corporate network, VPNs will force all traffic to and from the PC over the VPN tunnel.
+Dual (split) tunneling is NOT permitted; only one network connection is allowed.
+VPN users will be automatically disconnected from network after preset minutes of inactivity. The user must then logon again to reconnect to the network. 
+Only A2I approved VPN clients must be used.
+Authorized user shall protect their username and passwords even from using from personal device.
+While using a computer to remotely connect to A2I network, Authorized Users shall ensure the remote host is not connected to any other network at the same time, with the exception of personal networks that are under their complete control or under the complete control of an Authorized User or Third Party. 
+All hosts that are connected to internal networks via remote access technologies must use the most up-to-date anti-virus software.
+5.6.2 Secure Shell Access
+Only approved employees and authorized third parties (customers, vendors, etc.) shall be provided SSH credentials. Only one SSH access credentials will be provided. Authorized employees or third parties must adhere to following requirement:
+Fill up form (Annexure – B) and submit to A2I.
+It is the responsibility of employees/authorized party with SSH privileges to ensure that unauthorized users are not allowed access to the network.
+SSH users will be automatically disconnected from network after certain minutes of inactivity. The user must then logon again to reconnect to the network. 
+Authorized user shall protect their username and passwords even from while using personal devices. 
+While using a computer to remotely connect to A2I network, Authorized Users shall ensure the remote host is not connected to any other network at the same time, with the exception of personal networks that are under their complete control or under the complete control of an Authorized User or Third Party. 
+All hosts that are connected to internal networks via remote access technologies must use the most up-to-date anti-virus software. 
+5.7 Resources
+5.7.1 Hardware/Equipment
+Hardware/Equipment refers to all devices (storage, compute, network), racks, cables installed within the A2I designated data center. All installation, replacement and removal works shall be approved by A2I.
+Authorized staff/vendor performing equipment installation must submit a work permit form (Annexure - A) and get approval before carrying out any of the following tasks.
+Installation of new hardware.
+Replacement of hardware.
+Removal/Decommissioning of defective equipment or expired equipment.
+5.7.2 Application/Software 
+Application/Software refers to all proprietary, in-house or outsourced software as well as all open source software being used to run the services at A2I. All installation, configuration, testing, upgrades, updates and removal of application/software must be approved by A2I in consultation with concerned agency. 
+The authorized staff/vendor performing installation or configuration works shall submit a work permit form (Annexure - A) and get approval before carrying out any of the following tasks:
+Installation and configuration.
+Upgrades/Updates.
+Decommissioning/Uninstallation/Removal.
+5.8 Allocation 
+Resource refers to all usable network, compute and storage capacities currently available and ready to be allocated. The concerned agency wishing to avail resources at A2I must follow procedures outline below:
+Seek approval from A2I to host services/application. 
+Submit resource requirement via formal email by authorized personnel from A2I. The application must be accompanied with a comprehensive project document in case of new application/system.
+5.9 Reporting and Documentation 
+A report must be compiled and submitted to the A2I Management for review on a quarterly basis, in the format attached (Annexure - D) along with a copy of report generated by Monitoring system. 
+All log reports must be maintained for a period of three months and archived for a period of one year.
+5.10 Human Resources
+5.10.1 Knowledge Sharing Session
+Capacity building is key to ensure smooth operation of the Maintenance and Enhancement of Hosting Infrastructure services. A2I technical team shall organize Knowledge Sharing Session to achieve better understanding of the mentioned working areas under engagement of scope for BASE - TVNL - Kloud JV staffs.
+5.11 Emergency Contact
+In the event of a staff member availing leave, it should be ensured that there is a competent personal, who is capable of fulfilling all obligations during his/her absence.
+Following procedures must be adopted:
+Update contact emergency form (Annexure - C) and provide a copy to A2I emergency contact. 
+Set auto-responder on email along with contact details of person who has been delegated the task. 
+Inform through closed/secure social media group or community, if there is any such group instituted for faster dissemination of information.
+5.12 Roles and Communication
+SL
+Team
+Composition
+Responsibilities
+1
+Management Team
+Project Director, A2I
+Key Focal Maintenance and Enhancement of Hosting Infrastructure, A2I
+Provide direction and guidance in line with application requirements.
+Authorize and approve project scopes during up gradation and change management process. 
+2
+Maintenance and Enhancement of Hosting Infrastructure Operations Team
+Key Focal Maintenance and Enhancement of Hosting Infrastructure, A2I
+Solution Architect, A2I
+Technical Lead, Service Partners
+Prepare project scopes based on available resources. 
+Provide technical support and guidance to concerned agencies. 
+Advise management on data center trends. 
+Liaise with O&M contractor and government agencies. 
+Manage and Administrate of Hosting Infrastructure.
+Forecast and plan NOTHI resource capacity. 
+Liaise and coordinate with network and relevant system/application owners. 
+Assess the resource requirement submitted by system/application owners and grant approval. 
+Plan and coordinate change management. 
+Coordinate and communicate with end users, as and when required, about application level impacts of outages or scheduled maintenance. 
+3
+Application Owner
+Concerned agency
+Maintain and manage application hosted in A2I’s Hosting Infrastructure.
+Manage and apply patch updates in consultation with relevant Software Team
+Consult ITSM to seek technical support.
+4
+ITSM Provider
+Technical team of concerned provider
+Configure and set up new virtual platform and accordingly allocate resources such as memory, storage, processor, network etc.as per the requirement submitted by A2I.
+Ensure that system hosted in each virtual platform has no access to another virtual platform unless required by A2I
+Implement firewall security policy (ies) needed for system management and accessibility based on A2I's requirement.
+Manage and apply patch updates to the Operating Systems in consultation and prior approval from A2I. This consultation must be sought at the earliest upon system notification and official release of patches.
+Plan and outline patch management strategy in consultation with A2I.
+Ensure the hardware contingencies are maintained throughout operation of A2I’s Hosting Infrastructure networks and services.
+Monitor availability and utilization of server resources. These reports shall be submitted to the A2I on a periodical basis.
+Notify A2I on resource usage status and recommend/provide necessary action to prevent any service outage due to depletion of resources.
+Provide 24/7 or 9/9 on-call support, as specified for each supported server or device; diagnose and correct hardware and operating system problems; provide support to application and database administrators when they are troubleshooting applications/services.
+Provide unique usernames and passwords for all virtual platform and applications/services to A2I.
+Configure, maintain and monitor servers such as DNS, Log Server, NTP, NMS and other critical servers required to run and operate A2I’s Hosting Infrastructure network and services.
+5.13 Inventory Management
+An inventory of all hardware/software/application shall be maintained as per A2I’s suggested format/tool.
+Hardware: An up-to-date list of hardware component in A2I's Hosting Infrastructure shall be maintained. 
+Software Library: An up-to-date list of hosted applications shall be maintained.
+Service/Applications: A list of software licenses/versions, Operating Systems and other critical software shall be maintained.
+5.14 Configuration and Testing
+1.  A2I shall provide a staging server where new software/applications shall be temporarily hosted for testing before going into production environment. 
+2.  All configuration and testing of hardware/software shall be carried out in the staging server. 
+3.  Staging server will be a temporary provision until the end of testing phase. After completion of tests, all resource shall be held back and all configurations shall be erased.
+6. Operations & Maintenance (O&M) Approaches
+The section explains all the O&M activities of Maintenance and Enhancement of Hosting Infrastructure Services. All technical personnel follow these approaches. Any confusion must be clarified at own responsibility from line managers. Manager O&M shall be held responsible for maintaining and updating this document as and when needed.
+Any amendment shall be incorporated as and when necessary and a revised version of this section shall be circulated to all. Manager O&M shall be responsible for notifying all concerned personnel.
+6.1 Roles & Responsibilities 
+Role
+Function
+Organization/ Functional Area
+Application Software Installations
+Installation of core web application in case or Disaster Recovery
+BASE - TVNL - Kloud JV
+Application(s) Administration
+For Application Software update, change management, continuity
+BASE - TVNL - Kloud JV
+Server Hardware/OS Maintenance Administration
+Regular Monitoring and Updates
+BASE - TVNL - Kloud JV
+Desktop/Client Administration
+Customer Support
+BASE - TVNL - Kloud JV
+Backup & Recovery
+Regular Monitoring and Updates
+BASE - TVNL - Kloud JV
+Scripts (Scheduled execution)
+-
+BASE - TVNL - Kloud JV
+Database Administration
+Regular Monitoring and Updates
+BASE - TVNL - Kloud JV
+Infrastructure Support 
+Installation and update 
+BASE - TVNL - Kloud JV
+6.2 Standard Operations involved for Maintenance and Enhancement of Hosting Infrastructure Services 
+System Provisioning
+System Backup and Recovery
+System Migration
+Network Latency Monitoring
+Network BW Graphs Monitoring
+System BW Graphs Monitoring
+Device Error Monitoring
+O&M Reporting
+NOC Reporting
+Emergency Situation
+Technical Inventory Management of Network Equipment
+Technical Inventory Management of Servers
+Technical Inventory Management of Support Systems
+NOC support and roster
+Server Maintenance
+Database and Application/Site Monitoring
+6.3 Backup Procedures:
+Taking periodical Virtual Machine Snapshot
+Taking periodical server configuration files backup
+Periodical log records dump
+Periodical IDS and firewall log dump
+Periodical mail log dump
+Periodical database dump
+Periodical Monitor data dump
+Periodical web server log dump
+6.4 Restart Recovery Procedure
+For routine/planed restart, notify to all concerns prior 72 Hours
+For emergency restart, notify to all concerns and act immediately
+For recovery, follow an approved Disaster recovery schedule
+6.5 System migration
+BASE - TVNL - Kloud JV will migrate system from one data center to another data center as required. On migration procedure system service quality, data integrity will be maintained. System migration below things will be followed by BASE - TVNL - Kloud JV.
+Infrastructure assessment before migration.
+Minimum service outage time during migration.
+Zero or less possible data loss during migration.
+Proper migration plan considering all sorts of feasibility assessment.
+Ensure service quality.
+Ensure all security measurement.
+After migration ensure uninterrupted support during observation period.
+System migration procedure are not limited to the defined items, these are key items to be maintain. Detail plan or outline should be defined by service provider before each system migration & acknowledged by A2I.
+6.6 Monitoring Tools:
+Following Monitoring tools will be used to perform the regular monitoring of the resources. 
+Netbox
+Nagios 
+Nmon 
+Librenms
+Cacti
+Currently Deployed Monitoring tools screenshots (Annexure – F)
+The regular monitoring procedure involves include Port Monitoring, Ping, and Load Averages.
+6.6.1 Port Monitoring
+The server's primary communication services are polled every few minutes to ensure that they are online. The service is considered down if the poll was unsuccessful for the number of retries (by default 3) for any of the following:
+A route to the IP address is not available.
+The connection is refused.
+The connection times out (by default 10 seconds unless otherwise specified).
+As long as the service is online, the service will be polled every 5 minutes. Once a service is down, it will poll every 30 seconds until either the service comes back up or 5 minutes have elapsed at which that point it will go back to the default polling interval.
+The services that are polled include:
+HTTP (The service that serves web pages.)
+POP3 (Related to email delivery.)
+SMTP (Also related to email delivery.)
+MySQL/MSSQL (The service that operates databases.)
+SFTP (The service that manages uploading and downloading files to the server.)
+SSH (The service that manages the server's shell communication.)
+If one of the services listed above goes offline, alerts are generated within the server facility, and a server technician is dispatched to investigate and resolve the issue ASAP.
+6.6.2 Ping
+An ICMP ping request is sent to the IP address of the server every 5 minutes, requiring a response within 5 seconds. If it doesn't respond within 5 seconds, it tries every 30 seconds until the service comes back or reaches the 5 minutes mark. If it responds in time, it resumes to regular polling. Otherwise an alert is generated within the server facility, and action is taken as necessary.
+6.6.3 Load Averages
+Each server is pinged once per minute to retrieve its load average (how hard the server's processor is working). The load average results are displayed in the control panel used by all members of the Modular Merchant support team, and are updated every minute. If a server's load increases outside the range of acceptable performance, the appropriate action is taken immediately. The action taken will vary, depending on the cause of the high load.
+The combination of monitoring and emergency procedures listed above are designed to keep all of services up and running reliably 24/7.
+6.7 Maintenance Procedure
+Check disk usage. 
+Check RAID Alarms.
+Update your OS. 
+Update your Control Panel. 
+Check application updates
+Check remote management tools
+Check for hardware errors. 
+Check server utilization
+Review user accounts. 
+Change passwords.
+Check system security.
+6.8 Database Administration Procedures
+Database administration is performed by BASE - TVNL - Kloud JV.
+Database backup and continuity support maintained by BASE - TVNL - Kloud JV.
+6.9 System Provisioning
+All related O&M actions shall start after notification from accounts to Kloud support support@kloud.com.bd 
+Concerned responsible persons shall then take actions as per the mail(s) from accounts.
+Core responsible shall prepare necessary configuration, rules, policies etc.
+All sorts of necessary configurations must be verified by Manager O&M or his designated person(s) as applicable.
+The SLA for client IPBW service provisioning, as applicable, shall be followed further.
+6.10 Network Latency Monitoring
+The task owner shall be responsible for monitoring of all network latency and keep a log every after 3 hrs i.e. 8 times a day.
+Must maintain an up-to-date database on the performance of all circuits.
+Send weekly latency report to Manager for all systems.
+Any systems not performing as per standard and expected, the matter must be notified through email in weekly report.
+6.11 Network & System BW Graphs Monitoring
+The support engineer(s) shall be held responsible for monitoring BW usages graphs.
+Any unusual observation in the system must be notified through email(s).
+Any new system must be kept under monitoring for at least 2 days from the date of activation.
+6.12 Device Error Monitoring
+Duty support engineer is to be held responsible for monitoring any device error.
+The matter must be notified immediately in case of serious issue or in the case when he/she is not being able to understand the message/log etc.
+In this regard, all other related SOPs shall be followed.
+The task owner shall compile, raise TAC and follow up the issue till completion.
+A compiled report on all device errors must be sent to Manager on daily basis.
+6.13 O&M Reporting
+All task owners must send his/her report(s) in time as per schedule.
+All the reports must be informative and in a consolidated form.
+6.14 NOC Reporting
+Support engineer is to be held responsible for sending NOC report 7 days in a week basis.
+It must reflect summary of all information.
+The format for NOC report may get modified time to time; if so then the latest format shall be used.
+6.15 SOP for Emergency
+In case any emergency everyone must be ‘Cooled Down’ and work ‘Calm’.
+NO other persons except mentioned below shall be in the vicinity. All such employees shall be stationed in the conference room for emergency pool in.
+In case of any Emergency State - 1, Manager O&M shall hold the total control of NOC and troubleshooting activities. He/she shall be acting as ‘NOC Leader’.
+In case of Emergency State – 2, Head of Planning and R&D shall hold the total control of NOC and troubleshooting activities. He/she shall be acting as ‘NOC Leader’. State – 1 ‘NOC Leader’ shall be dissolved automatically.
+Following stations shall be manned:
+Customer Handling
+NOC Support
+Customer Handling responsible shall do followings:
+Get instructions from ‘NOC Leader’ regarding what to communicate to customer(s)
+Receive all calls from customers
+Guide support engineer as and when needed
+NOC Support responsible shall do followings:
+Get instructions from ‘NOC Leader’ regarding what to communicate to customer(s), if applicable
+Perform normal activities
+Take guidance from ‘Customer Handling’ responsible
+Send emails to all clients
+Take activity log with timing and reference person’s name and other details
+On successful restore, all emergency states shall be dissolved and resumed to ‘Normal’
+On resuming at ‘Normal’ state, the support engineer shall collect all information, compile them all and then send to all concerned internally
+6.16 Technical Inventory Management of Network Equipment
+The task owner must maintain an up-to-date inventory status of all hardware and software.
+A monthly report showing all the running hardware and spare hardware shall be sent to CEO/HOD/Manager.
+The same report shall also be sent to HOD Planning and R&D for their internal work.
+Any new spare must be included in the database and keep it up-to-date.
+Database must be updated in case of every RMA replacement.
+The items must have complete information like; number, part number, serial number etc.
+6.17 Technical Inventory Management of Servers
+The task owner must maintain an up-to-date inventory status of all hardware and software.
+A monthly report showing all the running hardware and spare hardware shall be sent to CEO/HOD/Manager.
+The same report shall also be sent to HOD Planning and R&D for their internal work.
+Any new spare must be included in the database and keep it up-to-date.
+Database must be updated in case of every warranty or other replacement.
+The items must have complete information like; number, part number, serial number etc.
+6.18 Technical Inventory Management of Support Systems
+The task owner must maintain an up-to-date inventory status of all hardware and software.
+A monthly report showing all the running hardware and spare hardware shall be sent to CEO/HOD/Manager.
+The same report shall also be sent to HOD Planning and R&D for their internal work.
+Any new spare must be included in the database and keep it up-to-date.
+Database must be updated in case of every warranty or other replacement.
+The items must have complete information like; number, part number, serial number etc.
+6.19 NOC Roster
+The NOC responsible must prepare a weekly roster for support duties.
+The roster must be approved from HOD/Manager and then circulate internally.
+The approved support roster must be maintained strictly and every assigned engineer must follow that.
+Only in case of extreme urgency, the roster may be changed after approval. CEO shall be notified for any such change.
+There must not be any inter-change of duties between shift engineers without prior approval from CEO/HOD/Manager O&M.
+All personal problems should be kept aside and schedule must be maintained strictly.
+6.20 Server Maintenance
+The task owner must check all monitoring system everyday for all servers running in data center and generate a daily summary report to NOC manager.
+A monthly report showing all the running server (physical and virtual) status must be sent to CEO/HOD/Manager.
+All the reports must be informative and in a consolidated form.
+In case of problem, T.O. shall understand its impact on services and try to address the issue accordingly.
+For issues that affect customers service notify immediately – e.g. MRTG server down/gateway server down, Web server is down etc.
+T.O. shall try to solve the problem by own within 10 minutes.
+If that is not under his/her competence, T.O. must notify NOC Manager and take help of the concerned skilled person.
+For issues that will affect on operation (later) – e.g. bad sector in hard disk, server space, database is getting full etc.
+T.O. must notify NOC manager.
+T.O shall contact the hardware vendor (if needed) and take a working schedule for maintenance.
+Each issue must be tracked by the task owner till completion and well documented for history.
+6.21 Database and Application/Site Monitoring
+The task owner must check regularly that all applications (mail, dns, solarwinds, crm, mrtg, nfa, ipplan) and site (website) are running smoothly.
+The task owner must submit a monthly report to CEO/HOD/Manager showing all database and application status.
+Report must be informative and in a consolidated form.
+In case of applications and site issues
+T.O. shall contact immediately with the concerned skilled person.
+In case of database issues (error/full)
+T.O. must notify NOC manager.
+T.O. shall take a schedule for database repair/backup.
+Each issue must be tracked the by the task owner till completion and well documented for history.
+6.22 Server Maintenance
+Must give own weekly, monthly reports to BoD/CTO/Manager O&M as per the schedule agreed upon or as instructed time to time by management.
+Manage, maintain and update relevant software and databases of the instructions and activation with reference letter/date/duration etc.
+6.23 Support Contacts
+Responsibilities
+Level 1
+Level 2
+Level 3
+Database
+Kloud NOC | support@kloud.com.bd | +880.967.8113113
+Md. Naziur Rahman| 01717241302
+Md. Munzur-Ul-Mamun | 01733949421
+Network & Infrastructure
+Kloud NOC | support@kloud.com.bd | +880.967.8113113
+Shibasish Rajbanshi| 01313752585
+Amirul Islam | 01711853128
+System and Servers
+Kloud NOC | support@kloud.com.bd | +880.967.8113113
+Ashraf Hossain | 01313752589
+Ahmed S. Ceder| 01711578746
+7. Deliverables and Work plan
+7.1 Quarters and their durations
+Sl
+Quarter
+Start Date
+End Date
+1
+Inception Report
+06-Apr-2022
+06-May-2022
+2
+Quarter 1 (Q1)
+06-Apr-2022
+05-July-2022
+3
+Quarter 2 (Q2)
+06-July-2022
+05-Oct-2022
+4
+Quarter 3 (Q3)
+06-Oct-2022
+05-Jan-2023
+5
+Quarter 4 (Q4)
+06-Jan-2023
+05-Apr-2023
+7.2 Deliverables and Milestone Plan:
+7.3 Deliverables and Milestone Summary:
+SN
+Deliverables
+Timeline
+1
+Inception Report with work plan
+At the end of 1st Month
+2
+Network Health report.
+Server log analysis report.
+Web log analysis report.
+DB log analysis report.
+IDS log analysis report.
+Server health report.
+System enhancement report.
+Service migration report.
+At the end of 3rd Month
+3
+Network Health report.
+Server log analysis report.
+Web log analysis report.
+DB log analysis report.
+IDS log analysis report.
+Server health report.
+System update report as per last quarter system enhancement report
+System impact report as per system update.
+System enhancement report.
+At the end of 6lh Month
+4
+Network Health report.
+Server log analysis report.
+Web log analysis report.
+DB log analysis report.
+IDS log analysis report.
+Server health report.
+System update report as per last quarter system enhancement report
+System impact report as per system update.
+System enhancement report.
+At the end of 9th Month
+5
+Network Health report.
+Server log analysis report.
+Web log analysis report.
+DB log analysis report.
+IDS log analysis report.
+Server health report.
+System update report as per last quarter system enhancement report
+System impact report as per system update.
+System enhancement report.
+At the end of 12th Month
+8. Committed SLA
+8.1 SLA Terms to be complied and delivered
+Below a SLA terms are listed as per RFP outlined:
+A2i/A2i Nominated Data Centers will be responsible for Physical Server, Network Equipment, Power and External Connectivity.
+Availability (Uptime): 99.5% Uptime of Managed server and resources.
+Performance: 98% deployed clusters response time should be less than 15 seconds.
+Fault handling process and response time: Fault will be handled as per mentioned O&M process and response time in accordance to following format.
+7 Days in a week from 7:00 AM to 11:59PM hours except government National holidays:
+Priority Definitions
+mean time to
+acknowledge
+(MTTA)
+mean time to recovery MTTR
+Update Intervals
+Out of Service
+30 Mins
+1 Hour
+15 Mins
+Service Interruption
+30 Mins
+4 Hours
+15 Mins
+Non-Service
+Affecting
+1 Hours
+24 Hours
+6 Hours
+Incident Receive
+5 Mins
+1 Hour
+30 Mins
+Beyond working hours:
+Priority Definitions
+MTTA
+MTTR
+Update Intervals
+Out of Service
+2 Hours
+6 Hours
+2 Hours
+Service Interruptions
+2 Hours
+10 Hours
+2 Hours
+Non-Service Affecting
+8 Hours
+36 Hours
+12 Hours
+Incident Receive
+1 Hour
+4 Hours
+1 Hours
+9. PMT Composition
+As discussed with A2I following are the team members of PMT from A2I (which may add or adjust as required and decided by A2I time to time):
+9.1 Technical Team
+Will be responsible for System Architecture, Technology Assessment, Product Mangement, Solution Development Approval and Monitoring, Change Management Approval, System Deployment Expansion, Infrastructure Management, UAT Assistance, etc all technical advisory will be addressed by Technical Team:   
+Name
+Designation
+Contact
+Debabrata Sarkar
+Infrastructure Management Expert, A2I
+01557059753debabrata.sarkar@a2i.gov.bd
+9.2 Implementation Team
+Will be responsible to provide business requirement, training, UAT Confirmation, Regular Support Assistance for Layer 1 and Layer 2, End-User's Office, Organogram and Profile Data, provide training schedule ahead of time to take necessary steps for server sizing and system deployment, office implementation schedule, arrange workshop and seminars (and any other assistance requires during the implementation of the system):
+Name
+Designation
+Contact
+Ms. Sheikh Lima
+Hosting Infrastructure Specialist, A2I
+01711207388
+sheikh.lima@a2i.gov.bd
+9.3 PTT Team composition:
+Required resources will be mobilized as needed during the different deliverables. For continuous communication following team members are in place for each area of work (unless otherwise notified for any changes due to unavoidable circumstances):
+Task
+Contact Person
+Focal Person
+Neyamot Ullah
+01751219503 | mohan@kloud.com.bd
+Enhancement and Change Management
+Ahmed S. Ceder
+01711578746 | ceder@kloud.com.bd
+Issue Management
+Ashraf Hossain 
+01313752589 | ashraf.hossain@kloud.com.bd
+Support Management 
+Fahid Reza 
+01313752573 | kazi.fahid@kloud.com.bd
+Infrastructure Management
+Amirul Islam
+01711853128 | amirul.islam@kloud.com.bd
+Ticket
+For any communication with infrastructure team:
+support@kloud.com.bd 
+Other than these members, required resources as per proposal/contract will be engaged accordingly.
+The input months for each expert will be recorded and reported in every quarterly report.
+The actual allocation of expert’s input month may varies in every quarter comparing with submitted technical and financial phase. The total input month will remain same but distribution of engagement in every quarter may reduce or increase based on the necessity of the assignment.
+9.4 Services and facilities provided by A2I
+Provide the requirement/changes/enhancement by following proper process to ensure the effective change management and version control.
+Ensure the requirement/change reviewed by A2I team before sending to provisioning team with signed CR.
+Inform concerned officials / personnel of the stakeholders for the prompt and effective implementation of the program
+Administrative cooperation, coordination and requirement gathering support by domain experts.
+Hosting infrastructure as production environment, training environment, version control, CRM, Issue Tracker and staging environment in data center.
+Full time remote access to hosting infrastructure of all instance (test, staging, training and production)
+Provide 24x7 access to the server through VPN
+Provide necessary virtual or physical server, network/security components/services.
+10. Out of Scope
+Similar like scope details, the following section describes which are not under the scope of infrastructure management activities 
+Monitoring of hardware resources like physical server, switch, router, storage etc
+Any kind of hardware purchase hardware capability enhancement 
+Any kind hardware troubleshooting
+Management of public IP and DNS
+Configuration and/or management uplink and downlink connectivity
+Procurement and Management of bandwidth (internet, data connectivity etc.)
+Monitoring and management of physical datacenter 
+Any item which is not mentioned in the scope is subject to discussion. The scope should be reviewed at least once in a year and may be redefined based on the negotiating alternatives.
+11. Disclaimer
+This report is intended for the information and use of the management of A2I and is not intended to be and should not be used by anyone other than these specified parties. BASE - TVNL - Kloud JV therefore assumes no responsibility to any user of the report other than A2I. Any other persons who choose to rely on our report do so entirely at their own risk.
+As it is particularly not possible to assess and identify all aspects of a process in its entirety thoroughly during the limited time period, based on our methodology for preparing the inception report, BASE - TVNL - Kloud JV conducted the process and held discussions with different stakeholders.
+The work carried out and the analysis thereof is based on the discussions, agreement and documents provided by A2I.
+12. Errors and omissions
+When reading this document if you identify any errors or omissions, please advise BASE - TVNL - Kloud JV in writing, within 3 calendar days, giving a brief description.
+13. Confidentiality
+This document contains privileged and confidential information pertaining to “Inception Report”. The access level for the document is specified above. The addressee should honor this access rights by preventing intentional or accidental access outside the access scope.
+14.  Conclusions
+This document presents the fundamental principles that will guide the Maintenance and Enhancement of Hosting Infrastructure within the project. The focus is on providing users with a positive experience with the system delivered by BASE - TVNL - Kloud JV, both in terms of stability and feature evolution.
+The basic principles will be expanded into practical guidelines and procedures in collaboration with A2I and in conformity to the QA.
+Annexure - A
+Physical Access Request form
+This form must be filled by the person seeking approval to access A2I hosted network and submitted to A2I team/Operator. Anyone accessing the A2I hosted network must read, agree to and follow the process outlined in SOP/Policy.
+Request Date:
+Details of Requestor
+Requestor
+Supervisor
+Agency
+Division/Unit
+Contact No.
+Contact No.
+Email
+Email
+Reason for Access Request
+Specific area to require Access
+Access Timeframe
+For Administrative Use
+Approved
+Denied
+Remarks
+Name
+Signature
+Date
+Annexure – B
+Remote Access Request form
+This form must be filled by the person seeking approval to access A2I hosted network and submitted to A2I team/Operator. Anyone accessing the A2I hosted network must read, agree to and follow the process outlined in SOP/Policy.
+Request Date:
+Details of Requestor
+Requestor
+Supervisor
+Agency
+Division/Unit
+Contact No.
+Contact No.
+Email
+Email
+Reason for Access Request
+Type of Access
+□ VPN □ SSH
+Notes:
+Access Timeframe
+For Administrative Use
+Approved
+Denied
+Remarks
+Name
+Signature
+Date
+Annexure – C 
+Emergency Contact update Form
+Name
+Email
+NID
+Contact Number
+Agency
+Annexure – D
+Incident Reporting Template
+Type of Outage(Scheduled
+Maintenance/Device
+Outage/Fibre Breakdown/System
+Issue)
+Response Time/Date
+Resolve Time/Date
+Root Cause Analysis (RCA)
+Remarks
+Annexure – E
+Implementation workplan and timeline
+SL 
+Task Name
+Duration
+1
+Infra Resource Assessment
+Quarter 1 (Q1)
+2
+Migration plan for BTCL to 4TDC
+Quarter 1 (Q1)
+3
+Migration Prepartion of the Selected Services as per A2I requiermentsPrimary Selected Service List:Eksheba Gov doptor.gov.bdEksheba Citizen mygov.bdGrs grs.gov.bdOnline forms forms.gov.bdIsdp++isdplabSDG sdg.gov.bdOGD data.gov.bdMuktopaath muktopaath.gov.bdTeachers portal techers.gov.bdKonnect konnect.edu.bdMMCM mmcm.gov.bdEduhub eduhub.gov.bdVirtual Classroom, https://virtualclass.gov.bd/CA ToolCAS https://cas.konnect.edu.bd/casJudiciary SystemsEcourtE challan echallan.gov.bdNEPS http://123.49.47.64:8080/neps-apiCorona dashboardCorona datawarehouse 10.10.11.144A2i websiteA2i dashboardEksheba uddoktaConstituency TrackerImam PortalMigration portal http://migration.gov.bd/bnDFS PortalNISEEdirectory http://edirectory.apps.portal.gov.bd/SSN4PSI siteFutureofworklab websiteFinancialinclusion websiteDPGReport Management System
+Quarter 1 (Q1)
+4
+Test system Migration of the Selected Services as per A2I requirements
+Quarter 1 (Q1)
+5
+Production System Migration of the Selected Services as per A2I requirements
+6
+Infra Resources Management Access Implementation of Existing 4TD Services
+Quarter 1 (Q1)
+7
+Monitoring tools Integration
+Quarter 1 (Q1)
+8
+Regular Administration & Monitoring as per SoP
+Quarter 2 (Q2) Onwards
+9
+System Provisioning and Migration as per A2I's requirements
+Quarter 2 (Q2) Onwards
+This work plan and schedule may change as per A2I's requirements with both parties mutual discussion.
+Annexure – F
+Existing Deployed Monitoring Tools 
