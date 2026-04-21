@@ -25,7 +25,6 @@ const PersonnelDetail = () => {
     const navigate = useNavigate();
 
     const [person, setPerson] = useState<any>(null);
-    const [properties, setProperties] = useState<any[]>([]);
     const [assets, setAssets] = useState<any[]>([]);
     const [workOrders, setWorkOrders] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
@@ -45,11 +44,7 @@ const PersonnelDetail = () => {
                 setPerson(u);
                 setAllProperties(Array.isArray(allPropsRes.data) ? allPropsRes.data : []);
 
-                // Tagged property (from propertyId)
-                if (u.propertyId) {
-                    const tagged = (Array.isArray(allPropsRes.data) ? allPropsRes.data : []).filter((p: any) => p.id === u.propertyId);
-                    setProperties(tagged);
-                }
+                // Tagged property (from propertyId) — allProperties is used directly below
 
                 // Assets assigned to this user
                 const allAssets = Array.isArray(assetsRes.data) ? assetsRes.data : [];
