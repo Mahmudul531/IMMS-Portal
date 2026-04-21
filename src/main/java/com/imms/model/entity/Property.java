@@ -20,6 +20,26 @@ public class Property {
 
     private String address;
 
+    @Column(unique = true)
+    private String code;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "property_type_id")
+    private PropertyType propertyType;
+
+    private String managerName;
+    private String contactPhone;
+    private String contactEmail;
+    
+    @Column(columnDefinition = "TEXT")
+    private String description;
+
+    private String city;
+    private String country = "Bangladesh";
+    
+    @Column(columnDefinition = "boolean default true")
+    private Boolean active = true;
+
     private String locLat;
     private String locLon;
 

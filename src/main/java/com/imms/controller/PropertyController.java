@@ -15,6 +15,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.List;
 
+import com.imms.model.entity.PropertyType;
+import com.imms.repository.PropertyTypeRepository;
+
 @RestController
 @RequestMapping("/api/properties")
 @CrossOrigin(origins = "*")
@@ -22,6 +25,9 @@ public class PropertyController {
 
     @Autowired
     private PropertyRepository propertyRepository;
+
+    @Autowired
+    private PropertyTypeRepository propertyTypeRepository;
 
     @Autowired
     private PropertyImageRepository propertyImageRepository;
@@ -32,10 +38,28 @@ public class PropertyController {
     // ─── Core CRUD ────────────────────────────────────────────────────────
 
     @PostMapping
-    public ResponseEntity<Property> createProperty(@RequestBody PropertyRequest request) {
+    public ResponseEntity<?> createProperty(@RequestBody PropertyRequest request) {
+        if (request.getCode() != null && propertyRepository.existsByCode(request.getCode())) {
+            return ResponseEntity.badRequest().body("Property code already exists.");
+        }
+        
         Property property = new Property();
         property.setName(request.getName());
         property.setAddress(request.getAddress());
+        property.setCode(request.getCode());
+        property.setManagerName(request.getManagerName());
+        property.setContactPhone(request.getContactPhone());
+        property.setContactEmail(request.getContactEmail());
+        property.setDescription(request.getDescription());
+        property.setCity(request.getCity());
+        property.setCountry(request.getCountry() == null ? "Bangladesh" : request.getCountry());
+        property.setActive(request.getActive() == null ? true : request.getActive());
+        
+        if (request.getPropertyTypeId() != null) {
+            PropertyType pt = propertyTypeRepository.findById(request.getPropertyTypeId()).orElse(null);
+            property.setPropertyType(pt);
+        }
+        
         property.setLocLat(request.getLocLat());
         property.setLocLon(request.getLocLon());
         return ResponseEntity.ok(propertyRepository.save(property));
@@ -47,11 +71,33 @@ public class PropertyController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Property> updateProperty(@PathVariable Long id, @RequestBody PropertyRequest request) {
+    public ResponseEntity<?> updateProperty(@PathVariable Long id, @RequestBody PropertyRequest request) {
+        if (request.getCode() != null && propertyRepository.existsByCodeAndIdNot(request.getCode(), id)) {
+            return ResponseEntity.badRequest().body("Property code already exists.");
+        }
+
         Property property = propertyRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Property not found"));
         property.setName(request.getName());
         property.setAddress(request.getAddress());
+        property.setCode(request.getCode());
+        property.setManagerName(request.getManagerName());
+        property.setContactPhone(request.getContactPhone());
+        property.setContactEmail(request.getContactEmail());
+        property.setDescription(request.getDescription());
+        property.setCity(request.getCity());
+        property.setCountry(request.getCountry() == null ? "Bangladesh" : request.getCountry());
+        if(request.getActive() != null) {
+            property.setActive(request.getActive());
+        }
+
+        if (request.getPropertyTypeId() != null) {
+            PropertyType pt = propertyTypeRepository.findById(request.getPropertyTypeId()).orElse(null);
+            property.setPropertyType(pt);
+        } else {
+            property.setPropertyType(null);
+        }
+        
         property.setLocLat(request.getLocLat());
         property.setLocLon(request.getLocLon());
         return ResponseEntity.ok(propertyRepository.save(property));

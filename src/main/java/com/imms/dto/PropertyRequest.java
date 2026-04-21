@@ -8,6 +8,16 @@ import lombok.Setter;
 public class PropertyRequest {
     private String name;
     private String address;
+    private String code;
+    private Long propertyTypeId;
+    private String managerName;
+    private String contactPhone;
+    private String contactEmail;
+    private String description;
+    private String city;
+    private String country;
+    private Boolean active;
+    
     private String locLat;
     private String locLon;
 }

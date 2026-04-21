@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface PropertyRepository extends JpaRepository<Property, Long> {
+    boolean existsByCode(String code);
+    boolean existsByCodeAndIdNot(String code, Long id);
 }
