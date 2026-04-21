@@ -10,6 +10,8 @@ import com.imms.repository.AssetRepository;
 import com.imms.repository.AssetImageRepository;
 import com.imms.repository.AssetTransferLogRepository;
 import com.imms.repository.PropertyRepository;
+import com.imms.repository.UserRepository;
+import com.imms.model.entity.User;
 import com.imms.service.AssetService;
 import com.imms.service.CloudinaryService;
 
@@ -31,6 +33,9 @@ public class AssetController {
 
     @Autowired
     private PropertyRepository propertyRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
     private AssetService assetService;
@@ -66,6 +71,7 @@ public class AssetController {
         asset.setName(request.getName());
         asset.setType(request.getType());
         asset.setCategory(request.getCategory());
+        asset.setSubCategory(request.getSubCategory());
         asset.setSupplierName(request.getSupplierName());
         asset.setAssetCode(request.getAssetCode());
         asset.setPurchaseDate(request.getPurchaseDate());
@@ -75,6 +81,28 @@ public class AssetController {
         asset.setRemarks(request.getRemarks());
         asset.setInvoiceUrl(request.getInvoiceUrl());
         asset.setProperty(property);
+
+        asset.setAssetCondition(request.getAssetCondition());
+        asset.setWeight(request.getWeight());
+        asset.setDimensions(request.getDimensions());
+        asset.setInstallationDate(request.getInstallationDate());
+
+        asset.setSoftwareName(request.getSoftwareName());
+        asset.setLicense(request.getLicense());
+        asset.setExpiryDate(request.getExpiryDate());
+        asset.setCredentials(request.getCredentials());
+
+        asset.setRentalUnit(request.getRentalUnit());
+        asset.setAvailability(request.getAvailability());
+        asset.setDeposit(request.getDeposit());
+
+        asset.setActive(request.getActive());
+        asset.setDepartment(request.getDepartment());
+
+        if (request.getAssignedUserId() != null) {
+            userRepository.findById(request.getAssignedUserId()).ifPresent(asset::setAssignedUser);
+        }
+
         return ResponseEntity.ok(assetRepository.save(asset));
     }
 
@@ -92,6 +120,7 @@ public class AssetController {
         asset.setName(request.getName());
         asset.setType(request.getType());
         asset.setCategory(request.getCategory());
+        asset.setSubCategory(request.getSubCategory());
         asset.setSupplierName(request.getSupplierName());
         asset.setAssetCode(request.getAssetCode());
         asset.setPurchaseDate(request.getPurchaseDate());
@@ -101,6 +130,30 @@ public class AssetController {
         asset.setRemarks(request.getRemarks());
         asset.setInvoiceUrl(request.getInvoiceUrl());
         asset.setProperty(property);
+
+        asset.setAssetCondition(request.getAssetCondition());
+        asset.setWeight(request.getWeight());
+        asset.setDimensions(request.getDimensions());
+        asset.setInstallationDate(request.getInstallationDate());
+
+        asset.setSoftwareName(request.getSoftwareName());
+        asset.setLicense(request.getLicense());
+        asset.setExpiryDate(request.getExpiryDate());
+        asset.setCredentials(request.getCredentials());
+
+        asset.setRentalUnit(request.getRentalUnit());
+        asset.setAvailability(request.getAvailability());
+        asset.setDeposit(request.getDeposit());
+
+        asset.setActive(request.getActive());
+        asset.setDepartment(request.getDepartment());
+
+        if (request.getAssignedUserId() != null) {
+            userRepository.findById(request.getAssignedUserId()).ifPresent(asset::setAssignedUser);
+        } else {
+            asset.setAssignedUser(null);
+        }
+
         return ResponseEntity.ok(assetRepository.save(asset));
     }
 

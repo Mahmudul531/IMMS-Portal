@@ -34,6 +34,7 @@ public class AssetPreferenceController {
         AssetPreference existing = repository.findById(id).orElseThrow(() -> new RuntimeException("Not found"));
         existing.setPrefType(pref.getPrefType());
         existing.setPrefValue(pref.getPrefValue());
+        existing.setParentId(pref.getParentId());
         return ResponseEntity.ok(repository.save(existing));
     }
 

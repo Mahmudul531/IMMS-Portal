@@ -33,6 +33,21 @@ public class User {
 
     private String inactiveNote;
 
+    // --- Extended Profile ---
+    private String fullName;
+    private String phone;
+    private java.time.LocalDate dob;
+    private String gender;        // MALE, FEMALE, OTHER
+    private String nidOrPassport;
+
+    // --- Organization ---
+    private String department;
+    private String designation;
+    private Long propertyId;      // Links to a property (organization/location)
+
+    // --- Permissions ---
+    private Long permissionGroupId;
+
     @org.hibernate.annotations.CreationTimestamp
     @jakarta.persistence.Column(updatable = false)
     private java.time.LocalDate createdAt;

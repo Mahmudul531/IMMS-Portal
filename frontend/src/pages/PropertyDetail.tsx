@@ -272,6 +272,42 @@ const PropertyDetail = () => {
         )}
       </div>
 
+      {/* Personnel (users assigned to assets in this property) */}
+      {(() => {
+        const personnelMap = new Map<number, any>();
+        assets.forEach((a: any) => {
+          if (a.assignedUser && !personnelMap.has(a.assignedUser.id)) {
+            personnelMap.set(a.assignedUser.id, a.assignedUser);
+          }
+        });
+        const personnel = Array.from(personnelMap.values());
+        if (personnel.length === 0) return null;
+        return (
+          <div className="card" style={{ marginBottom: '1.5rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
+              <User size={20} color="var(--primary)" />
+              <h2 style={{ margin: 0, fontSize: '1.1rem' }}>Personnel</h2>
+              <span style={{ background: 'var(--primary)', color: 'white', borderRadius: 12, padding: '2px 8px', fontSize: '0.75rem', fontWeight: 600 }}>{personnel.length}</span>
+            </div>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
+              {personnel.map(p => (
+                <div key={p.id} onClick={() => navigate(`/personnel/${p.id}`)} style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '0.75rem 1rem', border: '1px solid var(--border)', borderRadius: '10px', cursor: 'pointer', minWidth: 200, transition: 'all 0.15s' }}
+                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = 'var(--primary)'; (e.currentTarget as HTMLElement).style.background = 'rgba(16,185,129,0.04)'; }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'var(--border)'; (e.currentTarget as HTMLElement).style.background = 'white'; }}>
+                  <div style={{ width: 36, height: 36, borderRadius: '50%', background: 'rgba(16,185,129,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <User size={20} color="var(--primary)" />
+                  </div>
+                  <div>
+                    <div style={{ fontWeight: 700, color: 'var(--primary)', fontSize: '0.9rem' }}>{p.username}</div>
+                    <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{p.role}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+      })()}
+
       {/* Work Orders */}
       <div className="card">
         <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>

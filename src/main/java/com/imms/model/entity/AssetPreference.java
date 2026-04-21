@@ -18,5 +18,7 @@ public class AssetPreference {
     private String prefType; // "TYPE" or "CATEGORY"
 
     @Column(nullable = false)
-    private String prefValue; // e.g. "Fixed", "Rental", "AC"
+    private String prefValue; // e.g. "Fixed", "Rental", "AC", "Hardware"
+
+    private Long parentId; // Used strictly to map SubCategories back to their parent Category
 }
