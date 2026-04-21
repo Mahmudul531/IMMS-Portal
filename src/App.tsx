@@ -3,7 +3,9 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { AuthProvider, useAuth } from './context/AuthContext';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
-import Properties from './pages/Properties';
+import PropertyAdd from './pages/PropertyAdd';
+import PropertyList from './pages/PropertyList';
+import PropertySetup from './pages/PropertySetup';
 import Assets from './pages/Assets';
 import Users from './pages/Users';
 import WorkOrders from './pages/WorkOrders';
@@ -62,7 +64,25 @@ function App() {
 
           <Route path="/properties" element={
             <ProtectedRoute allowedRoles={['ADMIN', 'ENGINEER']}>
-              <AppLayout><Properties /></AppLayout>
+              <Navigate to="/properties/list" replace />
+            </ProtectedRoute>
+          } />
+
+          <Route path="/properties/add" element={
+            <ProtectedRoute allowedRoles={['ADMIN', 'ENGINEER']}>
+              <AppLayout><PropertyAdd /></AppLayout>
+            </ProtectedRoute>
+          } />
+
+          <Route path="/properties/list" element={
+            <ProtectedRoute allowedRoles={['ADMIN', 'ENGINEER']}>
+              <AppLayout><PropertyList /></AppLayout>
+            </ProtectedRoute>
+          } />
+
+          <Route path="/properties/setup" element={
+            <ProtectedRoute allowedRoles={['ADMIN']}>
+              <AppLayout><PropertySetup /></AppLayout>
             </ProtectedRoute>
           } />
 

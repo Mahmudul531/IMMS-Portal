@@ -17,11 +17,11 @@ L.Icon.Default.mergeOptions({
 });
 
 // Create a labeled marker icon with property name
-const createLabelIcon = (name: string) => L.divIcon({
+const createLabelIcon = (name: string, isActive: boolean) => L.divIcon({
     className: 'property-label-marker',
     html: `<div class="property-label-pin">
-              <div class="property-label-dot"></div>
-              <div class="property-label-tag">${name}</div>
+              <div class="property-label-dot" style="${!isActive ? 'background: #cbd5e1;' : ''}"></div>
+              <div class="property-label-tag" style="${!isActive ? 'background: #f8f9fa; color: #94a3b8; border: 1px solid #e2e8f0;' : ''}">${isActive ? '' : '⚠️ '}${name}</div>
            </div>`,
     iconSize: [0, 0],
     iconAnchor: [0, 24],
@@ -33,6 +33,7 @@ interface Property {
     address: string;
     locLat?: string;
     locLon?: string;
+    active?: boolean;
 }
 
 interface Asset {
@@ -75,7 +76,9 @@ const Dashboard = () => {
     // Memoize label icons so they don't get recreated every render
     const labelIcons = useMemo(() => {
         const map: Record<number, L.DivIcon> = {};
-        mappableProperties.forEach(p => { map[p.id] = createLabelIcon(p.name); });
+        mappableProperties.forEach(p => { 
+            map[p.id] = createLabelIcon(p.name, p.active !== false); 
+        });
         return map;
     }, [mappableProperties]);
 

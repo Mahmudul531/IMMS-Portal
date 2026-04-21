@@ -1,14 +1,25 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { Building2, Package, Inbox, ArrowLeft, Loader2, MapPin, Briefcase, Image, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Building2, Package, Inbox, ArrowLeft, Loader2, MapPin, Briefcase, Image, ChevronLeft, ChevronRight, Map as MapIcon, Phone, Mail, User } from 'lucide-react';
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import toast from 'react-hot-toast';
 
 const API = import.meta.env.VITE_API_URL || 'http://localhost:8080';
 
 interface Property {
   id: number;
   name: string;
+  code: string;
   address: string;
+  city: string;
+  country: string;
+  managerName: string;
+  contactPhone: string;
+  contactEmail: string;
+  description: string;
+  active: boolean;
+  propertyType: { id: number, name: string } | null;
   locLat: string;
   locLon: string;
 }
@@ -134,6 +145,18 @@ const PropertyDetail = () => {
     fetchData();
   }, [id, navigate]);
 
+  const toggleStatus = async () => {
+    if (!property) return;
+    try {
+        const payload = { ...property, active: !property.active, propertyTypeId: property.propertyType?.id };
+        await axios.put(`${API}/api/properties/${property.id}`, payload);
+        setProperty({ ...property, active: !property.active });
+        toast.success(`Property marked as ${!property.active ? 'Active' : 'Inactive'}`);
+    } catch (error) {
+        toast.error('Failed to change status');
+    }
+  };
+
   if (loading) return (
     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '400px' }}>
       <Loader2 style={{ animation: 'spin 1s linear infinite' }} size={48} />
@@ -151,27 +174,69 @@ const PropertyDetail = () => {
       </div>
 
       {/* Property Header Card */}
-      <div className="card" style={{ marginBottom: '1.5rem' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: '1rem' }}>
-          <Building2 size={30} color="var(--primary)" />
-          <h1 style={{ margin: 0, fontSize: '1.6rem' }}>{property.name}</h1>
+      <div className="card" style={{ marginBottom: '1.5rem', background: property.active ? 'white' : '#f8f9fa' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem' }}>
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: '0.5rem' }}>
+              <Building2 size={30} color={property.active ? "var(--primary)" : "var(--text-muted)"} />
+              <h1 style={{ margin: 0, fontSize: '1.6rem', color: property.active ? 'inherit' : 'var(--text-muted)' }}>{property.name}</h1>
+              {property.code && <span style={{ background: '#f1f5f9', padding: '2px 8px', borderRadius: '4px', fontSize: '0.9rem', color: 'var(--text-muted)', border: '1px solid var(--border)' }}>{property.code}</span>}
+              {!property.active && <span style={{ background: '#f8d7da', color: '#842029', padding: '2px 8px', borderRadius: '4px', fontSize: '0.85rem' }}>Inactive</span>}
+            </div>
+            {property.propertyType && <div style={{ color: 'var(--text-muted)', marginBottom: '1rem', fontWeight: 500 }}>Type: {property.propertyType.name}</div>}
+          </div>
+          <button 
+            onClick={toggleStatus}
+            style={{ 
+                border: 'none', 
+                background: property.active ? '#f8d7da' : '#d1e7dd', 
+                color: property.active ? '#842029' : '#0f5132', 
+                padding: '0.5rem 1rem', 
+                borderRadius: '6px', 
+                cursor: 'pointer', 
+                fontWeight: 600,
+                fontSize: '0.9rem',
+                transition: '0.2s'
+            }}
+          >
+            Mark as {property.active ? 'Inactive' : 'Active'}
+          </button>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8, color: 'var(--text-muted)', marginBottom: '1rem' }}>
-          <MapPin size={16} /><span>{property.address}</span>
-        </div>
-        <div style={{ display: 'flex', gap: '2rem' }}>
-          <div style={{ textAlign: 'center' }}>
-            <div style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--primary)' }}>{assets.length}</div>
-            <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Assets</div>
-          </div>
-          <div style={{ textAlign: 'center' }}>
-            <div style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--warning)' }}>{workOrders.length}</div>
-            <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Work Orders</div>
-          </div>
-          <div style={{ textAlign: 'center' }}>
-            <div style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--success)' }}>{propertyImages.length}</div>
-            <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Photos</div>
-          </div>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem', marginTop: '1rem' }}>
+            <div>
+                <h3 style={{ fontSize: '1.1rem', marginBottom: '1rem', borderBottom: '1px solid var(--border)', paddingBottom: '0.5rem' }}>Basic Info</h3>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                    {property.managerName && <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}><User size={16} color="var(--text-muted)"/> <strong>Manager:</strong> {property.managerName}</div>}
+                    {property.contactPhone && <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}><Phone size={16} color="var(--text-muted)"/> <strong>Phone:</strong> {property.contactPhone}</div>}
+                    {property.contactEmail && <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}><Mail size={16} color="var(--text-muted)"/> <strong>Email:</strong> {property.contactEmail}</div>}
+                    {property.description && (
+                         <div style={{ marginTop: '0.5rem', background: '#f8fafc', padding: '0.75rem', borderRadius: '6px', fontSize: '0.9rem', border: '1px solid var(--border)' }}>
+                            {property.description}
+                         </div>
+                    )}
+                </div>
+            </div>
+            
+            <div>
+                <h3 style={{ fontSize: '1.1rem', marginBottom: '1rem', borderBottom: '1px solid var(--border)', paddingBottom: '0.5rem' }}>Location Details</h3>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                    <div style={{ display: 'flex', gap: '8px', alignItems: 'flex-start' }}><MapPin size={16} color="var(--text-muted)" style={{ marginTop: 2 }}/> <strong>Address:</strong> <span>{property.address}</span></div>
+                    {property.city && <div style={{ display: 'flex', gap: '8px', alignItems: 'center', paddingLeft: 24 }}><strong>City:</strong> {property.city}</div>}
+                    {property.country && <div style={{ display: 'flex', gap: '8px', alignItems: 'center', paddingLeft: 24 }}><strong>Country:</strong> {property.country}</div>}
+                    
+                    {property.locLat && property.locLon && (
+                        <div style={{ height: '200px', width: '100%', marginTop: '1rem', borderRadius: '8px', overflow: 'hidden', border: '1px solid var(--border)' }}>
+                            <MapContainer center={[parseFloat(property.locLat), parseFloat(property.locLon)]} zoom={15} style={{ height: '100%', width: '100%' }}>
+                                <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+                                <Marker position={[parseFloat(property.locLat), parseFloat(property.locLon)]}>
+                                    <Popup>{property.name}</Popup>
+                                </Marker>
+                            </MapContainer>
+                        </div>
+                    )}
+                </div>
+            </div>
         </div>
       </div>
 
