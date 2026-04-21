@@ -34,7 +34,11 @@ interface Asset {
   id: number; name: string; type: string; category?: string; property: Property; createdAt?: string;
   supplierName?: string; assetCode?: string; purchaseDate?: string; 
   purchaseValue?: number; depreciationPercentage?: number; invoiceUrl?: string;
-  longDescription?: string; remarks?: string;
+  longDescription?: string; remarks?: string; active?: boolean;
+  department?: string; assignedUser?: { id: number; username: string; role: string };
+  assetCondition?: string; weight?: number; dimensions?: string; installationDate?: string;
+  softwareName?: string; license?: string; expiryDate?: string; credentials?: string;
+  rentalUnit?: string; availability?: boolean; deposit?: number; subCategory?: string;
 }
 interface AssetImage { id: number; imageData: string; }
 interface TransferLog {
@@ -262,6 +266,10 @@ const AssetDetail = () => {
             onClick={() => navigate(`/properties/${asset.property?.id}`)}
           >{asset.property?.name || 'N/A'}</strong>
           <MapPin size={14} color="var(--text-muted)" />
+          
+          <span style={{ marginLeft: '1rem', padding: '4px 10px', borderRadius: '20px', fontSize: '0.75rem', fontWeight: 'bold', backgroundColor: asset.active !== false ? 'rgba(16, 185, 129, 0.1)' : 'rgba(239, 68, 68, 0.1)', color: asset.active !== false ? '#10b981' : '#ef4444' }}>
+            {asset.active !== false ? 'Active & Operational' : 'Inactive / Decommissioned'}
+          </span>
         </div>
         <div style={{ display: 'flex', gap: '2rem' }}>
           <div style={{ textAlign: 'center' }}>
@@ -300,6 +308,63 @@ const AssetDetail = () => {
               <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', margin: '0 0 4px', display: 'flex', alignItems: 'center', gap: 4 }}><DollarSign size={14}/> Purchase Value</p>
               <p style={{ margin: 0, fontWeight: 600 }}>{asset.purchaseValue ? `৳${asset.purchaseValue.toLocaleString()}` : '—'}</p>
             </div>
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0,1fr) minmax(0,1fr)', gap: '1rem', marginBottom: '1.5rem' }}>
+             {asset.type === 'Physical' && (
+               <div style={{ gridColumn: 'span 2', background: '#f8fafc', padding: '1rem', borderRadius: 8, borderLeft: '4px solid var(--primary)' }}>
+                 <p style={{ margin: '0 0 10px 0', fontWeight: 'bold', color: 'var(--primary)' }}>Physical Specifications</p>
+                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+                   <div><span style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>Condition:</span> <strong style={{ fontSize: '0.9rem' }}>{asset.assetCondition || '—'}</strong></div>
+                   <div><span style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>Installed On:</span> <strong style={{ fontSize: '0.9rem' }}>{asset.installationDate || '—'}</strong></div>
+                   <div><span style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>Weight:</span> <strong style={{ fontSize: '0.9rem' }}>{asset.weight ? `${asset.weight} kg` : '—'}</strong></div>
+                   <div><span style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>Dimensions:</span> <strong style={{ fontSize: '0.9rem' }}>{asset.dimensions || '—'}</strong></div>
+                 </div>
+               </div>
+             )}
+
+             {asset.type === 'Digital' && (
+               <div style={{ gridColumn: 'span 2', background: '#f8fafc', padding: '1rem', borderRadius: 8, borderLeft: '4px solid var(--primary)' }}>
+                 <p style={{ margin: '0 0 10px 0', fontWeight: 'bold', color: 'var(--primary)' }}>Digital/Software Details</p>
+                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+                   <div><span style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>Software Name:</span> <strong style={{ fontSize: '0.9rem' }}>{asset.softwareName || '—'}</strong></div>
+                   <div><span style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>License Key:</span> <strong style={{ fontSize: '0.9rem' }}>{asset.license || '—'}</strong></div>
+                   <div><span style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>Expiry Date:</span> <strong style={{ fontSize: '0.9rem' }}>{asset.expiryDate || '—'}</strong></div>
+                   <div><span style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>Credentials:</span> <strong style={{ fontSize: '0.9rem' }}>{asset.credentials ? '****** (Stored)' : '—'}</strong></div>
+                 </div>
+               </div>
+             )}
+
+             {asset.type === 'Rental' && (
+               <div style={{ gridColumn: 'span 2', background: '#f8fafc', padding: '1rem', borderRadius: 8, borderLeft: '4px solid var(--primary)' }}>
+                 <p style={{ margin: '0 0 10px 0', fontWeight: 'bold', color: 'var(--primary)' }}>Rental Arrangement</p>
+                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+                   <div><span style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>Pricing Unit:</span> <strong style={{ fontSize: '0.9rem' }}>{asset.rentalUnit || '—'}</strong></div>
+                   <div><span style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>Security Deposit:</span> <strong style={{ fontSize: '0.9rem' }}>{asset.deposit ? `৳${asset.deposit.toLocaleString()}` : '—'}</strong></div>
+                   <div style={{ gridColumn: 'span 2' }}>
+                     <span style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>Rental Status:</span> 
+                     <strong style={{ fontSize: '0.9rem', color: asset.availability !== false ? 'var(--primary)' : 'var(--warning)', marginLeft: '8px' }}>
+                       {asset.availability !== false ? 'Available for Rent' : 'Currently Rented / Unavailable'}
+                     </strong>
+                   </div>
+                 </div>
+               </div>
+             )}
+
+             <div style={{ gridColumn: 'span 2', display: 'flex', gap: '1rem', background: '#eef2ff', padding: '1rem', borderRadius: 8 }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'white', padding: '12px', borderRadius: '50%', color: 'var(--primary)' }}>
+                   <User size={24} />
+                </div>
+                <div>
+                   <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', margin: '0 0 4px' }}>Key Personnel / Assigned To</p>
+                   {asset.assignedUser ? (
+                       <p style={{ margin: 0, fontWeight: 600 }}>{asset.assignedUser.username} <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>({asset.assignedUser.role})</span></p>
+                   ) : (
+                       <p style={{ margin: 0, fontWeight: 600, color: 'var(--text-muted)' }}>Unassigned</p>
+                   )}
+                   {asset.department && <p style={{ margin: '4px 0 0', fontSize: '0.85rem', color: 'var(--primary)' }}>Dept: {asset.department}</p>}
+                </div>
+             </div>
           </div>
           
           {depCalc && (
