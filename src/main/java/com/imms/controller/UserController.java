@@ -19,14 +19,13 @@ public class UserController {
     @Autowired private UserRepository userRepository;
 
     @PostMapping("/register")
-    public ResponseEntity<User> register(@RequestBody RegisterRequest request) {
+    public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
         User user = new User();
         user.setUsername(request.getUsername());
         user.setPassword(request.getPassword());
-        user.setRole(request.getRole());
+        user.setRole(request.getRole() != null ? request.getRole() : "VENDOR");
         user.setEmail(request.getEmail());
 
-        // Extended profile
         user.setFullName(request.getFullName());
         user.setPhone(request.getPhone());
         if (request.getDob() != null && !request.getDob().isBlank()) {
@@ -34,16 +33,13 @@ public class UserController {
         }
         user.setGender(request.getGender());
         user.setNidOrPassport(request.getNidOrPassport());
-
-        // Organization
         user.setDepartment(request.getDepartment());
         user.setDesignation(request.getDesignation());
         user.setPropertyId(request.getPropertyId());
-
-        // Permissions
         user.setPermissionGroupId(request.getPermissionGroupId());
 
-        if ("VENDOR".equalsIgnoreCase(request.getRole())) {
+        // Vendors always start inactive — pending admin approval
+        if ("VENDOR".equalsIgnoreCase(user.getRole())) {
             user.setActive(false);
             user.setInactiveNote("Pending Admin Approval");
         }
@@ -52,9 +48,12 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody RegisterRequest request) {
+    public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody RegisterRequest request) {
         User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+
+        // Profile fields — always updatable
         if (request.getFullName() != null) user.setFullName(request.getFullName());
+        if (request.getEmail() != null) user.setEmail(request.getEmail());
         if (request.getPhone() != null) user.setPhone(request.getPhone());
         if (request.getDob() != null && !request.getDob().isBlank()) {
             user.setDob(java.time.LocalDate.parse(request.getDob()));
@@ -65,13 +64,21 @@ public class UserController {
         if (request.getDesignation() != null) user.setDesignation(request.getDesignation());
         if (request.getPropertyId() != null) user.setPropertyId(request.getPropertyId());
         if (request.getPermissionGroupId() != null) user.setPermissionGroupId(request.getPermissionGroupId());
-        if (request.getRole() != null) user.setRole(request.getRole());
-        if (request.getEmail() != null) user.setEmail(request.getEmail());
+
+        // Role change rules:
+        //  - VENDOR role is permanently fixed — cannot be changed to or from VENDOR
+        //  - Non-vendor roles can be changed among ADMIN / ENGINEER / TECHNICIAN
+        if (request.getRole() != null
+                && !"VENDOR".equalsIgnoreCase(user.getRole())
+                && !"VENDOR".equalsIgnoreCase(request.getRole())) {
+            user.setRole(request.getRole());
+        }
+
         return ResponseEntity.ok(userRepository.save(user));
     }
 
     @PostMapping("/login")
-    public ResponseEntity<User> login(@RequestBody com.imms.dto.LoginRequest request) {
+    public ResponseEntity<?> login(@RequestBody com.imms.dto.LoginRequest request) {
         return ResponseEntity.ok(userService.loginUser(request.getUsername(), request.getPassword()));
     }
 
@@ -94,7 +101,20 @@ public class UserController {
     }
 
     @PutMapping("/{id}/status")
-    public ResponseEntity<?> updateUserStatus(@PathVariable Long id, @RequestParam Boolean active, @RequestParam(required = false) String note) {
+    public ResponseEntity<?> updateUserStatus(@PathVariable Long id,
+                                               @RequestParam Boolean active,
+                                               @RequestParam(required = false) String note) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        // Block activation of VENDOR without an assigned Permission Group
+        if (Boolean.TRUE.equals(active) && "VENDOR".equalsIgnoreCase(user.getRole())) {
+            if (user.getPermissionGroupId() == null) {
+                return ResponseEntity.badRequest()
+                        .body("Cannot activate vendor: no Permission Group assigned. Edit the user profile to assign one first.");
+            }
+        }
+
         userService.updateUserStatus(id, active, note);
         return ResponseEntity.ok().build();
     }

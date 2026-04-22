@@ -1,6 +1,6 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { LayoutDashboard, Building2, MapPin, Wrench, LogOut, Users, Briefcase, ArrowRightLeft, FileText, ChevronDown, ChevronRight, Shield, BookOpen } from 'lucide-react';
+import { LayoutDashboard, Building2, MapPin, Wrench, LogOut, Users, Briefcase, ArrowRightLeft, FileText, ChevronDown, ChevronRight, Shield, BookOpen, BarChart2, ClipboardList } from 'lucide-react';
 import { useState } from 'react';
 
 const Sidebar = () => {
@@ -12,12 +12,14 @@ const Sidebar = () => {
   const [reportsOpen, setReportsOpen] = useState(false);
   const [usersOpen, setUsersOpen] = useState(false);
   const [docsOpen, setDocsOpen] = useState(false);
+  const [tasksOpen, setTasksOpen] = useState(false);
 
   const isAssetsActive = location.pathname.startsWith('/assets');
   const isPropertiesActive = location.pathname.startsWith('/properties');
   const isWorkOrdersActive = location.pathname.startsWith('/work-orders');
   const isReportsActive = location.pathname.startsWith('/reports');
   const isUsersActive = location.pathname.startsWith('/users') || location.pathname.startsWith('/personnel');
+  const isTasksActive = location.pathname.startsWith('/tasks');
 
   if (!user) return null;
 
@@ -140,6 +142,30 @@ const Sidebar = () => {
                 <Link to="/users/list" className={`nav-item ${isActive('/users/list') ? 'active' : ''}`} style={{ padding: '0.4rem 0.8rem', fontSize: '0.9rem' }}>User List</Link>
                 <Link to="/users/permission-groups" className={`nav-item ${isActive('/users/permission-groups') ? 'active' : ''}`} style={{ padding: '0.4rem 0.8rem', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: 6 }}>
                   <Shield size={14} /> Permission Groups
+                </Link>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Tasks */}
+        {['ADMIN', 'ENGINEER', 'TECHNICIAN'].includes(user.role) && (
+          <div>
+            <div className={`nav-item ${isTasksActive ? 'active' : ''}`} onClick={() => setTasksOpen(!tasksOpen)} style={{ cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                <ClipboardList size={20} />
+                Tasks
+              </div>
+              {tasksOpen ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
+            </div>
+            {tasksOpen && (
+              <div style={{ marginLeft: '1.5rem', display: 'flex', flexDirection: 'column', gap: '0.5rem', marginTop: '0.5rem', marginBottom: '0.5rem' }}>
+                {['ADMIN', 'ENGINEER'].includes(user.role) && (
+                  <Link to="/tasks/add" className={`nav-item ${isActive('/tasks/add') ? 'active' : ''}`} style={{ padding: '0.4rem 0.8rem', fontSize: '0.9rem' }}>Add Task</Link>
+                )}
+                <Link to="/tasks/list" className={`nav-item ${isActive('/tasks/list') ? 'active' : ''}`} style={{ padding: '0.4rem 0.8rem', fontSize: '0.9rem' }}>Task List</Link>
+                <Link to="/tasks/gantt" className={`nav-item ${isActive('/tasks/gantt') ? 'active' : ''}`} style={{ padding: '0.4rem 0.8rem', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <BarChart2 size={14} /> Gantt Chart
                 </Link>
               </div>
             )}

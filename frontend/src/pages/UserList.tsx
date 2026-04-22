@@ -33,7 +33,13 @@ const UserList = () => {
 
     useEffect(() => { fetchUsers(); }, []);
 
-    const handleToggleStatus = async (id: number, status: boolean) => {
+    const handleToggleStatus = async (id: number, status: boolean, userRow?: any) => {
+        // Frontend guard: stop admin trying to activate a VENDOR without permission group
+        if (status && userRow?.role === 'VENDOR' && !userRow?.permissionGroupId) {
+            toast.error('Cannot activate: no Permission Group assigned. Edit their profile first.', { duration: 5000 });
+            navigate(`/users/add?id=${id}`);
+            return;
+        }
         let note = '';
         if (!status) {
             const result = prompt('Reason for deactivating this user (required):');
@@ -42,8 +48,12 @@ const UserList = () => {
         }
         try {
             await axios.put(`${API}/api/users/${id}/status?active=${status}&note=${encodeURIComponent(note)}`);
+            toast.success(status ? 'User activated' : 'User deactivated');
             fetchUsers();
-        } catch { toast.error('Failed to update status'); }
+        } catch (err: any) {
+            const msg = err.response?.data;
+            toast.error(typeof msg === 'string' && msg.trim() ? msg : 'Failed to update status', { duration: 6000 });
+        }
     };
 
     const filtered = users.filter(u => {
@@ -140,9 +150,9 @@ const UserList = () => {
                                         <div style={{ display: 'flex', gap: '6px' }}>
                                             <button className="action-btn" title="Edit" onClick={() => navigate(`/users/add?id=${u.id}`)} style={{ fontSize: '0.75rem' }}>Edit</button>
                                             {u.active !== false ? (
-                                                <button className="btn" style={{ padding: '0.25rem 0.6rem', fontSize: '0.75rem', background: '#f57c00', color: 'white', width: 'auto', height: 'auto', minHeight: 0 }} onClick={() => handleToggleStatus(u.id, false)}>Deactivate</button>
+                                                <button className="btn" style={{ padding: '0.25rem 0.6rem', fontSize: '0.75rem', background: '#f57c00', color: 'white', width: 'auto', height: 'auto', minHeight: 0 }} onClick={() => handleToggleStatus(u.id, false, u)}>Deactivate</button>
                                             ) : (
-                                                <button className="btn" style={{ padding: '0.25rem 0.6rem', fontSize: '0.75rem', background: '#2e7d32', color: 'white', width: 'auto', height: 'auto', minHeight: 0 }} onClick={() => handleToggleStatus(u.id, true)}>Activate</button>
+                                                <button className="btn" style={{ padding: '0.25rem 0.6rem', fontSize: '0.75rem', background: '#2e7d32', color: 'white', width: 'auto', height: 'auto', minHeight: 0 }} onClick={() => handleToggleStatus(u.id, true, u)}>Activate</button>
                                             )}
                                         </div>
                                     </td>
