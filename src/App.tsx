@@ -21,6 +21,9 @@ import UserList from './pages/UserList';
 import UserAdd from './pages/UserAdd';
 import PermissionGroups from './pages/PermissionGroups';
 import PersonnelDetail from './pages/PersonnelDetail';
+import TaskAdd from './pages/TaskAdd';
+import TaskList from './pages/TaskList';
+import GanttChart from './pages/GanttChart';
 import Sidebar from './components/Sidebar';
 
 // Protected Route Component
@@ -86,6 +89,11 @@ function App() {
           {/* Reports */}
           <Route path="/reports" element={<ProtectedRoute allowedRoles={['ADMIN', 'ENGINEER']}><Navigate to="/reports/transfers" replace /></ProtectedRoute>} />
           <Route path="/reports/transfers" element={<ProtectedRoute allowedRoles={['ADMIN', 'ENGINEER']}><AppLayout><Reports /></AppLayout></ProtectedRoute>} />
+          {/* Tasks & Gantt */}
+          <Route path="/tasks" element={<ProtectedRoute allowedRoles={['ADMIN', 'ENGINEER', 'TECHNICIAN']}><Navigate to="/tasks/list" replace /></ProtectedRoute>} />
+          <Route path="/tasks/add" element={<ProtectedRoute allowedRoles={['ADMIN', 'ENGINEER']}><AppLayout><TaskAdd /></AppLayout></ProtectedRoute>} />
+          <Route path="/tasks/list" element={<ProtectedRoute allowedRoles={['ADMIN', 'ENGINEER', 'TECHNICIAN']}><AppLayout><TaskList /></AppLayout></ProtectedRoute>} />
+          <Route path="/tasks/gantt" element={<ProtectedRoute allowedRoles={['ADMIN', 'ENGINEER', 'TECHNICIAN']}><AppLayout><GanttChart /></AppLayout></ProtectedRoute>} />
         </Routes>
       </Router>
     </AuthProvider>

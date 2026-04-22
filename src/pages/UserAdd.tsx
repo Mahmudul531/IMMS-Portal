@@ -19,7 +19,8 @@ const PERMISSIONS_LIST = [
     { key: 'ASSIGN_ENGINEER', label: 'Assign Engineers' },
 ];
 
-const ROLES = ['ADMIN', 'ENGINEER', 'TECHNICIAN', 'VENDOR'];
+// Non-vendor roles only (vendors are always created via registration)
+const NON_VENDOR_ROLES = ['ADMIN', 'ENGINEER', 'TECHNICIAN'];
 
 const UserAdd = () => {
     const navigate = useNavigate();
@@ -83,11 +84,21 @@ const UserAdd = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!editId && !password) { toast.error('Password is required for new users'); return; }
+
+        // Vendor must have permission group before saving (non-vendors don't need it)
+        const isVendor = role === 'VENDOR';
+        if (!editId && isVendor && !permissionGroupId) {
+            toast.error('A Vendor must be assigned a Permission Group');
+            return;
+        }
+
         setSaving(true);
         try {
             const payload: any = {
                 fullName, username, email, phone, dob: dob || null,
-                gender, nidOrPassport, role,
+                gender, nidOrPassport,
+                // Don't send role on edit — protected by backend too
+                role: editId ? undefined : role,
                 department, designation,
                 propertyId: propertyId ? parseInt(propertyId) : null,
                 permissionGroupId: permissionGroupId ? parseInt(permissionGroupId) : null,
@@ -195,19 +206,65 @@ const UserAdd = () => {
                 {/* Role */}
                 <div className="card" style={{ marginBottom: '1.5rem' }}>
                     <h3 style={{ margin: '0 0 1.5rem 0', color: 'var(--primary)', borderBottom: '2px solid var(--bg-main)', paddingBottom: '0.5rem' }}>System Role</h3>
-                    <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-                        {ROLES.map(r => (
-                            <label key={r} style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '0.75rem 1.5rem', border: `2px solid ${role === r ? 'var(--primary)' : 'var(--border)'}`, borderRadius: '8px', cursor: 'pointer', background: role === r ? 'rgba(16,185,129,0.08)' : 'white', transition: 'all 0.15s' }}>
-                                <input type="radio" name="role" value={r} checked={role === r} onChange={() => setRole(r)} style={{ transform: 'scale(1.2)' }} />
-                                <span style={{ fontWeight: role === r ? 700 : 400, color: role === r ? 'var(--primary)' : 'inherit' }}>{r}</span>
-                            </label>
-                        ))}
-                    </div>
+
+                    {editId ? (
+                        // EDIT MODE: role is displayed but cannot be changed
+                        <div>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                <span style={{
+                                    padding: '6px 20px', borderRadius: '20px', fontWeight: 700, fontSize: '0.9rem',
+                                    background: role === 'VENDOR' ? '#fff3e0' : 'rgba(16,185,129,0.1)',
+                                    color: role === 'VENDOR' ? '#e65100' : 'var(--primary)',
+                                    border: `2px solid ${role === 'VENDOR' ? '#ff9800' : 'var(--primary)'}`,
+                                }}>
+                                    {role}
+                                </span>
+                                <span style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>
+                                    🔒 Role cannot be changed after creation
+                                </span>
+                            </div>
+                            {role !== 'VENDOR' && (
+                                <div style={{ marginTop: '1rem' }}>
+                                    <p style={{ margin: '0 0 0.75rem', fontSize: '0.85rem', color: 'var(--text-muted)' }}>Change role (non-vendor only):</p>
+                                    <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+                                        {NON_VENDOR_ROLES.map(r => (
+                                            <label key={r} style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '0.6rem 1.2rem', border: `2px solid ${role === r ? 'var(--primary)' : 'var(--border)'}`, borderRadius: '8px', cursor: 'pointer', background: role === r ? 'rgba(16,185,129,0.08)' : 'white', transition: 'all 0.15s' }}>
+                                                <input type="radio" name="role" value={r} checked={role === r} onChange={() => setRole(r)} style={{ transform: 'scale(1.2)' }} />
+                                                <span style={{ fontWeight: role === r ? 700 : 400, color: role === r ? 'var(--primary)' : 'inherit' }}>{r}</span>
+                                            </label>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    ) : (
+                        // CREATE MODE: choose role (non-vendor roles only — vendors register themselves)
+                        <div>
+                            <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+                                {NON_VENDOR_ROLES.map(r => (
+                                    <label key={r} style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '0.75rem 1.5rem', border: `2px solid ${role === r ? 'var(--primary)' : 'var(--border)'}`, borderRadius: '8px', cursor: 'pointer', background: role === r ? 'rgba(16,185,129,0.08)' : 'white', transition: 'all 0.15s' }}>
+                                        <input type="radio" name="role" value={r} checked={role === r} onChange={() => setRole(r)} style={{ transform: 'scale(1.2)' }} />
+                                        <span style={{ fontWeight: role === r ? 700 : 400, color: role === r ? 'var(--primary)' : 'inherit' }}>{r}</span>
+                                    </label>
+                                ))}
+                            </div>
+                            <p style={{ margin: '0.75rem 0 0', fontSize: '0.82rem', color: 'var(--text-muted)' }}>
+                                ℹ️ Vendors must self-register via the login page and are activated by Admin.
+                            </p>
+                        </div>
+                    )}
                 </div>
 
                 {/* Permissions */}
-                <div className="card" style={{ marginBottom: '2rem' }}>
-                    <h3 style={{ margin: '0 0 1.5rem 0', color: 'var(--primary)', borderBottom: '2px solid var(--bg-main)', paddingBottom: '0.5rem' }}>Permission Group</h3>
+                <div className="card" style={{ marginBottom: '2rem', borderLeft: role === 'VENDOR' ? '4px solid var(--warning)' : undefined }}>
+                    <h3 style={{ margin: '0 0 1.5rem 0', color: 'var(--primary)', borderBottom: '2px solid var(--bg-main)', paddingBottom: '0.5rem' }}>
+                        Permission Group {role === 'VENDOR' && <span style={{ color: 'red' }}>*</span>}
+                    </h3>
+                    {role === 'VENDOR' && !permissionGroupId && (
+                        <div style={{ background: '#fff3e0', border: '1px solid #ff9800', borderRadius: 8, padding: '0.6rem 0.9rem', marginBottom: '1rem', fontSize: '0.85rem', color: '#7a3900' }}>
+                            ⚠️ A Permission Group is required to activate vendor accounts.
+                        </div>
+                    )}
                     <div className="form-group" style={{ marginBottom: 0, maxWidth: '400px' }}>
                         <label className="form-label">Assign a Permission Group</label>
                         <select className="form-input" value={permissionGroupId} onChange={e => setPermissionGroupId(e.target.value)}>
