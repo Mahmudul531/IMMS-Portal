@@ -11,7 +11,8 @@ import java.util.Map;
 
 /**
  * Thin wrapper around the Cloudinary SDK.
- * Returns the secure HTTPS URL of the uploaded image.
+ * Returns the secure HTTPS URL of the uploaded file.
+ * Supports image, raw (documents/drawings), and auto resource types.
  */
 @Service
 public class CloudinaryService {
@@ -39,6 +40,41 @@ public class CloudinaryService {
                 )
         );
         return (String) result.get("secure_url");
+    }
+
+    /**
+     * Upload any file as a raw resource (documents, drawings, PDFs, DWG, etc.).
+     * Returns the full Cloudinary result map so the caller can extract
+     * public_id, secure_url, bytes, format, etc.
+     *
+     * @param file   multipart file
+     * @param folder e.g. "imms/documents"
+     * @return full Cloudinary upload result map
+     */
+    public Map<?, ?> uploadRaw(MultipartFile file, String folder) throws IOException {
+        return cloudinary.uploader().upload(
+                file.getBytes(),
+                ObjectUtils.asMap(
+                        "folder",         folder,
+                        "resource_type",  "raw",
+                        "use_filename",   true,
+                        "unique_filename", true
+                )
+        );
+    }
+
+    /**
+     * Delete a Cloudinary asset by its public_id with an explicit resource_type.
+     * Use this for documents/raw files where the resource_type is known.
+     */
+    public void deleteByPublicId(String publicId, String resourceType) {
+        if (publicId == null || publicId.isBlank()) return;
+        try {
+            cloudinary.uploader().destroy(publicId,
+                    ObjectUtils.asMap("resource_type", resourceType));
+        } catch (Exception e) {
+            System.err.println("Cloudinary delete warning: " + e.getMessage());
+        }
     }
 
     /**

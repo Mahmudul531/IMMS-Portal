@@ -24,6 +24,8 @@ import PersonnelDetail from './pages/PersonnelDetail';
 import TaskAdd from './pages/TaskAdd';
 import TaskList from './pages/TaskList';
 import GanttChart from './pages/GanttChart';
+import DocumentAdd from './pages/DocumentAdd';
+import DocumentList from './pages/DocumentList';
 import Sidebar from './components/Sidebar';
 
 // Protected Route Component
@@ -94,6 +96,11 @@ function App() {
           <Route path="/tasks/add" element={<ProtectedRoute allowedRoles={['ADMIN', 'ENGINEER']}><AppLayout><TaskAdd /></AppLayout></ProtectedRoute>} />
           <Route path="/tasks/list" element={<ProtectedRoute allowedRoles={['ADMIN', 'ENGINEER', 'TECHNICIAN']}><AppLayout><TaskList /></AppLayout></ProtectedRoute>} />
           <Route path="/tasks/gantt" element={<ProtectedRoute allowedRoles={['ADMIN', 'ENGINEER', 'TECHNICIAN']}><AppLayout><GanttChart /></AppLayout></ProtectedRoute>} />
+
+          {/* Documents & Drawings */}
+          <Route path="/documents" element={<ProtectedRoute allowedRoles={['ADMIN', 'ENGINEER', 'TECHNICIAN', 'VENDOR']}><Navigate to="/documents/list" replace /></ProtectedRoute>} />
+          <Route path="/documents/add" element={<ProtectedRoute allowedRoles={['ADMIN', 'ENGINEER', 'TECHNICIAN']}><AppLayout><DocumentAdd /></AppLayout></ProtectedRoute>} />
+          <Route path="/documents/list" element={<ProtectedRoute allowedRoles={['ADMIN', 'ENGINEER', 'TECHNICIAN', 'VENDOR']}><AppLayout><DocumentList /></AppLayout></ProtectedRoute>} />
         </Routes>
       </Router>
     </AuthProvider>
