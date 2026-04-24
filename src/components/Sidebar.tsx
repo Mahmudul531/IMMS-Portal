@@ -1,6 +1,6 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { LayoutDashboard, Building2, MapPin, Wrench, LogOut, Users, Briefcase, ArrowRightLeft, FileText, ChevronDown, ChevronRight, Shield, BookOpen, BarChart2, ClipboardList } from 'lucide-react';
+import { LayoutDashboard, Building2, MapPin, Wrench, LogOut, Users, Briefcase, ArrowRightLeft, FileText, ChevronDown, ChevronRight, Shield, FolderOpen, BarChart2, ClipboardList, BookOpen } from 'lucide-react';
 import { useState } from 'react';
 
 const Sidebar = () => {
@@ -18,6 +18,7 @@ const Sidebar = () => {
   const isPropertiesActive = location.pathname.startsWith('/properties');
   const isWorkOrdersActive = location.pathname.startsWith('/work-orders');
   const isReportsActive = location.pathname.startsWith('/reports');
+  const isDocumentsActive = location.pathname.startsWith('/documents');
   const isUsersActive = location.pathname.startsWith('/users') || location.pathname.startsWith('/personnel');
   const isTasksActive = location.pathname.startsWith('/tasks');
 
@@ -172,33 +173,38 @@ const Sidebar = () => {
           </div>
         )}
 
-        {/* Documentation */}
+        {/* Document & Drawing */}
         <div>
           <div
-            className="nav-item"
+            className={`nav-item ${isDocumentsActive ? 'active' : ''}`}
             onClick={() => setDocsOpen(!docsOpen)}
             style={{ cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-              <BookOpen size={20} />
-              Documentation
+              <FolderOpen size={20} />
+              Document & Drawing
             </div>
             {docsOpen ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
           </div>
           {docsOpen && (
             <div style={{ marginLeft: '1.5rem', display: 'flex', flexDirection: 'column', gap: '0.5rem', marginTop: '0.5rem', marginBottom: '0.5rem' }}>
-              <a
-                href="/docs.html"
-                target="_blank"
-                rel="noreferrer"
-                className="nav-item"
-                style={{ padding: '0.4rem 0.8rem', fontSize: '0.9rem', textDecoration: 'none' }}
-              >
-                Platform Docs
-              </a>
+              <Link to="/documents/add" className={`nav-item ${isActive('/documents/add') ? 'active' : ''}`} style={{ padding: '0.4rem 0.8rem', fontSize: '0.9rem' }}>Upload Document</Link>
+              <Link to="/documents/list" className={`nav-item ${isActive('/documents/list') ? 'active' : ''}`} style={{ padding: '0.4rem 0.8rem', fontSize: '0.9rem' }}>Document List</Link>
             </div>
           )}
         </div>
+
+        {/* User Manual */}
+        <a
+          href="/docs.html"
+          target="_blank"
+          rel="noreferrer"
+          className="nav-item"
+          style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.75rem' }}
+        >
+          <BookOpen size={20} />
+          User Manual
+        </a>
       </div>
 
       <button
