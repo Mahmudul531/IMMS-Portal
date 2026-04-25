@@ -13,6 +13,8 @@ const Sidebar = () => {
   const [usersOpen, setUsersOpen] = useState(false);
   const [docsOpen, setDocsOpen] = useState(false);
   const [tasksOpen, setTasksOpen] = useState(false);
+  const [tenderOpen, setTenderOpen] = useState(false);
+  const [financeOpen, setFinanceOpen] = useState(false);
 
   const isAssetsActive = location.pathname.startsWith('/assets');
   const isPropertiesActive = location.pathname.startsWith('/properties');
@@ -21,6 +23,8 @@ const Sidebar = () => {
   const isDocumentsActive = location.pathname.startsWith('/documents');
   const isUsersActive = location.pathname.startsWith('/users') || location.pathname.startsWith('/personnel');
   const isTasksActive = location.pathname.startsWith('/tasks');
+  const isTenderActive = location.pathname.startsWith('/tenders') || location.pathname.startsWith('/my-contracts');
+  const isFinanceActive = location.pathname.startsWith('/finance');
 
   if (!user) return null;
 
@@ -123,6 +127,7 @@ const Sidebar = () => {
             {reportsOpen && (
               <div style={{ marginLeft: '1.5rem', display: 'flex', flexDirection: 'column', gap: '0.5rem', marginTop: '0.5rem', marginBottom: '0.5rem' }}>
                 <Link to="/reports/transfers" className={`nav-item ${isActive('/reports/transfers') ? 'active' : ''}`} style={{ padding: '0.4rem 0.8rem', fontSize: '0.9rem' }}>Asset Transfer</Link>
+                <Link to="/reports/payments" className={`nav-item ${isActive('/reports/payments') ? 'active' : ''}`} style={{ padding: '0.4rem 0.8rem', fontSize: '0.9rem' }}>Payment History</Link>
               </div>
             )}
           </div>
@@ -144,6 +149,51 @@ const Sidebar = () => {
                 <Link to="/users/permission-groups" className={`nav-item ${isActive('/users/permission-groups') ? 'active' : ''}`} style={{ padding: '0.4rem 0.8rem', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: 6 }}>
                   <Shield size={14} /> Permission Groups
                 </Link>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Tender Lifecycle */}
+        {['ADMIN', 'VENDOR'].includes(user.role) && (
+          <div>
+            <div className={`nav-item ${isTenderActive ? 'active' : ''}`} onClick={() => setTenderOpen(!tenderOpen)} style={{ cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                <ClipboardList size={20} />
+                Tenders
+              </div>
+              {tenderOpen ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
+            </div>
+            {tenderOpen && (
+              <div style={{ marginLeft: '1.5rem', display: 'flex', flexDirection: 'column', gap: '0.5rem', marginTop: '0.5rem', marginBottom: '0.5rem' }}>
+                {['ADMIN'].includes(user.role) && (
+                  <Link to="/tenders/add" className={`nav-item ${isActive('/tenders/add') ? 'active' : ''}`} style={{ padding: '0.4rem 0.8rem', fontSize: '0.9rem' }}>Add Tender</Link>
+                )}
+                {['ADMIN'].includes(user.role) && (
+                  <Link to="/tenders" className={`nav-item ${isActive('/tenders') ? 'active' : ''}`} style={{ padding: '0.4rem 0.8rem', fontSize: '0.9rem' }}>Tender List</Link>
+                )}
+                {['VENDOR'].includes(user.role) && (
+                  <Link to="/my-contracts" className={`nav-item ${isActive('/my-contracts') ? 'active' : ''}`} style={{ padding: '0.4rem 0.8rem', fontSize: '0.9rem' }}>My Contracts</Link>
+                )}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Finance Workflow */}
+        {['ADMIN', 'ENGINEER'].includes(user.role) && (
+          <div>
+            <div className={`nav-item ${isFinanceActive ? 'active' : ''}`} onClick={() => setFinanceOpen(!financeOpen)} style={{ cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                <BarChart2 size={20} />
+                Finance
+              </div>
+              {financeOpen ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
+            </div>
+            {financeOpen && (
+              <div style={{ marginLeft: '1.5rem', display: 'flex', flexDirection: 'column', gap: '0.5rem', marginTop: '0.5rem', marginBottom: '0.5rem' }}>
+                <Link to="/finance/approvals" className={`nav-item ${isActive('/finance/approvals') ? 'active' : ''}`} style={{ padding: '0.4rem 0.8rem', fontSize: '0.9rem' }}>Pending Approvals</Link>
+                <Link to="/finance/projects" className={`nav-item ${isActive('/finance/projects') ? 'active' : ''}`} style={{ padding: '0.4rem 0.8rem', fontSize: '0.9rem' }}>Current Projects</Link>
               </div>
             )}
           </div>

@@ -11,6 +11,7 @@ import AssetList from './pages/AssetList';
 import AssetSetup from './pages/AssetSetup';
 import AssetTransfer from './pages/AssetTransfer';
 import Reports from './pages/Reports';
+import PaymentReports from './pages/PaymentReports';
 import PropertyDetail from './pages/PropertyDetail';
 import AssetDetail from './pages/AssetDetail';
 import ProjectAdd from './pages/ProjectAdd';
@@ -26,8 +27,12 @@ import TaskList from './pages/TaskList';
 import GanttChart from './pages/GanttChart';
 import DocumentAdd from './pages/DocumentAdd';
 import DocumentList from './pages/DocumentList';
+import TenderAdd from './pages/TenderAdd';
+import TenderList from './pages/TenderList';
+import MyContracts from './pages/MyContracts';
+import FinanceApprovals from './pages/FinanceApprovals';
+import FinanceProjects from './pages/FinanceProjects';
 import Sidebar from './components/Sidebar';
-
 // Protected Route Component
 const ProtectedRoute = ({ children, allowedRoles }: { children: ReactElement, allowedRoles?: string[] }) => {
   const { user } = useAuth();
@@ -91,6 +96,16 @@ function App() {
           {/* Reports */}
           <Route path="/reports" element={<ProtectedRoute allowedRoles={['ADMIN', 'ENGINEER']}><Navigate to="/reports/transfers" replace /></ProtectedRoute>} />
           <Route path="/reports/transfers" element={<ProtectedRoute allowedRoles={['ADMIN', 'ENGINEER']}><AppLayout><Reports /></AppLayout></ProtectedRoute>} />
+          <Route path="/reports/payments" element={<ProtectedRoute allowedRoles={['ADMIN', 'ENGINEER']}><AppLayout><PaymentReports /></AppLayout></ProtectedRoute>} />
+          {/* Tenders & Contracts */}
+          <Route path="/tenders/add" element={<ProtectedRoute allowedRoles={['ADMIN']}><AppLayout><TenderAdd /></AppLayout></ProtectedRoute>} />
+          <Route path="/tenders" element={<ProtectedRoute allowedRoles={['ADMIN']}><AppLayout><TenderList /></AppLayout></ProtectedRoute>} />
+          <Route path="/my-contracts" element={<ProtectedRoute allowedRoles={['VENDOR']}><AppLayout><MyContracts /></AppLayout></ProtectedRoute>} />
+
+          {/* Finance */}
+          <Route path="/finance/approvals" element={<ProtectedRoute allowedRoles={['ADMIN', 'ENGINEER']}><AppLayout><FinanceApprovals /></AppLayout></ProtectedRoute>} />
+          <Route path="/finance/projects" element={<ProtectedRoute allowedRoles={['ADMIN', 'ENGINEER']}><AppLayout><FinanceProjects /></AppLayout></ProtectedRoute>} />
+
           {/* Tasks & Gantt */}
           <Route path="/tasks" element={<ProtectedRoute allowedRoles={['ADMIN', 'ENGINEER', 'TECHNICIAN']}><Navigate to="/tasks/list" replace /></ProtectedRoute>} />
           <Route path="/tasks/add" element={<ProtectedRoute allowedRoles={['ADMIN', 'ENGINEER']}><AppLayout><TaskAdd /></AppLayout></ProtectedRoute>} />
