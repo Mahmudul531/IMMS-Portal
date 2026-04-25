@@ -61,4 +61,10 @@ public class UserService {
         user.setInactiveNote(active ? null : note);
         userRepository.save(user);
     }
+
+    public void resetPassword(Long id, String newPassword) {
+        User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+    }
 }

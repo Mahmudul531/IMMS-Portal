@@ -6,18 +6,18 @@ import lombok.Setter;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "work_order_application")
+@Table(name = "tender_application")
 @Getter
 @Setter
-public class WorkOrderApplication {
+public class TenderApplication {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "work_order_id", nullable = false)
-    private WorkOrder workOrder;
+    @JoinColumn(name = "tender_id", nullable = false)
+    private Tender tender;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "vendor_id", nullable = false)
@@ -26,7 +26,6 @@ public class WorkOrderApplication {
     @Column(nullable = false)
     private Double amount;
 
-    // Optional document upload (e.g., proposal, quotation)
     private String documentUrl;
     private String documentName;
 
@@ -35,5 +34,5 @@ public class WorkOrderApplication {
 
     @org.hibernate.annotations.CreationTimestamp
     @Column(updatable = false)
-    private LocalDate appliedAt;
+    private LocalDate createdAt;
 }

@@ -6,34 +6,39 @@ import lombok.Setter;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "work_order_application")
+@Table(name = "payment_request")
 @Getter
 @Setter
-public class WorkOrderApplication {
+public class PaymentRequest {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "work_order_id", nullable = false)
     private WorkOrder workOrder;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "vendor_id", nullable = false)
     private User vendor;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "task_id", nullable = true)
+    private Task task;
 
     @Column(nullable = false)
     private Double amount;
 
-    // Optional document upload (e.g., proposal, quotation)
-    private String documentUrl;
-    private String documentName;
+    // Status: PENDING_ENGINEER, PENDING_ADMIN, APPROVED, REJECTED
+    @Column(nullable = false)
+    private String status = "PENDING_ENGINEER";
 
-    // APPLIED, APPROVED, REJECTED
-    private String status = "APPLIED";
+    private String invoiceUrl;
+    
+    private String note;
 
     @org.hibernate.annotations.CreationTimestamp
     @Column(updatable = false)
-    private LocalDate appliedAt;
+    private LocalDate createdAt;
 }

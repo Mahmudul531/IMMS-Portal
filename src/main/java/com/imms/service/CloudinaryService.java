@@ -56,8 +56,21 @@ public class CloudinaryService {
                 file.getBytes(),
                 ObjectUtils.asMap(
                         "folder",         folder,
-                        "resource_type",  "raw",
+                        "resource_type",  "auto",
                         "use_filename",   true,
+                        "unique_filename", true
+                )
+        );
+    }
+
+    public Map<?, ?> uploadRaw(byte[] fileBytes, String filename, String folder) throws IOException {
+        return cloudinary.uploader().upload(
+                fileBytes,
+                ObjectUtils.asMap(
+                        "folder",         folder,
+                        "resource_type",  "auto",
+                        "use_filename",   true,
+                        "filename_override", filename,
                         "unique_filename", true
                 )
         );

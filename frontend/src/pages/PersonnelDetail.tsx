@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { ArrowLeft, User, Building2, Package, Briefcase, Mail, Phone, MapPin, Loader2 } from 'lucide-react';
+import { toast } from 'react-hot-toast';
+import { useAuth } from '../context/AuthContext';
+import { ArrowLeft, User, Building2, Package, Briefcase, Mail, Phone, MapPin, Loader2, KeyRound } from 'lucide-react';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -23,6 +25,7 @@ const ROLE_COLORS: Record<string, string> = {
 const PersonnelDetail = () => {
     const { id } = useParams();
     const navigate = useNavigate();
+    const { user: currentUser } = useAuth();
 
     const [person, setPerson] = useState<any>(null);
     const [assets, setAssets] = useState<any[]>([]);
@@ -30,6 +33,21 @@ const PersonnelDetail = () => {
     const [loading, setLoading] = useState(true);
     const [allProperties, setAllProperties] = useState<any[]>([]);
     const [permGroup, setPermGroup] = useState<any>(null);
+
+    const handleResetPassword = async () => {
+        const newPassword = prompt(`Enter new password for ${person.username}:`);
+        if (!newPassword) return;
+
+        try {
+            toast.loading('Resetting password...');
+            await axios.put(`${API}/api/users/${id}/reset-password?newPassword=${encodeURIComponent(newPassword)}`);
+            toast.dismiss();
+            toast.success('Password reset successfully!');
+        } catch (err: any) {
+            toast.dismiss();
+            toast.error(err.response?.data || 'Failed to reset password');
+        }
+    };
 
     useEffect(() => {
         const load = async () => {
@@ -83,10 +101,15 @@ const PersonnelDetail = () => {
 
     return (
         <div className="page-container fade-in">
-            <div style={{ marginBottom: '1.5rem' }}>
+            <div style={{ marginBottom: '1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <button className="btn btn-secondary" onClick={() => navigate(-1)} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                     <ArrowLeft size={18} /> Back
                 </button>
+                {currentUser?.role === 'ADMIN' && (
+                    <button className="btn btn-secondary" onClick={handleResetPassword} style={{ display: 'flex', alignItems: 'center', gap: 8, color: '#d97706', borderColor: '#d97706' }}>
+                        <KeyRound size={18} /> Reset Password
+                    </button>
+                )}
             </div>
 
             {/* Profile Header */}

@@ -19,7 +19,6 @@ public class WorkOrderController {
     @Autowired private AssetRepository assetRepository;
     @Autowired private PropertyRepository propertyRepository;
     @Autowired private UserRepository userRepository;
-    @Autowired private WorkOrderApplicationRepository applicationRepository;
 
     @PostMapping
     public ResponseEntity<WorkOrder> createWorkOrder(@RequestBody WorkOrderRequest request) {
@@ -92,24 +91,42 @@ public class WorkOrderController {
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("/{id}/applications")
-    public ResponseEntity<?> applyWithAmount(@PathVariable Long id, @RequestParam Long vendorId, @RequestParam Double amount) {
+    @PutMapping("/{id}/cancel")
+    public ResponseEntity<?> cancelWorkOrder(@PathVariable Long id) {
         WorkOrder workOrder = workOrderRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Work Order not found"));
-        User vendor = userRepository.findById(vendorId)
-                .orElseThrow(() -> new RuntimeException("Vendor not found"));
+        if (!"PENDING".equals(workOrder.getStatus())) {
+            return ResponseEntity.badRequest().body("Only pending work orders can be cancelled.");
+        }
+        workOrder.setStatus("CANCELLED");
+        return ResponseEntity.ok(workOrderRepository.save(workOrder));
+    }
 
-        List<WorkOrderApplication> existingApps = applicationRepository.findByVendorId(vendorId);
-        boolean alreadyApplied = existingApps.stream().anyMatch(a -> a.getWorkOrder().getId().equals(id));
+    @Autowired private WorkOrderApplicationRepository applicationRepository;
+
+    @PostMapping("/{id}/applications")
+    public ResponseEntity<?> apply(@PathVariable Long id, @RequestParam Long vendorId, @RequestParam Double amount) {
+        WorkOrder wo = workOrderRepository.findById(id).orElseThrow(() -> new RuntimeException("Work Order not found"));
+        User vendor = userRepository.findById(vendorId).orElseThrow(() -> new RuntimeException("Vendor not found"));
+
+        if (!"PENDING".equals(wo.getStatus()) && !"APPLIED".equals(wo.getStatus())) {
+            return ResponseEntity.badRequest().body("Project is not open for bidding.");
+        }
+
+        boolean alreadyApplied = applicationRepository.findByVendorId(vendorId).stream()
+                .anyMatch(a -> a.getWorkOrder().getId().equals(id));
         if (alreadyApplied) {
-            return ResponseEntity.badRequest().body("Already applied to this work order.");
+            return ResponseEntity.badRequest().body("Already applied.");
         }
 
         WorkOrderApplication app = new WorkOrderApplication();
-        app.setWorkOrder(workOrder);
+        app.setWorkOrder(wo);
         app.setVendor(vendor);
         app.setAmount(amount);
-        app.setStatus("APPLIED");
+        
+        wo.setStatus("APPLIED");
+        workOrderRepository.save(wo);
+
         return ResponseEntity.ok(applicationRepository.save(app));
     }
 
@@ -124,29 +141,18 @@ public class WorkOrderController {
     }
 
     @PutMapping("/{id}/assign")
-    public ResponseEntity<WorkOrder> assignWorkOrder(@PathVariable Long id, @RequestParam Long applicationId) {
-        WorkOrder workOrder = workOrderRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Work Order not found"));
-        WorkOrderApplication app = applicationRepository.findById(applicationId)
-                .orElseThrow(() -> new RuntimeException("Application not found"));
+    public ResponseEntity<?> assignVendor(@PathVariable Long id, @RequestParam Long applicationId) {
+        WorkOrder wo = workOrderRepository.findById(id).orElseThrow(() -> new RuntimeException("Work Order not found"));
+        WorkOrderApplication app = applicationRepository.findById(applicationId).orElseThrow(() -> new RuntimeException("Application not found"));
+
+        wo.setVendor(app.getVendor());
+        wo.setAmount(app.getAmount());
+        wo.setStatus("ASSIGNED");
+        workOrderRepository.save(wo);
 
         app.setStatus("APPROVED");
         applicationRepository.save(app);
 
-        workOrder.setAmount(app.getAmount());
-        workOrder.setVendor(app.getVendor());
-        workOrder.setStatus("ASSIGNED");
-        return ResponseEntity.ok(workOrderRepository.save(workOrder));
-    }
-
-    @PutMapping("/{id}/cancel")
-    public ResponseEntity<?> cancelWorkOrder(@PathVariable Long id) {
-        WorkOrder workOrder = workOrderRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Work Order not found"));
-        if (!"PENDING".equals(workOrder.getStatus())) {
-            return ResponseEntity.badRequest().body("Only pending work orders can be cancelled.");
-        }
-        workOrder.setStatus("CANCELLED");
-        return ResponseEntity.ok(workOrderRepository.save(workOrder));
+        return ResponseEntity.ok(wo);
     }
 }

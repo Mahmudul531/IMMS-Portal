@@ -118,4 +118,15 @@ public class UserController {
         userService.updateUserStatus(id, active, note);
         return ResponseEntity.ok().build();
     }
+
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<String> handleRuntimeException(RuntimeException e) {
+        return ResponseEntity.badRequest().body(e.getMessage());
+    }
+
+    @PutMapping("/{id}/reset-password")
+    public ResponseEntity<?> resetPassword(@PathVariable Long id, @RequestParam String newPassword) {
+        userService.resetPassword(id, newPassword);
+        return ResponseEntity.ok().build();
+    }
 }

@@ -80,7 +80,4 @@ public class WorkOrder {
     @Column(updatable = false)
     private LocalDate createdAt;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "workOrder", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<WorkOrderApplication> applications;
 }
