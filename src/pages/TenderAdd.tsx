@@ -62,7 +62,11 @@ const TenderAdd = () => {
             navigate('/tenders');
         } catch (err: any) {
             toast.dismiss();
-            toast.error(err.response?.data || 'Failed to create tender');
+            const data = err.response?.data;
+            const errorMsg = typeof data === 'string' && data.length > 0 
+                ? data 
+                : (data?.message || data?.error || 'Failed to create tender');
+            toast.error(errorMsg);
         }
     };
 
@@ -82,12 +86,12 @@ const TenderAdd = () => {
                     </div>
 
                     <div className="form-group">
-                        <label>Minimum Budget ($)</label>
+                        <label>Minimum Budget (৳)</label>
                         <input type="number" className="form-input" required value={formData.budgetStart} onChange={e => setFormData({...formData, budgetStart: e.target.value})} />
                     </div>
 
                     <div className="form-group">
-                        <label>Maximum Budget ($)</label>
+                        <label>Maximum Budget (৳)</label>
                         <input type="number" className="form-input" required value={formData.budgetEnd} onChange={e => setFormData({...formData, budgetEnd: e.target.value})} />
                     </div>
 
@@ -117,7 +121,7 @@ const TenderAdd = () => {
                                 </select>
                             </div>
                             <div className="form-group">
-                                <label>Assigned Contract Amount ($)</label>
+                                <label>Assigned Contract Amount (৳)</label>
                                 <input type="number" className="form-input" required value={formData.assignedAmount} onChange={e => setFormData({...formData, assignedAmount: e.target.value})} />
                             </div>
                         </>

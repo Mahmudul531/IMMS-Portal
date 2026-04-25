@@ -1,6 +1,7 @@
 import React, { type ReactElement } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
+import { Toaster } from 'react-hot-toast';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import PropertyAdd from './pages/PropertyAdd';
@@ -52,6 +53,7 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => (
 function App() {
   return (
     <AuthProvider>
+      <Toaster position="top-right" />
       <Router>
         <Routes>
           <Route path="/login" element={<Login />} />
