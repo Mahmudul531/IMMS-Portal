@@ -178,7 +178,7 @@ const PersonnelDetail = () => {
                             {[
                                 ['Address', taggedProperty.address || '—'],
                                 ['City', taggedProperty.city || '—'],
-                                ['Type', taggedProperty.propertyType || '—'],
+                                ['Type', taggedProperty.propertyType?.name || '—'],
                                 ['Status', taggedProperty.active === false ? 'Inactive' : 'Active'],
                             ].map(([label, val]) => (
                                 <div key={label} style={{ display: 'flex', gap: '1rem', marginBottom: '0.5rem' }}>
