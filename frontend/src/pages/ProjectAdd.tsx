@@ -83,7 +83,9 @@ const ProjectAdd = () => {
         setSaving(true);
         try {
             const payload = {
-                jobTitle, jobCode, method,
+                jobTitle, 
+                jobCode: jobCode || null, 
+                method,
                 propertyId: propertyId ? parseInt(propertyId) : null,
                 publishDate: publishDate || null,
                 closeDate: closeDate || null,
@@ -104,7 +106,11 @@ const ProjectAdd = () => {
             }
             navigate('/work-orders/list');
         } catch (err: any) {
-            toast.error(err.response?.data?.message || 'Failed to save project');
+            const data = err.response?.data;
+            const errorMsg = typeof data === 'string' && data.length > 0 
+                ? data 
+                : (data?.message || data?.error || 'Failed to save project');
+            toast.error(errorMsg);
         } finally {
             setSaving(false);
         }

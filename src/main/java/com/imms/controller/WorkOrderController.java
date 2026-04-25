@@ -6,6 +6,7 @@ import com.imms.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,19 +22,31 @@ public class WorkOrderController {
     @Autowired private UserRepository userRepository;
 
     @PostMapping
-    public ResponseEntity<WorkOrder> createWorkOrder(@RequestBody WorkOrderRequest request) {
-        WorkOrder workOrder = new WorkOrder();
-        buildFromRequest(workOrder, request);
-        workOrder.setStatus("PENDING");
-        return ResponseEntity.ok(workOrderRepository.save(workOrder));
+    public ResponseEntity<?> createWorkOrder(@RequestBody WorkOrderRequest request) {
+        try {
+            WorkOrder workOrder = new WorkOrder();
+            buildFromRequest(workOrder, request);
+            workOrder.setStatus("PENDING");
+            return ResponseEntity.ok(workOrderRepository.save(workOrder));
+        } catch (DataIntegrityViolationException e) {
+            return ResponseEntity.badRequest().body("Job Code already exists or another database constraint was violated.");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Failed to create project: " + e.getMessage());
+        }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<WorkOrder> updateWorkOrder(@PathVariable Long id, @RequestBody WorkOrderRequest request) {
-        WorkOrder workOrder = workOrderRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Work Order not found"));
-        buildFromRequest(workOrder, request);
-        return ResponseEntity.ok(workOrderRepository.save(workOrder));
+    public ResponseEntity<?> updateWorkOrder(@PathVariable Long id, @RequestBody WorkOrderRequest request) {
+        try {
+            WorkOrder workOrder = workOrderRepository.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Work Order not found"));
+            buildFromRequest(workOrder, request);
+            return ResponseEntity.ok(workOrderRepository.save(workOrder));
+        } catch (DataIntegrityViolationException e) {
+            return ResponseEntity.badRequest().body("Job Code already exists or another database constraint was violated.");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Failed to update project: " + e.getMessage());
+        }
     }
 
     private void buildFromRequest(WorkOrder wo, WorkOrderRequest request) {
