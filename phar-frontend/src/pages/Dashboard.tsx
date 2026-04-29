@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import {
     BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
-    PieChart, Pie, Cell, LineChart, Line, Legend
+    PieChart, Pie, Cell, LineChart, Line
 } from 'recharts';
 import { TrendingUp, ShoppingBag, Users, Award, RefreshCw, ChevronDown } from 'lucide-react';
 
@@ -49,7 +49,6 @@ export default function Dashboard() {
     const [byZone, setByZone] = useState<any[]>([]);
     const [byTier, setByTier] = useState<any[]>([]);
     const [bySM, setBySM] = useState<any[]>([]);
-    const [bySR, setBySR] = useState<any[]>([]);
     const [byShop, setByShop] = useState<any[]>([]);
     const [monthlyTrend, setMonthlyTrend] = useState<any[]>([]);
     const [commission, setCommission] = useState<any[]>([]);
@@ -59,7 +58,7 @@ export default function Dashboard() {
         setLoading(true);
         const q = p ? `?period=${p}` : '';
         try {
-            const [sumR, zonesR, tierR, smR, srR, shopR, trendR, commR, perR] = await Promise.all([
+            const [sumR, zonesR, tierR, smR, _srR, shopR, trendR, commR, perR] = await Promise.all([
                 axios.get(`${PHAR}/dashboard/summary${q}`),
                 axios.get(`${PHAR}/dashboard/by-zone${q}`),
                 axios.get(`${PHAR}/dashboard/by-tier${q}`),
@@ -74,7 +73,7 @@ export default function Dashboard() {
             setByZone(zonesR.data);
             setByTier(tierR.data);
             setBySM(smR.data);
-            setBySR(srR.data);
+            // srR.data available if needed for future SR chart
             setByShop(shopR.data);
             setMonthlyTrend(trendR.data);
             setCommission(commR.data);
@@ -144,7 +143,7 @@ export default function Dashboard() {
                         <ChartCard title="Sales by Tier">
                             <ResponsiveContainer width="100%" height={240}>
                                 <PieChart>
-                                    <Pie data={byTier} dataKey="sales" nameKey="tier" cx="50%" cy="50%" outerRadius={90} label={({ tier, percent }) => `${tier} ${(percent * 100).toFixed(0)}%`} labelLine={false}>
+                                    <Pie data={byTier} dataKey="sales" nameKey="tier" cx="50%" cy="50%" outerRadius={90} label={(props: any) => `${props.tier} ${((props.percent ?? 0) * 100).toFixed(0)}%`} labelLine={false}>
                                         {byTier.map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
                                     </Pie>
                                     <Tooltip {...tooltip} formatter={(v: any) => fmtBDT(v)} />
