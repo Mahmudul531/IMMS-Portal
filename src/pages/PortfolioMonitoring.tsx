@@ -170,7 +170,7 @@ const regions = [
 
 /* ── National Bubble Overlap Chart (SVG) ── */
 const NationalBubble = ({ isDark }: { isDark: boolean }) => {
-    const textColor = isDark ? 'white' : '#0f172a';
+
     return (
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
             <svg width={160} height={130} viewBox="0 0 160 130">
