@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useTheme } from '../context/ThemeContext';
 import { Settings, Save, RotateCcw, CheckCircle, Info, Percent } from 'lucide-react';
 import toast from 'react-hot-toast';
@@ -30,7 +30,7 @@ export default function CommissionPreference() {
                 const parsed = JSON.parse(saved);
                 return DEFAULT_TIERS.map((def, i) => ({ ...def, rate: parsed[i]?.rate ?? def.rate }));
             }
-        } catch {}
+        } catch { }
         return DEFAULT_TIERS;
     });
     const [saved, setSaved] = useState(false);
