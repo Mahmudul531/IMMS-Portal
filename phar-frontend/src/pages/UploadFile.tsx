@@ -125,7 +125,6 @@ export default function UploadFile() {
     };
 
     const statusColor = (s: string) => ({ SUCCESS: '#10b981', PARTIAL: '#f59e0b', FAILED: '#ef4444', PROCESSING: '#3b82f6', QUEUED: '#8b5cf6' }[s] || '#94a3b8');
-    const StatusIcon = ({ s }: any) => s === 'SUCCESS' ? <CheckCircle size={16} /> : s === 'FAILED' ? <XCircle size={16} /> : <Clock size={16} />;
 
     const isActive = uploading || (job && !['SUCCESS', 'PARTIAL', 'FAILED'].includes(job.status));
     const isDone = job && ['SUCCESS', 'PARTIAL', 'FAILED'].includes(job.status);
