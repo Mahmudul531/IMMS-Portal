@@ -161,35 +161,36 @@ export default function Sidebar() {
                         </div>
                     )}
                 </div>
+
+                {/* Sign Out below Finance */}
+                <div style={{ marginTop: '0.75rem' }}>
+                    <button
+                        onClick={() => { logout(); navigate('/login'); }}
+                        style={{
+                            width: '100%', padding: '0.6rem 0.875rem', borderRadius: 10, border: 'none', cursor: 'pointer',
+                            background: 'rgba(239,68,68,0.08)', color: '#f87171',
+                            fontSize: '0.82rem', fontWeight: 600,
+                            display: 'flex', alignItems: 'center', gap: 8, transition: 'all 0.2s',
+                        }}
+                    >
+                        <LogOut size={15} /> Sign Out
+                    </button>
+                </div>
             </nav>
 
-            {/* User Info & Logout */}
+            {/* User Info strip at bottom */}
             <div style={{
                 borderTop: `1px solid ${isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.07)'}`,
-                paddingTop: '1rem', marginTop: '1rem',
+                paddingTop: '0.75rem', marginTop: '0.75rem',
+                display: 'flex', alignItems: 'center', gap: 8, padding: '0.6rem 0.5rem',
             }}>
-                <div style={{ padding: '0.4rem 0.5rem', marginBottom: '0.5rem' }}>
-                    <div style={{
-                        fontSize: '0.875rem', fontWeight: 700,
-                        color: isDark ? 'white' : '#0f172a',
-                    }}>{user?.fullName || user?.username}</div>
-                    <div style={{
-                        fontSize: '0.7rem',
-                        color: isDark ? 'rgba(255,255,255,0.3)' : 'rgba(0,0,0,0.4)',
-                        marginTop: 2,
-                    }}>{user?.role}</div>
+                <div style={{ width: 30, height: 30, borderRadius: '50%', background: 'linear-gradient(135deg,#3b82f6,#06b6d4)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <span style={{ color: 'white', fontSize: '0.7rem', fontWeight: 800 }}>{(user?.fullName || user?.username || '?')[0].toUpperCase()}</span>
                 </div>
-                <button
-                    onClick={() => { logout(); navigate('/login'); }}
-                    style={{
-                        width: '100%', padding: '0.6rem 1rem', borderRadius: 10, border: 'none', cursor: 'pointer',
-                        background: 'rgba(239,68,68,0.1)', color: '#f87171',
-                        fontSize: '0.82rem', fontWeight: 600,
-                        display: 'flex', alignItems: 'center', gap: 8, transition: 'all 0.2s',
-                    }}
-                >
-                    <LogOut size={15} /> Sign Out
-                </button>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ fontSize: '0.78rem', fontWeight: 700, color: isDark ? 'white' : '#0f172a', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{user?.fullName || user?.username}</div>
+                    <div style={{ fontSize: '0.62rem', color: isDark ? 'rgba(255,255,255,0.3)' : 'rgba(0,0,0,0.4)' }}>{user?.role}</div>
+                </div>
             </div>
         </div>
     );
