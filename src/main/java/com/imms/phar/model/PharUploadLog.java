@@ -20,5 +20,6 @@ public class PharUploadLog {
 
     private String status; // SUCCESS, PARTIAL, FAILED
     private Integer recordsImported = 0;
+    @Column(columnDefinition = "TEXT")
     private String errorMessage;
 }

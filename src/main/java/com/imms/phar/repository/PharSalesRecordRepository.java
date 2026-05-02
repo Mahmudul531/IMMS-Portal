@@ -11,8 +11,18 @@ import java.util.List;
 public interface PharSalesRecordRepository extends JpaRepository<PharSalesRecord, Long> {
     List<PharSalesRecord> findByShopId(Long shopId);
 
+    List<PharSalesRecord> findByUploadLogId(Long uploadLogId);
+
+    void deleteByUploadLogId(Long uploadLogId);
+
     @Query("SELECT r FROM PharSalesRecord r WHERE FUNCTION('TO_CHAR', r.saleDate, 'YYYY-MM') = :period")
     List<PharSalesRecord> findByPeriod(@Param("period") String period);
+
+    @Query("SELECT r FROM PharSalesRecord r WHERE r.shop.salesRepresentative.territory.zone.name = :zone")
+    List<PharSalesRecord> findByZone(@Param("zone") String zone);
+
+    @Query("SELECT r FROM PharSalesRecord r WHERE FUNCTION('TO_CHAR', r.saleDate, 'YYYY-MM') = :period AND r.shop.salesRepresentative.territory.zone.name = :zone")
+    List<PharSalesRecord> findByPeriodAndZone(@Param("period") String period, @Param("zone") String zone);
 
     @Query("SELECT r FROM PharSalesRecord r WHERE r.saleDate BETWEEN :start AND :end")
     List<PharSalesRecord> findByDateRange(@Param("start") LocalDate start, @Param("end") LocalDate end);

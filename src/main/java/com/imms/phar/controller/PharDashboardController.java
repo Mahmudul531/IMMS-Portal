@@ -16,52 +16,75 @@ public class PharDashboardController {
     @Autowired private PharDashboardService dashboardService;
 
     @GetMapping("/summary")
-    public ResponseEntity<Map<String, Object>> summary(@RequestParam(required = false) String period) {
-        return ResponseEntity.ok(dashboardService.getSummary(period));
+    public ResponseEntity<Map<String, Object>> summary(
+            @RequestParam(required = false) String period,
+            @RequestParam(required = false) String zone) {
+        return ResponseEntity.ok(dashboardService.getSummary(period, zone));
     }
 
     @GetMapping("/by-zone")
-    public ResponseEntity<List<Map<String, Object>>> byZone(@RequestParam(required = false) String period) {
-        return ResponseEntity.ok(dashboardService.getByZone(period));
+    public ResponseEntity<List<Map<String, Object>>> byZone(
+            @RequestParam(required = false) String period,
+            @RequestParam(required = false) String zone) {
+        return ResponseEntity.ok(dashboardService.getByZone(period, zone));
     }
 
     @GetMapping("/by-territory")
-    public ResponseEntity<List<Map<String, Object>>> byTerritory(@RequestParam(required = false) String period) {
-        return ResponseEntity.ok(dashboardService.getByTerritory(period));
+    public ResponseEntity<List<Map<String, Object>>> byTerritory(
+            @RequestParam(required = false) String period,
+            @RequestParam(required = false) String zone) {
+        return ResponseEntity.ok(dashboardService.getByTerritory(period, zone));
     }
 
     @GetMapping("/by-sm")
-    public ResponseEntity<List<Map<String, Object>>> bySM(@RequestParam(required = false) String period) {
-        return ResponseEntity.ok(dashboardService.getBySM(period));
+    public ResponseEntity<List<Map<String, Object>>> bySM(
+            @RequestParam(required = false) String period,
+            @RequestParam(required = false) String zone) {
+        return ResponseEntity.ok(dashboardService.getBySM(period, zone));
     }
 
     @GetMapping("/by-sr")
-    public ResponseEntity<List<Map<String, Object>>> bySR(@RequestParam(required = false) String period) {
-        return ResponseEntity.ok(dashboardService.getBySR(period));
+    public ResponseEntity<List<Map<String, Object>>> bySR(
+            @RequestParam(required = false) String period,
+            @RequestParam(required = false) String zone) {
+        return ResponseEntity.ok(dashboardService.getBySR(period, zone));
     }
 
     @GetMapping("/by-shop")
-    public ResponseEntity<List<Map<String, Object>>> byShop(@RequestParam(required = false) String period) {
-        return ResponseEntity.ok(dashboardService.getByShop(period));
+    public ResponseEntity<List<Map<String, Object>>> byShop(
+            @RequestParam(required = false) String period,
+            @RequestParam(required = false) String zone) {
+        return ResponseEntity.ok(dashboardService.getByShop(period, zone));
     }
 
     @GetMapping("/by-tier")
-    public ResponseEntity<List<Map<String, Object>>> byTier(@RequestParam(required = false) String period) {
-        return ResponseEntity.ok(dashboardService.getByTier(period));
+    public ResponseEntity<List<Map<String, Object>>> byTier(
+            @RequestParam(required = false) String period,
+            @RequestParam(required = false) String zone) {
+        return ResponseEntity.ok(dashboardService.getByTier(period, zone));
     }
 
     @GetMapping("/monthly-trend")
-    public ResponseEntity<List<Map<String, Object>>> monthlyTrend() {
-        return ResponseEntity.ok(dashboardService.getMonthlyTrend());
+    public ResponseEntity<List<Map<String, Object>>> monthlyTrend(
+            @RequestParam(required = false) String period,
+            @RequestParam(required = false) String zone) {
+        return ResponseEntity.ok(dashboardService.getMonthlyTrend(period, zone));
     }
 
     @GetMapping("/commission-summary")
-    public ResponseEntity<List<Map<String, Object>>> commissionSummary(@RequestParam(required = false) String period) {
-        return ResponseEntity.ok(dashboardService.getCommissionSummary(period));
+    public ResponseEntity<List<Map<String, Object>>> commissionSummary(
+            @RequestParam(required = false) String period,
+            @RequestParam(required = false) String zone) {
+        return ResponseEntity.ok(dashboardService.getCommissionSummary(period, zone));
     }
 
     @GetMapping("/periods")
     public ResponseEntity<List<String>> periods() {
         return ResponseEntity.ok(dashboardService.getAvailablePeriods());
+    }
+
+    @GetMapping("/zones")
+    public ResponseEntity<List<String>> zones() {
+        return ResponseEntity.ok(dashboardService.getAvailableZones());
     }
 }

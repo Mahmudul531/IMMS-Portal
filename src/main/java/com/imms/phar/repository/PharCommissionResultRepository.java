@@ -9,4 +9,5 @@ public interface PharCommissionResultRepository extends JpaRepository<PharCommis
     List<PharCommissionResult> findByPeriod(String period);
     Optional<PharCommissionResult> findByShopIdAndTierIdAndPeriod(Long shopId, Long tierId, String period);
     List<PharCommissionResult> findByShopId(Long shopId);
+    void deleteByPeriod(String period);
 }
