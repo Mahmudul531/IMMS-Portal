@@ -28,29 +28,100 @@ function useReveal() {
     return ref;
 }
 
-/* ── Territory Donut ── */
+/* ── Territory Donut with hover tooltip ── */
 const TerritoryDonut = ({ data, isDark }: { data: any[]; isDark: boolean }) => {
-    const total = data.reduce((s, d) => s + (d.sales || 0), 0);
+    const [hovered, setHovered] = useState<{ zone: string; sales: number; pct: number; x: number; y: number } | null>(null);
+    const svgRef = useRef<SVGSVGElement>(null);
+
+    const total = data.reduce((s, d) => s + (Number(d.sales) || 0), 0);
     const size = 160; const r = 58; const cx = size / 2; const cy = size / 2;
     const circ = 2 * Math.PI * r;
-    let offset = 0;
+
+    // Build arc segments
+    const segments: { path: string; color: string; zone: string; sales: number; pct: number }[] = [];
+    let cumOffset = 0;
+    data.forEach((d, i) => {
+        const sales = Number(d.sales) || 0;
+        const pct = total > 0 ? sales / total : 0;
+        const dash = pct * circ;
+        segments.push({ path: `${dash} ${circ - dash}`, color: COLORS[i % COLORS.length], zone: d.zone, sales, pct });
+        cumOffset += dash;
+    });
+
+    const handleMouseMove = (e: React.MouseEvent<SVGCircleElement>, seg: typeof segments[0]) => {
+        const rect = svgRef.current?.getBoundingClientRect();
+        if (!rect) return;
+        setHovered({ zone: seg.zone, sales: seg.sales, pct: seg.pct, x: e.clientX - rect.left, y: e.clientY - rect.top });
+    };
+
     return (
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
-                <circle cx={cx} cy={cy} r={r} fill="none" stroke={isDark ? 'rgba(255,255,255,0.07)' : 'rgba(0,0,0,0.07)'} strokeWidth={14} />
-                {data.map((d, i) => {
-                    const pct = total > 0 ? d.sales / total : 0;
-                    const dash = pct * circ; const gap = circ - dash;
-                    const seg = <circle key={i} cx={cx} cy={cy} r={r} fill="none"
-                        stroke={COLORS[i % COLORS.length]} strokeWidth={14}
-                        strokeDasharray={`${dash} ${gap}`}
-                        strokeDashoffset={-offset}
-                        transform={`rotate(-90 ${cx} ${cy})`} />;
-                    offset += dash; return seg;
-                })}
-                <text x="50%" y="48%" textAnchor="middle" fill={isDark ? 'white' : '#0f172a'} fontSize="13" fontWeight="800">{fmtBDT(total)}</text>
-                <text x="50%" y="62%" textAnchor="middle" fill={isDark ? 'rgba(255,255,255,0.4)' : 'rgba(0,0,0,0.4)'} fontSize="9">Total Territory</text>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', position: 'relative' }}>
+            <svg ref={svgRef} width={size} height={size} viewBox={`0 0 ${size} ${size}`} style={{ overflow: 'visible' }}>
+                {/* Track */}
+                <circle cx={cx} cy={cy} r={r} fill="none"
+                    stroke={isDark ? 'rgba(255,255,255,0.07)' : 'rgba(0,0,0,0.07)'} strokeWidth={14} />
+                {/* Segments */}
+                {(() => {
+                    let offset = 0;
+                    return segments.map((seg, i) => {
+                        const dashOffset = -offset;
+                        const el = (
+                            <circle key={i} cx={cx} cy={cy} r={r} fill="none"
+                                stroke={seg.color}
+                                strokeWidth={hovered?.zone === seg.zone ? 18 : 14}
+                                strokeDasharray={seg.path}
+                                strokeDashoffset={dashOffset}
+                                transform={`rotate(-90 ${cx} ${cy})`}
+                                style={{ cursor: 'pointer', transition: 'stroke-width 0.15s' }}
+                                onMouseMove={e => handleMouseMove(e, seg)}
+                                onMouseLeave={() => setHovered(null)}
+                            />
+                        );
+                        offset += Number(seg.path.split(' ')[0]);
+                        return el;
+                    });
+                })()}
+                {/* Center text */}
+                {hovered ? (
+                    <>
+                        <text x="50%" y="44%" textAnchor="middle" fill={isDark ? 'white' : '#0f172a'} fontSize="11" fontWeight="800">
+                            {hovered.zone}
+                        </text>
+                        <text x="50%" y="57%" textAnchor="middle" fill={COLORS[data.findIndex(d => d.zone === hovered.zone) % COLORS.length]} fontSize="11" fontWeight="800">
+                            {(hovered.pct * 100).toFixed(1)}%
+                        </text>
+                    </>
+                ) : (
+                    <>
+                        <text x="50%" y="48%" textAnchor="middle" fill={isDark ? 'white' : '#0f172a'} fontSize="13" fontWeight="800">{fmtBDT(total)}</text>
+                        <text x="50%" y="62%" textAnchor="middle" fill={isDark ? 'rgba(255,255,255,0.4)' : 'rgba(0,0,0,0.4)'} fontSize="9">Total Territory</text>
+                    </>
+                )}
             </svg>
+
+            {/* Floating tooltip */}
+            {hovered && (
+                <div style={{
+                    position: 'absolute',
+                    left: hovered.x + 12,
+                    top: hovered.y - 10,
+                    background: isDark ? '#1e293b' : '#ffffff',
+                    border: `1px solid ${isDark ? 'rgba(255,255,255,0.12)' : 'rgba(0,0,0,0.12)'}`,
+                    borderRadius: 8, padding: '0.4rem 0.75rem',
+                    fontSize: '0.75rem', fontWeight: 600, pointerEvents: 'none',
+                    boxShadow: '0 4px 16px rgba(0,0,0,0.15)',
+                    color: isDark ? 'white' : '#0f172a',
+                    whiteSpace: 'nowrap', zIndex: 99,
+                }}>
+                    <div style={{ color: COLORS[data.findIndex(d => d.zone === hovered.zone) % COLORS.length], fontWeight: 700, marginBottom: 2 }}>
+                        {hovered.zone}
+                    </div>
+                    <div>{fmtBDT(hovered.sales)}</div>
+                    <div style={{ color: isDark ? 'rgba(255,255,255,0.5)' : 'rgba(0,0,0,0.45)' }}>{(hovered.pct * 100).toFixed(1)}% of total</div>
+                </div>
+            )}
+
+            {/* Legend */}
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.35rem', justifyContent: 'center', marginTop: '0.5rem' }}>
                 {data.slice(0, 6).map((d, i) => (
                     <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: '0.68rem', color: isDark ? 'rgba(255,255,255,0.55)' : 'rgba(0,0,0,0.55)' }}>
@@ -62,6 +133,7 @@ const TerritoryDonut = ({ data, isDark }: { data: any[]; isDark: boolean }) => {
         </div>
     );
 };
+
 
 const KpiCard = ({ icon: Icon, label, value, color, sub, isDark }: any) => {
     const ref = useReveal();
@@ -121,6 +193,7 @@ export default function Dashboard() {
     const [period, setPeriod] = useState('');
     const [zone, setZone] = useState('');
     const [periods, setPeriods] = useState<string[]>([]);
+    const [zones, setZones] = useState<string[]>([]);  // from /zones API
     const [summary, setSummary] = useState<any>(null);
     const [byZone, setByZone] = useState<any[]>([]);
     const [byTier, setByTier] = useState<any[]>([]);
@@ -131,9 +204,19 @@ export default function Dashboard() {
     const [loading, setLoading] = useState(true);
     const [showAllShops, setShowAllShops] = useState(false);
 
-    const load = async (p?: string) => {
+    // Load zone list once from DB (independent of filter state)
+    useEffect(() => {
+        axios.get(`${PHAR}/dashboard/zones`)
+            .then(r => setZones(r.data || []))
+            .catch(() => {});
+    }, []);
+
+    const load = async (p?: string, z?: string) => {
         setLoading(true);
-        const q = p ? `?period=${p}` : '';
+        const params: string[] = [];
+        if (p) params.push(`period=${encodeURIComponent(p)}`);
+        if (z) params.push(`zone=${encodeURIComponent(z)}`);
+        const q = params.length ? `?${params.join('&')}` : '';
         try {
             const [sumR, zonesR, tierR, smR, _srR, shopR, trendR, commR, perR] = await Promise.all([
                 axios.get(`${PHAR}/dashboard/summary${q}`),
@@ -142,7 +225,7 @@ export default function Dashboard() {
                 axios.get(`${PHAR}/dashboard/by-sm${q}`),
                 axios.get(`${PHAR}/dashboard/by-sr${q}`),
                 axios.get(`${PHAR}/dashboard/by-shop${q}`),
-                axios.get(`${PHAR}/dashboard/monthly-trend`),
+                axios.get(`${PHAR}/dashboard/monthly-trend${q}`),
                 axios.get(`${PHAR}/dashboard/commission-summary${q}`),
                 axios.get(`${PHAR}/dashboard/periods`),
             ]);
@@ -153,10 +236,9 @@ export default function Dashboard() {
         setLoading(false);
     };
 
-    useEffect(() => { load(period); }, [period]);
+    useEffect(() => { load(period, zone); }, [period, zone]);
 
-    const zones = byZone.map(z => z.zone);
-    const filteredShops = zone ? byShop.filter((s: any) => s.zone === zone) : byShop;
+    const filteredShops = byShop;
     const top10 = filteredShops.slice(0, 10);
 
     const tickFill = isDark ? 'rgba(255,255,255,0.4)' : 'rgba(0,0,0,0.4)';
@@ -194,7 +276,7 @@ export default function Dashboard() {
                         </select>
                         <ChevronDown size={14} style={{ position: 'absolute', right: 10, top: '50%', transform: 'translateY(-50%)', color: isDark ? 'rgba(255,255,255,0.4)' : 'rgba(0,0,0,0.4)', pointerEvents: 'none' }} />
                     </div>
-                    <button onClick={() => load(period)} style={{ background: 'rgba(59,130,246,0.2)', border: '1px solid rgba(59,130,246,0.3)', borderRadius: 10, padding: '0.6rem 1rem', color: '#60a5fa', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6, fontSize: '0.875rem', fontWeight: 600 }}>
+                    <button onClick={() => load(period, zone)} style={{ background: 'rgba(59,130,246,0.2)', border: '1px solid rgba(59,130,246,0.3)', borderRadius: 10, padding: '0.6rem 1rem', color: '#60a5fa', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6, fontSize: '0.875rem', fontWeight: 600 }}>
                         <RefreshCw size={14} /> Refresh
                     </button>
                 </div>
