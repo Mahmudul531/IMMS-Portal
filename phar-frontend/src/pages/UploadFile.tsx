@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
-import { Upload, FileSpreadsheet, CheckCircle, XCircle, Loader2, Clock, Info, Trash2, Activity } from 'lucide-react';
+import { Upload, FileSpreadsheet, Loader2, Info, Trash2, Activity } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 
 const API = import.meta.env.VITE_API_URL || 'http://localhost:8080';
