@@ -79,6 +79,12 @@ public class PharUploadController {
     public ResponseEntity<?> deleteLog(@PathVariable Long id) {
         Optional<PharUploadLog> logOpt = uploadLogRepo.findById(id);
         if (logOpt.isEmpty()) return ResponseEntity.notFound().build();
+        
+        JobProgress prog = parserService.getProgressByLogId(id);
+        if (prog != null && ("PROCESSING".equals(prog.status) || "QUEUED".equals(prog.status))) {
+            prog.cancelled = true;
+            return ResponseEntity.accepted().body("Cancellation signal sent. The background task will stop and clear its data momentarily.");
+        }
 
         List<PharSalesRecord> records = salesRecordRepo.findByUploadLogId(id);
         Set<String> periods = records.stream()

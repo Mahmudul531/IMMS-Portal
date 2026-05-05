@@ -6,6 +6,7 @@ import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.util.IOUtils;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,6 +39,8 @@ public class PharExcelParserService {
     @Autowired private PharSalesRecordRepository salesRepo;
     @Autowired private PharUploadLogRepository uploadLogRepo;
     @Autowired private PharCommissionService commissionService;
+    @Autowired private PharCommissionResultRepository commissionRepo;
+    @Autowired @Lazy private PharExcelParserService self;
 
     private static final int BATCH_SIZE = 500;
 
@@ -53,6 +56,7 @@ public class PharExcelParserService {
         public String currentStep; // "Reading file", "Saving records", "Calculating commissions"
         public String errorSummary;
         public Long logId;
+        public volatile boolean cancelled = false;
 
         public int getPercent() {
             if (totalRows <= 0) return 0;
@@ -64,6 +68,13 @@ public class PharExcelParserService {
 
     public JobProgress getProgress(String jobId) {
         return jobs.get(jobId);
+    }
+
+    public JobProgress getProgressByLogId(Long logId) {
+        for (JobProgress prog : jobs.values()) {
+            if (logId.equals(prog.logId)) return prog;
+        }
+        return null;
     }
 
     // ── Synchronous start: save log, return jobId immediately ─────────────────
@@ -87,7 +98,7 @@ public class PharExcelParserService {
         File tempFile = File.createTempFile("phar_upload_" + jobId + "_", ".xlsx");
         file.transferTo(tempFile);
 
-        processAsync(jobId, tempFile, log);
+        self.processAsync(jobId, tempFile, log);
         return jobId;
     }
 
@@ -100,6 +111,7 @@ public class PharExcelParserService {
 
         List<String> errors = new ArrayList<>();
         int imported = 0;
+        Set<String> affectedPeriods = new HashSet<>();
 
         try {
             // Open workbook directly from file — avoids POI's byte-array length check entirely.
@@ -122,6 +134,11 @@ public class PharExcelParserService {
                 List<PharSalesRecord> batch = new ArrayList<>(BATCH_SIZE);
 
                 for (int i = 1; i <= lastRow; i++) {
+                    if (prog.cancelled) {
+                        prog.currentStep = "Cancelling and clearing data...";
+                        break;
+                    }
+                    
                     Row row = sheet.getRow(i);
                     if (row == null || isRowEmpty(row)) { prog.processedRows++; continue; }
 
@@ -133,6 +150,7 @@ public class PharExcelParserService {
                         if (record != null) {
                             batch.add(record);
                             imported++;
+                            affectedPeriods.add(record.getSaleDate().getYear() + "-" + String.format("%02d", record.getSaleDate().getMonthValue()));
                         }
                     } catch (Exception e) {
                         errors.add("Row " + (i + 1) + ": " + e.getMessage());
@@ -148,13 +166,28 @@ public class PharExcelParserService {
                     }
                 }
 
+                if (prog.cancelled) {
+                    // Clean up partial data
+                    if (log.getId() != null) {
+                        for (String period : affectedPeriods) commissionRepo.deleteByPeriod(period);
+                        salesRepo.deleteByUploadLogId(log.getId());
+                        uploadLogRepo.deleteById(log.getId());
+                    }
+                    prog.status = "FAILED";
+                    prog.errorSummary = "Upload cancelled by user. Partial data was cleared.";
+                    prog.currentStep = "Cancelled";
+                    return;
+                }
+
                 if (!batch.isEmpty()) {
                     prog.currentStep = "Saving final batch...";
                     flushBatch(batch);
                 }
 
                 prog.currentStep = "Calculating commissions...";
-                commissionService.recalculateAll();
+                for (String period : affectedPeriods) {
+                    commissionService.recalculateSinglePeriod(period);
+                }
 
                 log.setStatus(errors.isEmpty() ? "SUCCESS" : "PARTIAL");
                 log.setRecordsImported(imported);
@@ -173,15 +206,24 @@ public class PharExcelParserService {
         } finally {
             // Always delete temp file
             if (tempFile != null && tempFile.exists()) tempFile.delete();
+            
+            try {
+                uploadLogRepo.save(log);
+            } catch (Exception ex) {
+                // If saving the log fails (e.g. detached entity, transaction rollback), make sure prog gets marked FAILED
+                prog.status = "FAILED";
+                prog.errorSummary = "Database error saving log: " + ex.getMessage();
+                log.setStatus("FAILED");
+            }
+
+            prog.status = log.getStatus();
+            prog.importedRows = imported;
+            prog.processedRows = prog.totalRows;
+            prog.currentStep = "Done";
+            if (prog.errorSummary == null) {
+                prog.errorSummary = log.getErrorMessage();
+            }
         }
-
-        uploadLogRepo.save(log);
-
-        prog.status = log.getStatus();
-        prog.importedRows = imported;
-        prog.processedRows = prog.totalRows;
-        prog.currentStep = "Done";
-        prog.errorSummary = log.getErrorMessage();
     }
 
     @Transactional
