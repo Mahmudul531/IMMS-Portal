@@ -10,4 +10,10 @@ public interface PharCommissionResultRepository extends JpaRepository<PharCommis
     Optional<PharCommissionResult> findByShopIdAndTierIdAndPeriod(Long shopId, Long tierId, String period);
     List<PharCommissionResult> findByShopId(Long shopId);
     void deleteByPeriod(String period);
+
+    @org.springframework.data.jpa.repository.Query("SELECT r.shop.salesRepresentative.name, SUM(r.totalSales), SUM(r.totalCommission) FROM PharCommissionResult r " +
+           "WHERE (:period = '' OR r.period = :period) " +
+           "AND (:zone = '' OR r.shop.salesRepresentative.territory.zone.name = :zone) " +
+           "GROUP BY r.shop.salesRepresentative.name")
+    List<Object[]> sumCommissionBySR(@org.springframework.data.repository.query.Param("period") String period, @org.springframework.data.repository.query.Param("zone") String zone);
 }

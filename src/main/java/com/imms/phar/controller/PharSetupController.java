@@ -35,8 +35,9 @@ public class PharSetupController {
     @PutMapping("/commission-config/{tierId}")
     public ResponseEntity<?> updateConfig(@PathVariable Long tierId, @RequestBody Map<String, Object> body) {
         PharTier tier = tierRepo.findById(tierId).orElseThrow(() -> new RuntimeException("Tier not found"));
-        PharTierCommissionConfig cfg = configRepo.findByTierId(tierId).orElse(new PharTierCommissionConfig());
+        PharTierCommissionConfig cfg = configRepo.findByTierIdAndPeriod(tierId, "DEFAULT").orElse(new PharTierCommissionConfig());
         cfg.setTier(tier);
+        cfg.setPeriod("DEFAULT");
         cfg.setBaseCommissionPct(new BigDecimal(body.get("baseCommissionPct").toString()));
         cfg.setBonusThresholdAmount(new BigDecimal(body.get("bonusThresholdAmount").toString()));
         cfg.setBonusCommissionPct(new BigDecimal(body.get("bonusCommissionPct").toString()));

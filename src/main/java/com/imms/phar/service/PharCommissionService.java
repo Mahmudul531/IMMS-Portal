@@ -48,7 +48,7 @@ public class PharCommissionService {
                     .map(PharSalesRecord::getTotalAmount)
                     .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-            PharTierCommissionConfig config = configRepo.findByTierId(tierId).orElse(null);
+            PharTierCommissionConfig config = configRepo.findByTierIdAndPeriod(tierId, period).orElse(null);
             BigDecimal basePct = config != null ? config.getBaseCommissionPct() : BigDecimal.ZERO;
             BigDecimal bonusPct = BigDecimal.ZERO;
             if (config != null && config.getBonusThresholdAmount().compareTo(BigDecimal.ZERO) > 0
@@ -74,5 +74,11 @@ public class PharCommissionService {
             result.setTotalCommission(base.add(bonus));
             resultRepo.save(result);
         }
+    }
+    
+    public void recalculateSinglePeriod(String period) {
+        List<PharSalesRecord> records = salesRepo.findByPeriod(period);
+        if (records == null || records.isEmpty()) return;
+        recalculatePeriod(period, records);
     }
 }

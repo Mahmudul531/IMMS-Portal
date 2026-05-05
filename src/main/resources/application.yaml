@@ -19,6 +19,7 @@ cloudinary:
   api-key: "624134459765584"
   api-secret: Um6QoySn8er6aK5vm_0gWv5XB3I
 
+
 # --- DEVELOPMENT CONFIGURATION ---
 ---
 spring:
@@ -43,6 +44,7 @@ spring:
     multipart:
       max-file-size: 500MB
       max-request-size: 500MB
+
 
 # --- PRODUCTION CONFIGURATION (SUPABASE) ---
 ---

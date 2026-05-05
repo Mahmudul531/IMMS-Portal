@@ -41,9 +41,10 @@ public class PharDataInitializer implements CommandLineRunner {
             return tierRepo.save(t);
         });
 
-        if (configRepo.findByTierId(tier.getId()).isEmpty()) {
+        if (configRepo.findByTierIdAndPeriod(tier.getId(), "DEFAULT").isEmpty()) {
             PharTierCommissionConfig cfg = new PharTierCommissionConfig();
             cfg.setTier(tier);
+            cfg.setPeriod("DEFAULT");
             cfg.setBaseCommissionPct(basePct);
             cfg.setBonusThresholdAmount(threshold);
             cfg.setBonusCommissionPct(bonusPct);
