@@ -240,6 +240,7 @@ export default function UploadFile() {
                         {[
                             { label: 'Progress', value: `${pct}%`, color: progressColor },
                             { label: 'Processed', value: fmt(job.processedRows), color: c.text },
+                            { label: 'Pending', value: fmt(job.totalRows > 0 ? job.totalRows - job.processedRows : 0), color: '#f59e0b' },
                             { label: 'Imported', value: fmt(job.importedRows), color: '#10b981' },
                             { label: 'Total Rows', value: fmt(job.totalRows), color: c.textSub },
                             { label: 'Errors', value: fmt(job.errorRows), color: job.errorRows > 0 ? '#f87171' : c.textSub },
