@@ -78,6 +78,13 @@ public class PharDashboardController {
         return ResponseEntity.ok(dashboardService.getCommissionSummary(period, zone));
     }
 
+    @GetMapping("/by-shop-commission")
+    public ResponseEntity<List<Map<String, Object>>> byShopCommission(
+            @RequestParam(required = false) String period,
+            @RequestParam(required = false) String zone) {
+        return ResponseEntity.ok(dashboardService.getShopCommissionSummary(period, zone));
+    }
+
     @GetMapping("/periods")
     public ResponseEntity<List<String>> periods() {
         return ResponseEntity.ok(dashboardService.getAvailablePeriods());

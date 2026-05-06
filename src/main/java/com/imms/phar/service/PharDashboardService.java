@@ -1,5 +1,6 @@
 package com.imms.phar.service;
 
+import com.imms.phar.model.*;
 import com.imms.phar.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -83,6 +84,57 @@ public class PharDashboardService {
             m.put("totalCommission", row[2]);
             return m;
         }).collect(Collectors.toList());
+    }
+
+    public List<Map<String, Object>> getShopCommissionSummary(String period, String zone) {
+        List<PharCommissionResult> detailed = commissionRepo.findDetailed(safeStr(period), safeStr(zone));
+        
+        // Group by Shop ID
+        Map<Long, Map<String, Object>> shopMap = new LinkedHashMap<>();
+        
+        for (PharCommissionResult r : detailed) {
+            PharShop shop = r.getShop();
+            shopMap.computeIfAbsent(shop.getId(), id -> {
+                Map<String, Object> m = new HashMap<>();
+                m.put("zone", shop.getSalesRepresentative().getTerritory().getZone().getName());
+                m.put("territory", shop.getSalesRepresentative().getTerritory().getName());
+                m.put("shopName", shop.getName());
+                m.put("sm", shop.getSalesRepresentative().getSalesManager().getName());
+                m.put("t1Sales", BigDecimal.ZERO);
+                m.put("t2Sales", BigDecimal.ZERO);
+                m.put("t3Sales", BigDecimal.ZERO);
+                m.put("t1Commission", BigDecimal.ZERO);
+                m.put("t2Commission", BigDecimal.ZERO);
+                m.put("t3Commission", BigDecimal.ZERO);
+                m.put("totalSales", BigDecimal.ZERO);
+                m.put("totalCommission", BigDecimal.ZERO);
+                return m;
+            });
+            
+            Map<String, Object> m = shopMap.get(shop.getId());
+            Integer tierNum = r.getTier().getTierNumber();
+            
+            BigDecimal sales = r.getTotalSales() != null ? r.getTotalSales() : BigDecimal.ZERO;
+            BigDecimal commission = r.getTotalCommission() != null ? r.getTotalCommission() : BigDecimal.ZERO;
+            
+            if (tierNum != null) {
+                if (tierNum == 1) {
+                    m.put("t1Sales", sales);
+                    m.put("t1Commission", commission);
+                } else if (tierNum == 2) {
+                    m.put("t2Sales", sales);
+                    m.put("t2Commission", commission);
+                } else if (tierNum == 3) {
+                    m.put("t3Sales", sales);
+                    m.put("t3Commission", commission);
+                }
+            }
+            
+            m.put("totalSales", ((BigDecimal)m.get("totalSales")).add(sales));
+            m.put("totalCommission", ((BigDecimal)m.get("totalCommission")).add(commission));
+        }
+        
+        return new ArrayList<>(shopMap.values());
     }
 
     public List<String> getAvailablePeriods() {

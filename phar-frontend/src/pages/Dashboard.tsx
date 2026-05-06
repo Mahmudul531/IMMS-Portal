@@ -209,6 +209,7 @@ export default function Dashboard() {
     const [byShop, setByShop] = useState<any[]>([]);
     const [monthlyTrend, setMonthlyTrend] = useState<any[]>([]);
     const [commission, setCommission] = useState<any[]>([]);
+    const [shopCommission, setShopCommission] = useState<any[]>([]);
     const [configs, setConfigs] = useState<any[]>([]);
     const [tiers, setTiers] = useState<any[]>([]);
     const [showConfigModal, setShowConfigModal] = useState(false);
@@ -216,6 +217,7 @@ export default function Dashboard() {
     const [savingConfig, setSavingConfig] = useState(false);
     const [showAllShops, setShowAllShops] = useState(false);
     const [commissionPage, setCommissionPage] = useState(1);
+    const [shopCommissionPage, setShopCommissionPage] = useState(1);
     const PAGE_SIZE = 10;
 
     // Load zone list once from DB (independent of filter state)
@@ -240,6 +242,7 @@ export default function Dashboard() {
         axios.get(`${PHAR}/dashboard/by-shop${q}`).then(r => setByShop(r.data)).catch(console.error);
         axios.get(`${PHAR}/dashboard/monthly-trend${q}`).then(r => setMonthlyTrend(r.data)).catch(console.error);
         axios.get(`${PHAR}/dashboard/commission-summary${q}`).then(r => setCommission(r.data)).catch(console.error);
+        axios.get(`${PHAR}/dashboard/by-shop-commission${q}`).then(r => setShopCommission(r.data)).catch(console.error);
         axios.get(`${PHAR}/commission-config${q}`).then(r => setConfigs(r.data)).catch(console.error);
         if (periods.length === 0) {
             axios.get(`${PHAR}/dashboard/periods`).then(r => setPeriods(r.data)).catch(console.error);
@@ -249,7 +252,8 @@ export default function Dashboard() {
 
     useEffect(() => { 
         load(period, zone); 
-        setCommissionPage(1); // Reset page on filter change
+        setCommissionPage(1); 
+        setShopCommissionPage(1); // Reset both pages on filter change
     }, [period, zone]);
 
     const filteredShops = byShop;
@@ -528,6 +532,75 @@ export default function Dashboard() {
                                         borderRadius: 8, padding: '0.5rem', color: isDark ? 'white' : '#0f172a', 
                                         cursor: commissionPage === Math.ceil(commission.length / PAGE_SIZE) ? 'not-allowed' : 'pointer', 
                                         opacity: commissionPage === Math.ceil(commission.length / PAGE_SIZE) ? 0.3 : 1 
+                                    }}
+                                >
+                                    <ChevronRight size={18} />
+                                </button>
+                            </div>
+                        )}
+                    </ChartCard>
+
+                    {/* Detailed Shop Commission Table */}
+                    <ChartCard isDark={isDark} title="Shop-wise Detailed Commission" style={{ marginTop: '1.5rem' }}>
+                        <div style={{ overflowX: 'auto' }}>
+                            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.875rem' }}>
+                                <thead>
+                                    <tr>
+                                        {['Zone', 'Territory', 'Shop Name', 'T1 Sales', 'T2 Sales', 'T3 Sales', 'Total Sales', 'Com T1', 'Com T2', 'Com T3', 'SM'].map(h => (
+                                            <th key={h} style={{ textAlign: 'left', padding: '0.75rem 0.5rem', color: isDark ? 'rgba(255,255,255,0.4)' : 'rgba(0,0,0,0.45)', fontWeight: 600, fontSize: '0.68rem', textTransform: 'uppercase', letterSpacing: '0.5px', borderBottom: `1px solid ${isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.07)'}` }}>{h}</th>
+                                        ))}
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {shopCommission.slice((shopCommissionPage - 1) * PAGE_SIZE, shopCommissionPage * PAGE_SIZE).map((r: any, i) => (
+                                        <tr key={i} style={{ borderBottom: `1px solid ${isDark ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.04)'}` }}>
+                                            <td style={{ padding: '0.75rem 0.5rem', color: isDark ? 'white' : '#0f172a', fontSize: '0.78rem' }}>{r.zone}</td>
+                                            <td style={{ padding: '0.75rem 0.5rem', color: isDark ? 'white' : '#0f172a', fontSize: '0.78rem' }}>{r.territory}</td>
+                                            <td style={{ padding: '0.75rem 0.5rem', color: isDark ? 'white' : '#0f172a', fontWeight: 600, fontSize: '0.78rem' }}>{r.shopName}</td>
+                                            <td style={{ padding: '0.75rem 0.5rem', color: '#60a5fa', fontSize: '0.78rem' }}>{fmt(r.t1Sales)}</td>
+                                            <td style={{ padding: '0.75rem 0.5rem', color: '#60a5fa', fontSize: '0.78rem' }}>{fmt(r.t2Sales)}</td>
+                                            <td style={{ padding: '0.75rem 0.5rem', color: '#60a5fa', fontSize: '0.78rem' }}>{fmt(r.t3Sales)}</td>
+                                            <td style={{ padding: '0.75rem 0.5rem', color: '#3b82f6', fontWeight: 700, fontSize: '0.78rem' }}>{fmt(r.totalSales)}</td>
+                                            <td style={{ padding: '0.75rem 0.5rem', color: '#34d399', fontSize: '0.78rem' }}>{fmt(r.t1Commission)}</td>
+                                            <td style={{ padding: '0.75rem 0.5rem', color: '#34d399', fontSize: '0.78rem' }}>{fmt(r.t2Commission)}</td>
+                                            <td style={{ padding: '0.75rem 0.5rem', color: '#34d399', fontSize: '0.78rem' }}>{fmt(r.t3Commission)}</td>
+                                            <td style={{ padding: '0.75rem 0.5rem', color: isDark ? 'white' : '#0f172a', fontSize: '0.78rem' }}>{r.sm}</td>
+                                        </tr>
+                                    ))}
+                                    {shopCommission.length === 0 && (
+                                        <tr><td colSpan={11} style={{ textAlign: 'center', padding: '2rem', color: isDark ? 'rgba(255,255,255,0.25)' : 'rgba(0,0,0,0.3)' }}>No detailed shop data available.</td></tr>
+                                    )}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        {/* Pagination Controls */}
+                        {shopCommission.length > PAGE_SIZE && (
+                            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '1rem', marginTop: '1.5rem', paddingTop: '1rem', borderTop: `1px solid ${isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)'}` }}>
+                                <button 
+                                    disabled={shopCommissionPage === 1}
+                                    onClick={() => setShopCommissionPage(p => Math.max(1, p - 1))}
+                                    style={{ 
+                                        background: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.02)', 
+                                        border: `1px solid ${isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'}`, 
+                                        borderRadius: 8, padding: '0.5rem', color: isDark ? 'white' : '#0f172a', 
+                                        cursor: shopCommissionPage === 1 ? 'not-allowed' : 'pointer', opacity: shopCommissionPage === 1 ? 0.3 : 1 
+                                    }}
+                                >
+                                    <ChevronLeft size={18} />
+                                </button>
+                                <span style={{ fontSize: '0.85rem', color: isDark ? 'rgba(255,255,255,0.6)' : 'rgba(0,0,0,0.6)', fontWeight: 600 }}>
+                                    Page {shopCommissionPage} of {Math.ceil(shopCommission.length / PAGE_SIZE)}
+                                </span>
+                                <button 
+                                    disabled={shopCommissionPage === Math.ceil(shopCommission.length / PAGE_SIZE)}
+                                    onClick={() => setShopCommissionPage(p => p + 1)}
+                                    style={{ 
+                                        background: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.02)', 
+                                        border: `1px solid ${isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'}`, 
+                                        borderRadius: 8, padding: '0.5rem', color: isDark ? 'white' : '#0f172a', 
+                                        cursor: shopCommissionPage === Math.ceil(shopCommission.length / PAGE_SIZE) ? 'not-allowed' : 'pointer', 
+                                        opacity: shopCommissionPage === Math.ceil(shopCommission.length / PAGE_SIZE) ? 0.3 : 1 
                                     }}
                                 >
                                     <ChevronRight size={18} />
