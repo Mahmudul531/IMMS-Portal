@@ -4,7 +4,7 @@ import {
     BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
     PieChart, Pie, Cell, LineChart, Line
 } from 'recharts';
-import { TrendingUp, ShoppingBag, Users, Award, RefreshCw, ChevronDown, X, ArrowRight, Save, Edit } from 'lucide-react';
+import { TrendingUp, ShoppingBag, Users, Award, RefreshCw, ChevronDown, X, ArrowRight, Save, Edit, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 
 const API = import.meta.env.VITE_API_URL || 'http://localhost:8080';
@@ -215,6 +215,8 @@ export default function Dashboard() {
     const [editingConfigs, setEditingConfigs] = useState<any[]>([]);
     const [savingConfig, setSavingConfig] = useState(false);
     const [showAllShops, setShowAllShops] = useState(false);
+    const [commissionPage, setCommissionPage] = useState(1);
+    const PAGE_SIZE = 10;
 
     // Load zone list once from DB (independent of filter state)
     useEffect(() => {
@@ -245,7 +247,10 @@ export default function Dashboard() {
         }
     };
 
-    useEffect(() => { load(period, zone); }, [period, zone]);
+    useEffect(() => { 
+        load(period, zone); 
+        setCommissionPage(1); // Reset page on filter change
+    }, [period, zone]);
 
     const filteredShops = byShop;
     const top10 = filteredShops.slice(0, 10);
@@ -479,7 +484,7 @@ export default function Dashboard() {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {commission.map((r: any, i) => (
+                                    {commission.slice((commissionPage - 1) * PAGE_SIZE, commissionPage * PAGE_SIZE).map((r: any, i) => (
                                         <tr key={i} style={{ borderBottom: `1px solid ${isDark ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.04)'}` }}>
                                             <td style={{ padding: '0.75rem 1rem', color: isDark ? 'white' : '#0f172a', fontWeight: 600 }}>{r.sr}</td>
                                             <td style={{ padding: '0.75rem 1rem', color: '#60a5fa' }}>{fmtBDT(r.totalSales)}</td>
@@ -495,6 +500,40 @@ export default function Dashboard() {
                                 </tbody>
                             </table>
                         </div>
+
+                        {/* Pagination Controls */}
+                        {commission.length > PAGE_SIZE && (
+                            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '1rem', marginTop: '1.5rem', paddingTop: '1rem', borderTop: `1px solid ${isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)'}` }}>
+                                <button 
+                                    disabled={commissionPage === 1}
+                                    onClick={() => setCommissionPage(p => Math.max(1, p - 1))}
+                                    style={{ 
+                                        background: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.02)', 
+                                        border: `1px solid ${isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'}`, 
+                                        borderRadius: 8, padding: '0.5rem', color: isDark ? 'white' : '#0f172a', 
+                                        cursor: commissionPage === 1 ? 'not-allowed' : 'pointer', opacity: commissionPage === 1 ? 0.3 : 1 
+                                    }}
+                                >
+                                    <ChevronLeft size={18} />
+                                </button>
+                                <span style={{ fontSize: '0.85rem', color: isDark ? 'rgba(255,255,255,0.6)' : 'rgba(0,0,0,0.6)', fontWeight: 600 }}>
+                                    Page {commissionPage} of {Math.ceil(commission.length / PAGE_SIZE)}
+                                </span>
+                                <button 
+                                    disabled={commissionPage === Math.ceil(commission.length / PAGE_SIZE)}
+                                    onClick={() => setCommissionPage(p => p + 1)}
+                                    style={{ 
+                                        background: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.02)', 
+                                        border: `1px solid ${isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'}`, 
+                                        borderRadius: 8, padding: '0.5rem', color: isDark ? 'white' : '#0f172a', 
+                                        cursor: commissionPage === Math.ceil(commission.length / PAGE_SIZE) ? 'not-allowed' : 'pointer', 
+                                        opacity: commissionPage === Math.ceil(commission.length / PAGE_SIZE) ? 0.3 : 1 
+                                    }}
+                                >
+                                    <ChevronRight size={18} />
+                                </button>
+                            </div>
+                        )}
                     </ChartCard>
                 </>
             
