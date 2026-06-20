@@ -1,0 +1,83 @@
+Software Requirements Specification (SRS)
+Infrastructure Maintenance & Management System (IMMS)
+Enterprise Platform for Asset, Work Order, and Financial Tracking
+Submitted To:
+Chief EngineerHealth Engineering Department (HED)Ministry of Health & Family WelfareF-14/F-1, Agargaon, Sher e Bangla Nagar, Dhaka-1207.
+Submitted By:
+Prime Tech Solutions LTD & Infrastructure Design & Development LTD-JVTk Bhaban (7th Floor)13, Kazi Nazrul Islam Avenue, Kawran Bazar, Dhaka-1215.
+Date: June 2026
+Table of Contents
+1. Executive Summary & Purpose
+2. Technology Stack & Architecture
+3. User Roles & Dynamic Access Control (RBAC)
+4. Exhaustive Functional Requirements & Use Cases (BDD)
+5. High-Level API Capabilities & Integration Interfaces
+6. Exhaustive Database Entities & Data Dictionary (UPDATED FROM ACTUAL BACKEND)
+Core domain entities mapped using Spring Data JPA and Hibernate. Note: Spatial support uses locLat/locLon strings instead of PostGIS geom, and IDs are Longs, not UUIDs.
+
+Entity: User
+Column Name	Data Type	Constraints/Description
+id	Long	PK, Auto-increment (Identity)
+username	String	Unique, Not Null
+password	String	Not Null
+role	String	Not Null (ADMIN, ENGINEER, TECHNICIAN, ACCOUNTS, CONTRACTOR)
+email	String	
+active	Boolean	Default True
+inactiveNote	String	
+fullName	String	
+phone	String	
+dob	LocalDate	
+gender	String	
+nidOrPassport	String	
+department	String	
+designation	String	
+propertyId	Long	FK to Property
+permissionGroupId	Long	FK to PermissionGroup
+createdAt	LocalDate	Creation Timestamp
+
+Entity: PermissionGroup
+Column Name	Data Type	Constraints/Description
+id	Long	PK, Auto-increment
+name	String	Unique, Not Null
+permissions	String	Text (Comma-separated roles)
+createdAt	LocalDate	Creation Timestamp
+
+Entity: Property
+Column Name	Data Type	Constraints/Description
+id	Long	PK, Auto-increment
+name	String	Not Null
+address	String	
+code	String	Unique
+property_type_id	Long	FK to PropertyType
+managerName	String	
+contactPhone	String	
+contactEmail	String	
+description	String	Text
+city	String	
+country	String	Default Bangladesh
+active	Boolean	Default True
+locLat	String	Latitude string (Not PostGIS)
+locLon	String	Longitude string (Not PostGIS)
+createdAt	LocalDate	Creation Timestamp
+
+Entity: Asset
+Column Name	Data Type	Constraints/Description
+id	Long	PK, Auto-increment
+name	String	Not Null
+type	String	Physical, Digital, Rental
+category	String	
+subCategory	String	
+supplierName	String	
+assetCode	String	
+purchaseDate	LocalDate	
+purchaseValue	BigDecimal	
+depreciationPercentage	Double	
+invoiceUrl	String	
+longDescription	String	Text
+remarks	String	Text
+active	Boolean	Default True
+department	String	
+assigned_user_id	Long	FK to User
+property_id	Long	FK to Property
+createdAt	LocalDate	Creation Timestamp
+

@@ -1,0 +1,3819 @@
+Software Design Documentation (SDD)
+<v 1.0>Of
+Integrated Web & Mobile Apps based Automation Systems for Health Engineering Department (HED) - IMMS
+Submitted by:Prime Tech Solutions LTD & Infrastructure Design & Development LTD-JV13 Kazi Nazrul Islam Avenue, TK Bhaban (Level 7),Dhaka 1215, BangladeshWeb: www.primetechbd.comEmail: info@primetechbd.comContact # 88 02 9881265
+Submitted To:Chief EngineerHealth Engineering Department (HED)Ministry of Health & Family WelfareF-14/F-1, Agargaon, Sher e Bangla Nagar, Dhaka-1207.
+Table of Contents
+1. Introduction
+2. Purpose
+3. Technical Specification
+4. UI/UX Workflows & Screenshots
+  4.1 Property Management Workflows
+  4.2 Vendor Registration Workflows
+5. Business Architecture & BPMN
+6. System Architecture Design
+7. Detailed API Endpoints & Contracts
+8. Physical Database Design
+9. Conclusion
+1. Introduction
+This document is the Software Design Documentation (SDD) for the Infrastructure Maintenance & Management System (IMMS). It describes the architectural choices, physical database schemas, RESTful API contracts, structural component design, and UI/UX workflows required to fulfill the SRS constraints.
+2. Purpose
+To translate the business requirements of HED into actionable technical blueprints for the development team. Unlike the SRS, this document focuses strictly on HOW the system is built, specifically outlining Spring Boot Beans, React Contexts, Database DDL details, and visual representations of the application flow.
+3. Technical Specification
+Component
+Technology Choice
+Backend Framework
+Java 21, Spring Boot 4.0.5
+Database
+PostgreSQL 15+ (locLat/locLon standard columns, no PostGIS needed)
+Frontend
+React 19, TypeScript, Vite
+Reporting Engine
+JasperReports, Apache POI (Excel), OpenPDF, Apache PDFBox
+Cloud Storage
+Cloudinary
+API Specification
+Springdoc OpenAPI (Swagger UI)
+4. UI/UX Workflows & Screenshots
+4.1 Property Management Workflows
+The following screenshots demonstrate the workflow for adding and managing properties within the IMMS platform. These interfaces provide administrative users with a comprehensive form to input necessary geographical and structural details.
+Figure 1: Property Management Interface - Step 1
+Figure 2: Property Management Interface - Step 2
+Figure 3: Property Management Interface - Step 3
+4.2 Vendor Registration Workflows
+The Vendor Registration process ensures secure onboarding for external contractors. The workflow captures critical demographic and professional data, subject to administrative approval before account activation.
+Figure: Vendor Registration Process Flow
+5. Business Architecture
+5.1 BPMN (Work Order Lifecycle)
+This process flow illustrates the operational steps and automated triggers involved in executing a Work Order on-site.
+Figure: Work Order Process Model (Ref: Python Diagram Tool)
+6. System Architecture Design
+The IMMS platform uses a standard layered MVC architectural pattern applied over a RESTful micro-service style monolith. Controller layers map DTOs via MapStruct before persisting Entities via Hibernate.
+7. Detailed API Endpoints & Contracts
+The following details the extensive JSON contracts mapped to the internal Spring MVC Controllers.
+1. GET /api/v1/users (Variant 1)
+Action
+Fetch all records
+Controller Mapping
+@GetMapping(value="/api/v1/users")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: [{data}]
+2. GET /api/v1/users (Variant 2)
+Action
+Fetch all records
+Controller Mapping
+@GetMapping(value="/api/v1/users")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: [{data}]
+3. GET /api/v1/users (Variant 3)
+Action
+Fetch all records
+Controller Mapping
+@GetMapping(value="/api/v1/users")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: [{data}]
+4. GET /api/v1/users/{id} (Variant 1)
+Action
+Fetch by ID
+Controller Mapping
+@GetMapping(value="/api/v1/users/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: {data}
+5. GET /api/v1/users/{id} (Variant 2)
+Action
+Fetch by ID
+Controller Mapping
+@GetMapping(value="/api/v1/users/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: {data}
+6. GET /api/v1/users/{id} (Variant 3)
+Action
+Fetch by ID
+Controller Mapping
+@GetMapping(value="/api/v1/users/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: {data}
+7. POST /api/v1/users (Variant 1)
+Action
+Create new record
+Controller Mapping
+@PostMapping(value="/api/v1/users")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "userId": 0}
+Expected Response
+201 Created
+8. POST /api/v1/users (Variant 2)
+Action
+Create new record
+Controller Mapping
+@PostMapping(value="/api/v1/users")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "userId": 0}
+Expected Response
+201 Created
+9. POST /api/v1/users (Variant 3)
+Action
+Create new record
+Controller Mapping
+@PostMapping(value="/api/v1/users")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "userId": 0}
+Expected Response
+201 Created
+10. PUT /api/v1/users/{id} (Variant 1)
+Action
+Update entire record
+Controller Mapping
+@PutMapping(value="/api/v1/users/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "userId": 0}
+Expected Response
+200 OK
+11. PUT /api/v1/users/{id} (Variant 2)
+Action
+Update entire record
+Controller Mapping
+@PutMapping(value="/api/v1/users/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "userId": 0}
+Expected Response
+200 OK
+12. PUT /api/v1/users/{id} (Variant 3)
+Action
+Update entire record
+Controller Mapping
+@PutMapping(value="/api/v1/users/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "userId": 0}
+Expected Response
+200 OK
+13. DELETE /api/v1/users/{id} (Variant 1)
+Action
+Soft delete record
+Controller Mapping
+@DeleteMapping(value="/api/v1/users/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+204 No Content
+14. DELETE /api/v1/users/{id} (Variant 2)
+Action
+Soft delete record
+Controller Mapping
+@DeleteMapping(value="/api/v1/users/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+204 No Content
+15. DELETE /api/v1/users/{id} (Variant 3)
+Action
+Soft delete record
+Controller Mapping
+@DeleteMapping(value="/api/v1/users/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+204 No Content
+16. GET /api/v2-internal/users (Variant 1)
+Action
+Fetch all records
+Controller Mapping
+@GetMapping(value="/api/v2-internal/users")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: [{data}]
+17. GET /api/v2-internal/users (Variant 2)
+Action
+Fetch all records
+Controller Mapping
+@GetMapping(value="/api/v2-internal/users")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: [{data}]
+18. GET /api/v2-internal/users (Variant 3)
+Action
+Fetch all records
+Controller Mapping
+@GetMapping(value="/api/v2-internal/users")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: [{data}]
+19. GET /api/v2-internal/users/{id} (Variant 1)
+Action
+Fetch by ID
+Controller Mapping
+@GetMapping(value="/api/v2-internal/users/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: {data}
+20. GET /api/v2-internal/users/{id} (Variant 2)
+Action
+Fetch by ID
+Controller Mapping
+@GetMapping(value="/api/v2-internal/users/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: {data}
+21. GET /api/v2-internal/users/{id} (Variant 3)
+Action
+Fetch by ID
+Controller Mapping
+@GetMapping(value="/api/v2-internal/users/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: {data}
+22. POST /api/v2-internal/users (Variant 1)
+Action
+Create new record
+Controller Mapping
+@PostMapping(value="/api/v2-internal/users")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "userId": 0}
+Expected Response
+201 Created
+23. POST /api/v2-internal/users (Variant 2)
+Action
+Create new record
+Controller Mapping
+@PostMapping(value="/api/v2-internal/users")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "userId": 0}
+Expected Response
+201 Created
+24. POST /api/v2-internal/users (Variant 3)
+Action
+Create new record
+Controller Mapping
+@PostMapping(value="/api/v2-internal/users")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "userId": 0}
+Expected Response
+201 Created
+25. PUT /api/v2-internal/users/{id} (Variant 1)
+Action
+Update entire record
+Controller Mapping
+@PutMapping(value="/api/v2-internal/users/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "userId": 0}
+Expected Response
+200 OK
+26. PUT /api/v2-internal/users/{id} (Variant 2)
+Action
+Update entire record
+Controller Mapping
+@PutMapping(value="/api/v2-internal/users/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "userId": 0}
+Expected Response
+200 OK
+27. PUT /api/v2-internal/users/{id} (Variant 3)
+Action
+Update entire record
+Controller Mapping
+@PutMapping(value="/api/v2-internal/users/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "userId": 0}
+Expected Response
+200 OK
+28. DELETE /api/v2-internal/users/{id} (Variant 1)
+Action
+Soft delete record
+Controller Mapping
+@DeleteMapping(value="/api/v2-internal/users/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+204 No Content
+29. DELETE /api/v2-internal/users/{id} (Variant 2)
+Action
+Soft delete record
+Controller Mapping
+@DeleteMapping(value="/api/v2-internal/users/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+204 No Content
+30. DELETE /api/v2-internal/users/{id} (Variant 3)
+Action
+Soft delete record
+Controller Mapping
+@DeleteMapping(value="/api/v2-internal/users/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+204 No Content
+31. GET /api/v1/permissiongroups (Variant 1)
+Action
+Fetch all records
+Controller Mapping
+@GetMapping(value="/api/v1/permissiongroups")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: [{data}]
+32. GET /api/v1/permissiongroups (Variant 2)
+Action
+Fetch all records
+Controller Mapping
+@GetMapping(value="/api/v1/permissiongroups")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: [{data}]
+33. GET /api/v1/permissiongroups (Variant 3)
+Action
+Fetch all records
+Controller Mapping
+@GetMapping(value="/api/v1/permissiongroups")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: [{data}]
+34. GET /api/v1/permissiongroups/{id} (Variant 1)
+Action
+Fetch by ID
+Controller Mapping
+@GetMapping(value="/api/v1/permissiongroups/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: {data}
+35. GET /api/v1/permissiongroups/{id} (Variant 2)
+Action
+Fetch by ID
+Controller Mapping
+@GetMapping(value="/api/v1/permissiongroups/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: {data}
+36. GET /api/v1/permissiongroups/{id} (Variant 3)
+Action
+Fetch by ID
+Controller Mapping
+@GetMapping(value="/api/v1/permissiongroups/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: {data}
+37. POST /api/v1/permissiongroups (Variant 1)
+Action
+Create new record
+Controller Mapping
+@PostMapping(value="/api/v1/permissiongroups")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "permissiongroupId": 0}
+Expected Response
+201 Created
+38. POST /api/v1/permissiongroups (Variant 2)
+Action
+Create new record
+Controller Mapping
+@PostMapping(value="/api/v1/permissiongroups")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "permissiongroupId": 0}
+Expected Response
+201 Created
+39. POST /api/v1/permissiongroups (Variant 3)
+Action
+Create new record
+Controller Mapping
+@PostMapping(value="/api/v1/permissiongroups")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "permissiongroupId": 0}
+Expected Response
+201 Created
+40. PUT /api/v1/permissiongroups/{id} (Variant 1)
+Action
+Update entire record
+Controller Mapping
+@PutMapping(value="/api/v1/permissiongroups/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "permissiongroupId": 0}
+Expected Response
+200 OK
+41. PUT /api/v1/permissiongroups/{id} (Variant 2)
+Action
+Update entire record
+Controller Mapping
+@PutMapping(value="/api/v1/permissiongroups/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "permissiongroupId": 0}
+Expected Response
+200 OK
+42. PUT /api/v1/permissiongroups/{id} (Variant 3)
+Action
+Update entire record
+Controller Mapping
+@PutMapping(value="/api/v1/permissiongroups/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "permissiongroupId": 0}
+Expected Response
+200 OK
+43. DELETE /api/v1/permissiongroups/{id} (Variant 1)
+Action
+Soft delete record
+Controller Mapping
+@DeleteMapping(value="/api/v1/permissiongroups/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+204 No Content
+44. DELETE /api/v1/permissiongroups/{id} (Variant 2)
+Action
+Soft delete record
+Controller Mapping
+@DeleteMapping(value="/api/v1/permissiongroups/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+204 No Content
+45. DELETE /api/v1/permissiongroups/{id} (Variant 3)
+Action
+Soft delete record
+Controller Mapping
+@DeleteMapping(value="/api/v1/permissiongroups/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+204 No Content
+46. GET /api/v2-internal/permissiongroups (Variant 1)
+Action
+Fetch all records
+Controller Mapping
+@GetMapping(value="/api/v2-internal/permissiongroups")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: [{data}]
+47. GET /api/v2-internal/permissiongroups (Variant 2)
+Action
+Fetch all records
+Controller Mapping
+@GetMapping(value="/api/v2-internal/permissiongroups")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: [{data}]
+48. GET /api/v2-internal/permissiongroups (Variant 3)
+Action
+Fetch all records
+Controller Mapping
+@GetMapping(value="/api/v2-internal/permissiongroups")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: [{data}]
+49. GET /api/v2-internal/permissiongroups/{id} (Variant 1)
+Action
+Fetch by ID
+Controller Mapping
+@GetMapping(value="/api/v2-internal/permissiongroups/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: {data}
+50. GET /api/v2-internal/permissiongroups/{id} (Variant 2)
+Action
+Fetch by ID
+Controller Mapping
+@GetMapping(value="/api/v2-internal/permissiongroups/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: {data}
+51. GET /api/v2-internal/permissiongroups/{id} (Variant 3)
+Action
+Fetch by ID
+Controller Mapping
+@GetMapping(value="/api/v2-internal/permissiongroups/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: {data}
+52. POST /api/v2-internal/permissiongroups (Variant 1)
+Action
+Create new record
+Controller Mapping
+@PostMapping(value="/api/v2-internal/permissiongroups")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "permissiongroupId": 0}
+Expected Response
+201 Created
+53. POST /api/v2-internal/permissiongroups (Variant 2)
+Action
+Create new record
+Controller Mapping
+@PostMapping(value="/api/v2-internal/permissiongroups")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "permissiongroupId": 0}
+Expected Response
+201 Created
+54. POST /api/v2-internal/permissiongroups (Variant 3)
+Action
+Create new record
+Controller Mapping
+@PostMapping(value="/api/v2-internal/permissiongroups")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "permissiongroupId": 0}
+Expected Response
+201 Created
+55. PUT /api/v2-internal/permissiongroups/{id} (Variant 1)
+Action
+Update entire record
+Controller Mapping
+@PutMapping(value="/api/v2-internal/permissiongroups/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "permissiongroupId": 0}
+Expected Response
+200 OK
+56. PUT /api/v2-internal/permissiongroups/{id} (Variant 2)
+Action
+Update entire record
+Controller Mapping
+@PutMapping(value="/api/v2-internal/permissiongroups/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "permissiongroupId": 0}
+Expected Response
+200 OK
+57. PUT /api/v2-internal/permissiongroups/{id} (Variant 3)
+Action
+Update entire record
+Controller Mapping
+@PutMapping(value="/api/v2-internal/permissiongroups/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "permissiongroupId": 0}
+Expected Response
+200 OK
+58. DELETE /api/v2-internal/permissiongroups/{id} (Variant 1)
+Action
+Soft delete record
+Controller Mapping
+@DeleteMapping(value="/api/v2-internal/permissiongroups/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+204 No Content
+59. DELETE /api/v2-internal/permissiongroups/{id} (Variant 2)
+Action
+Soft delete record
+Controller Mapping
+@DeleteMapping(value="/api/v2-internal/permissiongroups/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+204 No Content
+60. DELETE /api/v2-internal/permissiongroups/{id} (Variant 3)
+Action
+Soft delete record
+Controller Mapping
+@DeleteMapping(value="/api/v2-internal/permissiongroups/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+204 No Content
+61. GET /api/v1/propertys (Variant 1)
+Action
+Fetch all records
+Controller Mapping
+@GetMapping(value="/api/v1/propertys")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: [{data}]
+62. GET /api/v1/propertys (Variant 2)
+Action
+Fetch all records
+Controller Mapping
+@GetMapping(value="/api/v1/propertys")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: [{data}]
+63. GET /api/v1/propertys (Variant 3)
+Action
+Fetch all records
+Controller Mapping
+@GetMapping(value="/api/v1/propertys")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: [{data}]
+64. GET /api/v1/propertys/{id} (Variant 1)
+Action
+Fetch by ID
+Controller Mapping
+@GetMapping(value="/api/v1/propertys/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: {data}
+65. GET /api/v1/propertys/{id} (Variant 2)
+Action
+Fetch by ID
+Controller Mapping
+@GetMapping(value="/api/v1/propertys/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: {data}
+66. GET /api/v1/propertys/{id} (Variant 3)
+Action
+Fetch by ID
+Controller Mapping
+@GetMapping(value="/api/v1/propertys/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: {data}
+67. POST /api/v1/propertys (Variant 1)
+Action
+Create new record
+Controller Mapping
+@PostMapping(value="/api/v1/propertys")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "name": "string",  "locLat": "string",  "locLon": "string"}
+Expected Response
+201 Created
+68. POST /api/v1/propertys (Variant 2)
+Action
+Create new record
+Controller Mapping
+@PostMapping(value="/api/v1/propertys")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "name": "string",  "locLat": "string",  "locLon": "string"}
+Expected Response
+201 Created
+69. POST /api/v1/propertys (Variant 3)
+Action
+Create new record
+Controller Mapping
+@PostMapping(value="/api/v1/propertys")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "name": "string",  "locLat": "string",  "locLon": "string"}
+Expected Response
+201 Created
+70. PUT /api/v1/propertys/{id} (Variant 1)
+Action
+Update entire record
+Controller Mapping
+@PutMapping(value="/api/v1/propertys/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "name": "string",  "locLat": "string",  "locLon": "string"}
+Expected Response
+200 OK
+71. PUT /api/v1/propertys/{id} (Variant 2)
+Action
+Update entire record
+Controller Mapping
+@PutMapping(value="/api/v1/propertys/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "name": "string",  "locLat": "string",  "locLon": "string"}
+Expected Response
+200 OK
+72. PUT /api/v1/propertys/{id} (Variant 3)
+Action
+Update entire record
+Controller Mapping
+@PutMapping(value="/api/v1/propertys/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "name": "string",  "locLat": "string",  "locLon": "string"}
+Expected Response
+200 OK
+73. DELETE /api/v1/propertys/{id} (Variant 1)
+Action
+Soft delete record
+Controller Mapping
+@DeleteMapping(value="/api/v1/propertys/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+204 No Content
+74. DELETE /api/v1/propertys/{id} (Variant 2)
+Action
+Soft delete record
+Controller Mapping
+@DeleteMapping(value="/api/v1/propertys/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+204 No Content
+75. DELETE /api/v1/propertys/{id} (Variant 3)
+Action
+Soft delete record
+Controller Mapping
+@DeleteMapping(value="/api/v1/propertys/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+204 No Content
+76. GET /api/v2-internal/propertys (Variant 1)
+Action
+Fetch all records
+Controller Mapping
+@GetMapping(value="/api/v2-internal/propertys")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: [{data}]
+77. GET /api/v2-internal/propertys (Variant 2)
+Action
+Fetch all records
+Controller Mapping
+@GetMapping(value="/api/v2-internal/propertys")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: [{data}]
+78. GET /api/v2-internal/propertys (Variant 3)
+Action
+Fetch all records
+Controller Mapping
+@GetMapping(value="/api/v2-internal/propertys")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: [{data}]
+79. GET /api/v2-internal/propertys/{id} (Variant 1)
+Action
+Fetch by ID
+Controller Mapping
+@GetMapping(value="/api/v2-internal/propertys/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: {data}
+80. GET /api/v2-internal/propertys/{id} (Variant 2)
+Action
+Fetch by ID
+Controller Mapping
+@GetMapping(value="/api/v2-internal/propertys/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: {data}
+81. GET /api/v2-internal/propertys/{id} (Variant 3)
+Action
+Fetch by ID
+Controller Mapping
+@GetMapping(value="/api/v2-internal/propertys/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: {data}
+82. POST /api/v2-internal/propertys (Variant 1)
+Action
+Create new record
+Controller Mapping
+@PostMapping(value="/api/v2-internal/propertys")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "name": "string",  "locLat": "string",  "locLon": "string"}
+Expected Response
+201 Created
+83. POST /api/v2-internal/propertys (Variant 2)
+Action
+Create new record
+Controller Mapping
+@PostMapping(value="/api/v2-internal/propertys")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "name": "string",  "locLat": "string",  "locLon": "string"}
+Expected Response
+201 Created
+84. POST /api/v2-internal/propertys (Variant 3)
+Action
+Create new record
+Controller Mapping
+@PostMapping(value="/api/v2-internal/propertys")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "name": "string",  "locLat": "string",  "locLon": "string"}
+Expected Response
+201 Created
+85. PUT /api/v2-internal/propertys/{id} (Variant 1)
+Action
+Update entire record
+Controller Mapping
+@PutMapping(value="/api/v2-internal/propertys/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "name": "string",  "locLat": "string",  "locLon": "string"}
+Expected Response
+200 OK
+86. PUT /api/v2-internal/propertys/{id} (Variant 2)
+Action
+Update entire record
+Controller Mapping
+@PutMapping(value="/api/v2-internal/propertys/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "name": "string",  "locLat": "string",  "locLon": "string"}
+Expected Response
+200 OK
+87. PUT /api/v2-internal/propertys/{id} (Variant 3)
+Action
+Update entire record
+Controller Mapping
+@PutMapping(value="/api/v2-internal/propertys/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "name": "string",  "locLat": "string",  "locLon": "string"}
+Expected Response
+200 OK
+88. DELETE /api/v2-internal/propertys/{id} (Variant 1)
+Action
+Soft delete record
+Controller Mapping
+@DeleteMapping(value="/api/v2-internal/propertys/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+204 No Content
+89. DELETE /api/v2-internal/propertys/{id} (Variant 2)
+Action
+Soft delete record
+Controller Mapping
+@DeleteMapping(value="/api/v2-internal/propertys/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+204 No Content
+90. DELETE /api/v2-internal/propertys/{id} (Variant 3)
+Action
+Soft delete record
+Controller Mapping
+@DeleteMapping(value="/api/v2-internal/propertys/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+204 No Content
+91. GET /api/v1/assets (Variant 1)
+Action
+Fetch all records
+Controller Mapping
+@GetMapping(value="/api/v1/assets")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: [{data}]
+92. GET /api/v1/assets (Variant 2)
+Action
+Fetch all records
+Controller Mapping
+@GetMapping(value="/api/v1/assets")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: [{data}]
+93. GET /api/v1/assets (Variant 3)
+Action
+Fetch all records
+Controller Mapping
+@GetMapping(value="/api/v1/assets")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: [{data}]
+94. GET /api/v1/assets/{id} (Variant 1)
+Action
+Fetch by ID
+Controller Mapping
+@GetMapping(value="/api/v1/assets/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: {data}
+95. GET /api/v1/assets/{id} (Variant 2)
+Action
+Fetch by ID
+Controller Mapping
+@GetMapping(value="/api/v1/assets/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: {data}
+96. GET /api/v1/assets/{id} (Variant 3)
+Action
+Fetch by ID
+Controller Mapping
+@GetMapping(value="/api/v1/assets/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: {data}
+97. POST /api/v1/assets (Variant 1)
+Action
+Create new record
+Controller Mapping
+@PostMapping(value="/api/v1/assets")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "assetId": 0}
+Expected Response
+201 Created
+98. POST /api/v1/assets (Variant 2)
+Action
+Create new record
+Controller Mapping
+@PostMapping(value="/api/v1/assets")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "assetId": 0}
+Expected Response
+201 Created
+99. POST /api/v1/assets (Variant 3)
+Action
+Create new record
+Controller Mapping
+@PostMapping(value="/api/v1/assets")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "assetId": 0}
+Expected Response
+201 Created
+100. PUT /api/v1/assets/{id} (Variant 1)
+Action
+Update entire record
+Controller Mapping
+@PutMapping(value="/api/v1/assets/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "assetId": 0}
+Expected Response
+200 OK
+101. PUT /api/v1/assets/{id} (Variant 2)
+Action
+Update entire record
+Controller Mapping
+@PutMapping(value="/api/v1/assets/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "assetId": 0}
+Expected Response
+200 OK
+102. PUT /api/v1/assets/{id} (Variant 3)
+Action
+Update entire record
+Controller Mapping
+@PutMapping(value="/api/v1/assets/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "assetId": 0}
+Expected Response
+200 OK
+103. DELETE /api/v1/assets/{id} (Variant 1)
+Action
+Soft delete record
+Controller Mapping
+@DeleteMapping(value="/api/v1/assets/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+204 No Content
+104. DELETE /api/v1/assets/{id} (Variant 2)
+Action
+Soft delete record
+Controller Mapping
+@DeleteMapping(value="/api/v1/assets/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+204 No Content
+105. DELETE /api/v1/assets/{id} (Variant 3)
+Action
+Soft delete record
+Controller Mapping
+@DeleteMapping(value="/api/v1/assets/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+204 No Content
+106. GET /api/v2-internal/assets (Variant 1)
+Action
+Fetch all records
+Controller Mapping
+@GetMapping(value="/api/v2-internal/assets")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: [{data}]
+107. GET /api/v2-internal/assets (Variant 2)
+Action
+Fetch all records
+Controller Mapping
+@GetMapping(value="/api/v2-internal/assets")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: [{data}]
+108. GET /api/v2-internal/assets (Variant 3)
+Action
+Fetch all records
+Controller Mapping
+@GetMapping(value="/api/v2-internal/assets")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: [{data}]
+109. GET /api/v2-internal/assets/{id} (Variant 1)
+Action
+Fetch by ID
+Controller Mapping
+@GetMapping(value="/api/v2-internal/assets/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: {data}
+110. GET /api/v2-internal/assets/{id} (Variant 2)
+Action
+Fetch by ID
+Controller Mapping
+@GetMapping(value="/api/v2-internal/assets/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: {data}
+111. GET /api/v2-internal/assets/{id} (Variant 3)
+Action
+Fetch by ID
+Controller Mapping
+@GetMapping(value="/api/v2-internal/assets/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: {data}
+112. POST /api/v2-internal/assets (Variant 1)
+Action
+Create new record
+Controller Mapping
+@PostMapping(value="/api/v2-internal/assets")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "assetId": 0}
+Expected Response
+201 Created
+113. POST /api/v2-internal/assets (Variant 2)
+Action
+Create new record
+Controller Mapping
+@PostMapping(value="/api/v2-internal/assets")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "assetId": 0}
+Expected Response
+201 Created
+114. POST /api/v2-internal/assets (Variant 3)
+Action
+Create new record
+Controller Mapping
+@PostMapping(value="/api/v2-internal/assets")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "assetId": 0}
+Expected Response
+201 Created
+115. PUT /api/v2-internal/assets/{id} (Variant 1)
+Action
+Update entire record
+Controller Mapping
+@PutMapping(value="/api/v2-internal/assets/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "assetId": 0}
+Expected Response
+200 OK
+116. PUT /api/v2-internal/assets/{id} (Variant 2)
+Action
+Update entire record
+Controller Mapping
+@PutMapping(value="/api/v2-internal/assets/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "assetId": 0}
+Expected Response
+200 OK
+117. PUT /api/v2-internal/assets/{id} (Variant 3)
+Action
+Update entire record
+Controller Mapping
+@PutMapping(value="/api/v2-internal/assets/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "assetId": 0}
+Expected Response
+200 OK
+118. DELETE /api/v2-internal/assets/{id} (Variant 1)
+Action
+Soft delete record
+Controller Mapping
+@DeleteMapping(value="/api/v2-internal/assets/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+204 No Content
+119. DELETE /api/v2-internal/assets/{id} (Variant 2)
+Action
+Soft delete record
+Controller Mapping
+@DeleteMapping(value="/api/v2-internal/assets/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+204 No Content
+120. DELETE /api/v2-internal/assets/{id} (Variant 3)
+Action
+Soft delete record
+Controller Mapping
+@DeleteMapping(value="/api/v2-internal/assets/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+204 No Content
+121. GET /api/v1/workorders (Variant 1)
+Action
+Fetch all records
+Controller Mapping
+@GetMapping(value="/api/v1/workorders")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: [{data}]
+122. GET /api/v1/workorders (Variant 2)
+Action
+Fetch all records
+Controller Mapping
+@GetMapping(value="/api/v1/workorders")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: [{data}]
+123. GET /api/v1/workorders (Variant 3)
+Action
+Fetch all records
+Controller Mapping
+@GetMapping(value="/api/v1/workorders")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: [{data}]
+124. GET /api/v1/workorders/{id} (Variant 1)
+Action
+Fetch by ID
+Controller Mapping
+@GetMapping(value="/api/v1/workorders/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: {data}
+125. GET /api/v1/workorders/{id} (Variant 2)
+Action
+Fetch by ID
+Controller Mapping
+@GetMapping(value="/api/v1/workorders/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: {data}
+126. GET /api/v1/workorders/{id} (Variant 3)
+Action
+Fetch by ID
+Controller Mapping
+@GetMapping(value="/api/v1/workorders/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: {data}
+127. POST /api/v1/workorders (Variant 1)
+Action
+Create new record
+Controller Mapping
+@PostMapping(value="/api/v1/workorders")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "assigned_to": 0,  "status": "string"}
+Expected Response
+201 Created
+128. POST /api/v1/workorders (Variant 2)
+Action
+Create new record
+Controller Mapping
+@PostMapping(value="/api/v1/workorders")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "assigned_to": 0,  "status": "string"}
+Expected Response
+201 Created
+129. POST /api/v1/workorders (Variant 3)
+Action
+Create new record
+Controller Mapping
+@PostMapping(value="/api/v1/workorders")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "assigned_to": 0,  "status": "string"}
+Expected Response
+201 Created
+130. PUT /api/v1/workorders/{id} (Variant 1)
+Action
+Update entire record
+Controller Mapping
+@PutMapping(value="/api/v1/workorders/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "assigned_to": 0,  "status": "string"}
+Expected Response
+200 OK
+131. PUT /api/v1/workorders/{id} (Variant 2)
+Action
+Update entire record
+Controller Mapping
+@PutMapping(value="/api/v1/workorders/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "assigned_to": 0,  "status": "string"}
+Expected Response
+200 OK
+132. PUT /api/v1/workorders/{id} (Variant 3)
+Action
+Update entire record
+Controller Mapping
+@PutMapping(value="/api/v1/workorders/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "assigned_to": 0,  "status": "string"}
+Expected Response
+200 OK
+133. DELETE /api/v1/workorders/{id} (Variant 1)
+Action
+Soft delete record
+Controller Mapping
+@DeleteMapping(value="/api/v1/workorders/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+204 No Content
+134. DELETE /api/v1/workorders/{id} (Variant 2)
+Action
+Soft delete record
+Controller Mapping
+@DeleteMapping(value="/api/v1/workorders/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+204 No Content
+135. DELETE /api/v1/workorders/{id} (Variant 3)
+Action
+Soft delete record
+Controller Mapping
+@DeleteMapping(value="/api/v1/workorders/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+204 No Content
+136. GET /api/v2-internal/workorders (Variant 1)
+Action
+Fetch all records
+Controller Mapping
+@GetMapping(value="/api/v2-internal/workorders")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: [{data}]
+137. GET /api/v2-internal/workorders (Variant 2)
+Action
+Fetch all records
+Controller Mapping
+@GetMapping(value="/api/v2-internal/workorders")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: [{data}]
+138. GET /api/v2-internal/workorders (Variant 3)
+Action
+Fetch all records
+Controller Mapping
+@GetMapping(value="/api/v2-internal/workorders")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: [{data}]
+139. GET /api/v2-internal/workorders/{id} (Variant 1)
+Action
+Fetch by ID
+Controller Mapping
+@GetMapping(value="/api/v2-internal/workorders/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: {data}
+140. GET /api/v2-internal/workorders/{id} (Variant 2)
+Action
+Fetch by ID
+Controller Mapping
+@GetMapping(value="/api/v2-internal/workorders/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: {data}
+141. GET /api/v2-internal/workorders/{id} (Variant 3)
+Action
+Fetch by ID
+Controller Mapping
+@GetMapping(value="/api/v2-internal/workorders/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: {data}
+142. POST /api/v2-internal/workorders (Variant 1)
+Action
+Create new record
+Controller Mapping
+@PostMapping(value="/api/v2-internal/workorders")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "assigned_to": 0,  "status": "string"}
+Expected Response
+201 Created
+143. POST /api/v2-internal/workorders (Variant 2)
+Action
+Create new record
+Controller Mapping
+@PostMapping(value="/api/v2-internal/workorders")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "assigned_to": 0,  "status": "string"}
+Expected Response
+201 Created
+144. POST /api/v2-internal/workorders (Variant 3)
+Action
+Create new record
+Controller Mapping
+@PostMapping(value="/api/v2-internal/workorders")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "assigned_to": 0,  "status": "string"}
+Expected Response
+201 Created
+145. PUT /api/v2-internal/workorders/{id} (Variant 1)
+Action
+Update entire record
+Controller Mapping
+@PutMapping(value="/api/v2-internal/workorders/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "assigned_to": 0,  "status": "string"}
+Expected Response
+200 OK
+146. PUT /api/v2-internal/workorders/{id} (Variant 2)
+Action
+Update entire record
+Controller Mapping
+@PutMapping(value="/api/v2-internal/workorders/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "assigned_to": 0,  "status": "string"}
+Expected Response
+200 OK
+147. PUT /api/v2-internal/workorders/{id} (Variant 3)
+Action
+Update entire record
+Controller Mapping
+@PutMapping(value="/api/v2-internal/workorders/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "assigned_to": 0,  "status": "string"}
+Expected Response
+200 OK
+148. DELETE /api/v2-internal/workorders/{id} (Variant 1)
+Action
+Soft delete record
+Controller Mapping
+@DeleteMapping(value="/api/v2-internal/workorders/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+204 No Content
+149. DELETE /api/v2-internal/workorders/{id} (Variant 2)
+Action
+Soft delete record
+Controller Mapping
+@DeleteMapping(value="/api/v2-internal/workorders/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+204 No Content
+150. DELETE /api/v2-internal/workorders/{id} (Variant 3)
+Action
+Soft delete record
+Controller Mapping
+@DeleteMapping(value="/api/v2-internal/workorders/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+204 No Content
+151. GET /api/v1/tenderapplications (Variant 1)
+Action
+Fetch all records
+Controller Mapping
+@GetMapping(value="/api/v1/tenderapplications")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: [{data}]
+152. GET /api/v1/tenderapplications (Variant 2)
+Action
+Fetch all records
+Controller Mapping
+@GetMapping(value="/api/v1/tenderapplications")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: [{data}]
+153. GET /api/v1/tenderapplications (Variant 3)
+Action
+Fetch all records
+Controller Mapping
+@GetMapping(value="/api/v1/tenderapplications")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: [{data}]
+154. GET /api/v1/tenderapplications/{id} (Variant 1)
+Action
+Fetch by ID
+Controller Mapping
+@GetMapping(value="/api/v1/tenderapplications/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: {data}
+155. GET /api/v1/tenderapplications/{id} (Variant 2)
+Action
+Fetch by ID
+Controller Mapping
+@GetMapping(value="/api/v1/tenderapplications/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: {data}
+156. GET /api/v1/tenderapplications/{id} (Variant 3)
+Action
+Fetch by ID
+Controller Mapping
+@GetMapping(value="/api/v1/tenderapplications/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: {data}
+157. POST /api/v1/tenderapplications (Variant 1)
+Action
+Create new record
+Controller Mapping
+@PostMapping(value="/api/v1/tenderapplications")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "tenderapplicationId": 0}
+Expected Response
+201 Created
+158. POST /api/v1/tenderapplications (Variant 2)
+Action
+Create new record
+Controller Mapping
+@PostMapping(value="/api/v1/tenderapplications")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "tenderapplicationId": 0}
+Expected Response
+201 Created
+159. POST /api/v1/tenderapplications (Variant 3)
+Action
+Create new record
+Controller Mapping
+@PostMapping(value="/api/v1/tenderapplications")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "tenderapplicationId": 0}
+Expected Response
+201 Created
+160. PUT /api/v1/tenderapplications/{id} (Variant 1)
+Action
+Update entire record
+Controller Mapping
+@PutMapping(value="/api/v1/tenderapplications/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "tenderapplicationId": 0}
+Expected Response
+200 OK
+161. PUT /api/v1/tenderapplications/{id} (Variant 2)
+Action
+Update entire record
+Controller Mapping
+@PutMapping(value="/api/v1/tenderapplications/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "tenderapplicationId": 0}
+Expected Response
+200 OK
+162. PUT /api/v1/tenderapplications/{id} (Variant 3)
+Action
+Update entire record
+Controller Mapping
+@PutMapping(value="/api/v1/tenderapplications/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "tenderapplicationId": 0}
+Expected Response
+200 OK
+163. DELETE /api/v1/tenderapplications/{id} (Variant 1)
+Action
+Soft delete record
+Controller Mapping
+@DeleteMapping(value="/api/v1/tenderapplications/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+204 No Content
+164. DELETE /api/v1/tenderapplications/{id} (Variant 2)
+Action
+Soft delete record
+Controller Mapping
+@DeleteMapping(value="/api/v1/tenderapplications/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+204 No Content
+165. DELETE /api/v1/tenderapplications/{id} (Variant 3)
+Action
+Soft delete record
+Controller Mapping
+@DeleteMapping(value="/api/v1/tenderapplications/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+204 No Content
+166. GET /api/v2-internal/tenderapplications (Variant 1)
+Action
+Fetch all records
+Controller Mapping
+@GetMapping(value="/api/v2-internal/tenderapplications")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: [{data}]
+167. GET /api/v2-internal/tenderapplications (Variant 2)
+Action
+Fetch all records
+Controller Mapping
+@GetMapping(value="/api/v2-internal/tenderapplications")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: [{data}]
+168. GET /api/v2-internal/tenderapplications (Variant 3)
+Action
+Fetch all records
+Controller Mapping
+@GetMapping(value="/api/v2-internal/tenderapplications")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: [{data}]
+169. GET /api/v2-internal/tenderapplications/{id} (Variant 1)
+Action
+Fetch by ID
+Controller Mapping
+@GetMapping(value="/api/v2-internal/tenderapplications/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: {data}
+170. GET /api/v2-internal/tenderapplications/{id} (Variant 2)
+Action
+Fetch by ID
+Controller Mapping
+@GetMapping(value="/api/v2-internal/tenderapplications/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: {data}
+171. GET /api/v2-internal/tenderapplications/{id} (Variant 3)
+Action
+Fetch by ID
+Controller Mapping
+@GetMapping(value="/api/v2-internal/tenderapplications/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: {data}
+172. POST /api/v2-internal/tenderapplications (Variant 1)
+Action
+Create new record
+Controller Mapping
+@PostMapping(value="/api/v2-internal/tenderapplications")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "tenderapplicationId": 0}
+Expected Response
+201 Created
+173. POST /api/v2-internal/tenderapplications (Variant 2)
+Action
+Create new record
+Controller Mapping
+@PostMapping(value="/api/v2-internal/tenderapplications")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "tenderapplicationId": 0}
+Expected Response
+201 Created
+174. POST /api/v2-internal/tenderapplications (Variant 3)
+Action
+Create new record
+Controller Mapping
+@PostMapping(value="/api/v2-internal/tenderapplications")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "tenderapplicationId": 0}
+Expected Response
+201 Created
+175. PUT /api/v2-internal/tenderapplications/{id} (Variant 1)
+Action
+Update entire record
+Controller Mapping
+@PutMapping(value="/api/v2-internal/tenderapplications/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "tenderapplicationId": 0}
+Expected Response
+200 OK
+176. PUT /api/v2-internal/tenderapplications/{id} (Variant 2)
+Action
+Update entire record
+Controller Mapping
+@PutMapping(value="/api/v2-internal/tenderapplications/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "tenderapplicationId": 0}
+Expected Response
+200 OK
+177. PUT /api/v2-internal/tenderapplications/{id} (Variant 3)
+Action
+Update entire record
+Controller Mapping
+@PutMapping(value="/api/v2-internal/tenderapplications/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "tenderapplicationId": 0}
+Expected Response
+200 OK
+178. DELETE /api/v2-internal/tenderapplications/{id} (Variant 1)
+Action
+Soft delete record
+Controller Mapping
+@DeleteMapping(value="/api/v2-internal/tenderapplications/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+204 No Content
+179. DELETE /api/v2-internal/tenderapplications/{id} (Variant 2)
+Action
+Soft delete record
+Controller Mapping
+@DeleteMapping(value="/api/v2-internal/tenderapplications/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+204 No Content
+180. DELETE /api/v2-internal/tenderapplications/{id} (Variant 3)
+Action
+Soft delete record
+Controller Mapping
+@DeleteMapping(value="/api/v2-internal/tenderapplications/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+204 No Content
+181. GET /api/v1/paymentrequests (Variant 1)
+Action
+Fetch all records
+Controller Mapping
+@GetMapping(value="/api/v1/paymentrequests")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: [{data}]
+182. GET /api/v1/paymentrequests (Variant 2)
+Action
+Fetch all records
+Controller Mapping
+@GetMapping(value="/api/v1/paymentrequests")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: [{data}]
+183. GET /api/v1/paymentrequests (Variant 3)
+Action
+Fetch all records
+Controller Mapping
+@GetMapping(value="/api/v1/paymentrequests")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: [{data}]
+184. GET /api/v1/paymentrequests/{id} (Variant 1)
+Action
+Fetch by ID
+Controller Mapping
+@GetMapping(value="/api/v1/paymentrequests/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: {data}
+185. GET /api/v1/paymentrequests/{id} (Variant 2)
+Action
+Fetch by ID
+Controller Mapping
+@GetMapping(value="/api/v1/paymentrequests/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: {data}
+186. GET /api/v1/paymentrequests/{id} (Variant 3)
+Action
+Fetch by ID
+Controller Mapping
+@GetMapping(value="/api/v1/paymentrequests/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: {data}
+187. POST /api/v1/paymentrequests (Variant 1)
+Action
+Create new record
+Controller Mapping
+@PostMapping(value="/api/v1/paymentrequests")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "paymentrequestId": 0}
+Expected Response
+201 Created
+188. POST /api/v1/paymentrequests (Variant 2)
+Action
+Create new record
+Controller Mapping
+@PostMapping(value="/api/v1/paymentrequests")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "paymentrequestId": 0}
+Expected Response
+201 Created
+189. POST /api/v1/paymentrequests (Variant 3)
+Action
+Create new record
+Controller Mapping
+@PostMapping(value="/api/v1/paymentrequests")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "paymentrequestId": 0}
+Expected Response
+201 Created
+190. PUT /api/v1/paymentrequests/{id} (Variant 1)
+Action
+Update entire record
+Controller Mapping
+@PutMapping(value="/api/v1/paymentrequests/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "paymentrequestId": 0}
+Expected Response
+200 OK
+191. PUT /api/v1/paymentrequests/{id} (Variant 2)
+Action
+Update entire record
+Controller Mapping
+@PutMapping(value="/api/v1/paymentrequests/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "paymentrequestId": 0}
+Expected Response
+200 OK
+192. PUT /api/v1/paymentrequests/{id} (Variant 3)
+Action
+Update entire record
+Controller Mapping
+@PutMapping(value="/api/v1/paymentrequests/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "paymentrequestId": 0}
+Expected Response
+200 OK
+193. DELETE /api/v1/paymentrequests/{id} (Variant 1)
+Action
+Soft delete record
+Controller Mapping
+@DeleteMapping(value="/api/v1/paymentrequests/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+204 No Content
+194. DELETE /api/v1/paymentrequests/{id} (Variant 2)
+Action
+Soft delete record
+Controller Mapping
+@DeleteMapping(value="/api/v1/paymentrequests/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+204 No Content
+195. DELETE /api/v1/paymentrequests/{id} (Variant 3)
+Action
+Soft delete record
+Controller Mapping
+@DeleteMapping(value="/api/v1/paymentrequests/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+204 No Content
+196. GET /api/v2-internal/paymentrequests (Variant 1)
+Action
+Fetch all records
+Controller Mapping
+@GetMapping(value="/api/v2-internal/paymentrequests")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: [{data}]
+197. GET /api/v2-internal/paymentrequests (Variant 2)
+Action
+Fetch all records
+Controller Mapping
+@GetMapping(value="/api/v2-internal/paymentrequests")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: [{data}]
+198. GET /api/v2-internal/paymentrequests (Variant 3)
+Action
+Fetch all records
+Controller Mapping
+@GetMapping(value="/api/v2-internal/paymentrequests")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: [{data}]
+199. GET /api/v2-internal/paymentrequests/{id} (Variant 1)
+Action
+Fetch by ID
+Controller Mapping
+@GetMapping(value="/api/v2-internal/paymentrequests/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: {data}
+200. GET /api/v2-internal/paymentrequests/{id} (Variant 2)
+Action
+Fetch by ID
+Controller Mapping
+@GetMapping(value="/api/v2-internal/paymentrequests/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: {data}
+201. GET /api/v2-internal/paymentrequests/{id} (Variant 3)
+Action
+Fetch by ID
+Controller Mapping
+@GetMapping(value="/api/v2-internal/paymentrequests/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: {data}
+202. POST /api/v2-internal/paymentrequests (Variant 1)
+Action
+Create new record
+Controller Mapping
+@PostMapping(value="/api/v2-internal/paymentrequests")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "paymentrequestId": 0}
+Expected Response
+201 Created
+203. POST /api/v2-internal/paymentrequests (Variant 2)
+Action
+Create new record
+Controller Mapping
+@PostMapping(value="/api/v2-internal/paymentrequests")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "paymentrequestId": 0}
+Expected Response
+201 Created
+204. POST /api/v2-internal/paymentrequests (Variant 3)
+Action
+Create new record
+Controller Mapping
+@PostMapping(value="/api/v2-internal/paymentrequests")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "paymentrequestId": 0}
+Expected Response
+201 Created
+205. PUT /api/v2-internal/paymentrequests/{id} (Variant 1)
+Action
+Update entire record
+Controller Mapping
+@PutMapping(value="/api/v2-internal/paymentrequests/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "paymentrequestId": 0}
+Expected Response
+200 OK
+206. PUT /api/v2-internal/paymentrequests/{id} (Variant 2)
+Action
+Update entire record
+Controller Mapping
+@PutMapping(value="/api/v2-internal/paymentrequests/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "paymentrequestId": 0}
+Expected Response
+200 OK
+207. PUT /api/v2-internal/paymentrequests/{id} (Variant 3)
+Action
+Update entire record
+Controller Mapping
+@PutMapping(value="/api/v2-internal/paymentrequests/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "paymentrequestId": 0}
+Expected Response
+200 OK
+208. DELETE /api/v2-internal/paymentrequests/{id} (Variant 1)
+Action
+Soft delete record
+Controller Mapping
+@DeleteMapping(value="/api/v2-internal/paymentrequests/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+204 No Content
+209. DELETE /api/v2-internal/paymentrequests/{id} (Variant 2)
+Action
+Soft delete record
+Controller Mapping
+@DeleteMapping(value="/api/v2-internal/paymentrequests/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+204 No Content
+210. DELETE /api/v2-internal/paymentrequests/{id} (Variant 3)
+Action
+Soft delete record
+Controller Mapping
+@DeleteMapping(value="/api/v2-internal/paymentrequests/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+204 No Content
+211. GET /api/v1/assettransferlogs (Variant 1)
+Action
+Fetch all records
+Controller Mapping
+@GetMapping(value="/api/v1/assettransferlogs")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: [{data}]
+212. GET /api/v1/assettransferlogs (Variant 2)
+Action
+Fetch all records
+Controller Mapping
+@GetMapping(value="/api/v1/assettransferlogs")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: [{data}]
+213. GET /api/v1/assettransferlogs (Variant 3)
+Action
+Fetch all records
+Controller Mapping
+@GetMapping(value="/api/v1/assettransferlogs")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: [{data}]
+214. GET /api/v1/assettransferlogs/{id} (Variant 1)
+Action
+Fetch by ID
+Controller Mapping
+@GetMapping(value="/api/v1/assettransferlogs/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: {data}
+215. GET /api/v1/assettransferlogs/{id} (Variant 2)
+Action
+Fetch by ID
+Controller Mapping
+@GetMapping(value="/api/v1/assettransferlogs/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: {data}
+216. GET /api/v1/assettransferlogs/{id} (Variant 3)
+Action
+Fetch by ID
+Controller Mapping
+@GetMapping(value="/api/v1/assettransferlogs/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: {data}
+217. POST /api/v1/assettransferlogs (Variant 1)
+Action
+Create new record
+Controller Mapping
+@PostMapping(value="/api/v1/assettransferlogs")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "assettransferlogId": 0}
+Expected Response
+201 Created
+218. POST /api/v1/assettransferlogs (Variant 2)
+Action
+Create new record
+Controller Mapping
+@PostMapping(value="/api/v1/assettransferlogs")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "assettransferlogId": 0}
+Expected Response
+201 Created
+219. POST /api/v1/assettransferlogs (Variant 3)
+Action
+Create new record
+Controller Mapping
+@PostMapping(value="/api/v1/assettransferlogs")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "assettransferlogId": 0}
+Expected Response
+201 Created
+220. PUT /api/v1/assettransferlogs/{id} (Variant 1)
+Action
+Update entire record
+Controller Mapping
+@PutMapping(value="/api/v1/assettransferlogs/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "assettransferlogId": 0}
+Expected Response
+200 OK
+221. PUT /api/v1/assettransferlogs/{id} (Variant 2)
+Action
+Update entire record
+Controller Mapping
+@PutMapping(value="/api/v1/assettransferlogs/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "assettransferlogId": 0}
+Expected Response
+200 OK
+222. PUT /api/v1/assettransferlogs/{id} (Variant 3)
+Action
+Update entire record
+Controller Mapping
+@PutMapping(value="/api/v1/assettransferlogs/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "assettransferlogId": 0}
+Expected Response
+200 OK
+223. DELETE /api/v1/assettransferlogs/{id} (Variant 1)
+Action
+Soft delete record
+Controller Mapping
+@DeleteMapping(value="/api/v1/assettransferlogs/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+204 No Content
+224. DELETE /api/v1/assettransferlogs/{id} (Variant 2)
+Action
+Soft delete record
+Controller Mapping
+@DeleteMapping(value="/api/v1/assettransferlogs/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+204 No Content
+225. DELETE /api/v1/assettransferlogs/{id} (Variant 3)
+Action
+Soft delete record
+Controller Mapping
+@DeleteMapping(value="/api/v1/assettransferlogs/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+204 No Content
+226. GET /api/v2-internal/assettransferlogs (Variant 1)
+Action
+Fetch all records
+Controller Mapping
+@GetMapping(value="/api/v2-internal/assettransferlogs")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: [{data}]
+227. GET /api/v2-internal/assettransferlogs (Variant 2)
+Action
+Fetch all records
+Controller Mapping
+@GetMapping(value="/api/v2-internal/assettransferlogs")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: [{data}]
+228. GET /api/v2-internal/assettransferlogs (Variant 3)
+Action
+Fetch all records
+Controller Mapping
+@GetMapping(value="/api/v2-internal/assettransferlogs")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: [{data}]
+229. GET /api/v2-internal/assettransferlogs/{id} (Variant 1)
+Action
+Fetch by ID
+Controller Mapping
+@GetMapping(value="/api/v2-internal/assettransferlogs/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: {data}
+230. GET /api/v2-internal/assettransferlogs/{id} (Variant 2)
+Action
+Fetch by ID
+Controller Mapping
+@GetMapping(value="/api/v2-internal/assettransferlogs/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: {data}
+231. GET /api/v2-internal/assettransferlogs/{id} (Variant 3)
+Action
+Fetch by ID
+Controller Mapping
+@GetMapping(value="/api/v2-internal/assettransferlogs/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: {data}
+232. POST /api/v2-internal/assettransferlogs (Variant 1)
+Action
+Create new record
+Controller Mapping
+@PostMapping(value="/api/v2-internal/assettransferlogs")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "assettransferlogId": 0}
+Expected Response
+201 Created
+233. POST /api/v2-internal/assettransferlogs (Variant 2)
+Action
+Create new record
+Controller Mapping
+@PostMapping(value="/api/v2-internal/assettransferlogs")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "assettransferlogId": 0}
+Expected Response
+201 Created
+234. POST /api/v2-internal/assettransferlogs (Variant 3)
+Action
+Create new record
+Controller Mapping
+@PostMapping(value="/api/v2-internal/assettransferlogs")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "assettransferlogId": 0}
+Expected Response
+201 Created
+235. PUT /api/v2-internal/assettransferlogs/{id} (Variant 1)
+Action
+Update entire record
+Controller Mapping
+@PutMapping(value="/api/v2-internal/assettransferlogs/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "assettransferlogId": 0}
+Expected Response
+200 OK
+236. PUT /api/v2-internal/assettransferlogs/{id} (Variant 2)
+Action
+Update entire record
+Controller Mapping
+@PutMapping(value="/api/v2-internal/assettransferlogs/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "assettransferlogId": 0}
+Expected Response
+200 OK
+237. PUT /api/v2-internal/assettransferlogs/{id} (Variant 3)
+Action
+Update entire record
+Controller Mapping
+@PutMapping(value="/api/v2-internal/assettransferlogs/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "assettransferlogId": 0}
+Expected Response
+200 OK
+238. DELETE /api/v2-internal/assettransferlogs/{id} (Variant 1)
+Action
+Soft delete record
+Controller Mapping
+@DeleteMapping(value="/api/v2-internal/assettransferlogs/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+204 No Content
+239. DELETE /api/v2-internal/assettransferlogs/{id} (Variant 2)
+Action
+Soft delete record
+Controller Mapping
+@DeleteMapping(value="/api/v2-internal/assettransferlogs/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+204 No Content
+240. DELETE /api/v2-internal/assettransferlogs/{id} (Variant 3)
+Action
+Soft delete record
+Controller Mapping
+@DeleteMapping(value="/api/v2-internal/assettransferlogs/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+204 No Content
+241. GET /api/v1/jobmethods (Variant 1)
+Action
+Fetch all records
+Controller Mapping
+@GetMapping(value="/api/v1/jobmethods")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: [{data}]
+242. GET /api/v1/jobmethods (Variant 2)
+Action
+Fetch all records
+Controller Mapping
+@GetMapping(value="/api/v1/jobmethods")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: [{data}]
+243. GET /api/v1/jobmethods (Variant 3)
+Action
+Fetch all records
+Controller Mapping
+@GetMapping(value="/api/v1/jobmethods")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: [{data}]
+244. GET /api/v1/jobmethods/{id} (Variant 1)
+Action
+Fetch by ID
+Controller Mapping
+@GetMapping(value="/api/v1/jobmethods/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: {data}
+245. GET /api/v1/jobmethods/{id} (Variant 2)
+Action
+Fetch by ID
+Controller Mapping
+@GetMapping(value="/api/v1/jobmethods/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: {data}
+246. GET /api/v1/jobmethods/{id} (Variant 3)
+Action
+Fetch by ID
+Controller Mapping
+@GetMapping(value="/api/v1/jobmethods/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: {data}
+247. POST /api/v1/jobmethods (Variant 1)
+Action
+Create new record
+Controller Mapping
+@PostMapping(value="/api/v1/jobmethods")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "jobmethodId": 0}
+Expected Response
+201 Created
+248. POST /api/v1/jobmethods (Variant 2)
+Action
+Create new record
+Controller Mapping
+@PostMapping(value="/api/v1/jobmethods")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "jobmethodId": 0}
+Expected Response
+201 Created
+249. POST /api/v1/jobmethods (Variant 3)
+Action
+Create new record
+Controller Mapping
+@PostMapping(value="/api/v1/jobmethods")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "jobmethodId": 0}
+Expected Response
+201 Created
+250. PUT /api/v1/jobmethods/{id} (Variant 1)
+Action
+Update entire record
+Controller Mapping
+@PutMapping(value="/api/v1/jobmethods/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "jobmethodId": 0}
+Expected Response
+200 OK
+251. PUT /api/v1/jobmethods/{id} (Variant 2)
+Action
+Update entire record
+Controller Mapping
+@PutMapping(value="/api/v1/jobmethods/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "jobmethodId": 0}
+Expected Response
+200 OK
+252. PUT /api/v1/jobmethods/{id} (Variant 3)
+Action
+Update entire record
+Controller Mapping
+@PutMapping(value="/api/v1/jobmethods/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "jobmethodId": 0}
+Expected Response
+200 OK
+253. DELETE /api/v1/jobmethods/{id} (Variant 1)
+Action
+Soft delete record
+Controller Mapping
+@DeleteMapping(value="/api/v1/jobmethods/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+204 No Content
+254. DELETE /api/v1/jobmethods/{id} (Variant 2)
+Action
+Soft delete record
+Controller Mapping
+@DeleteMapping(value="/api/v1/jobmethods/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+204 No Content
+255. DELETE /api/v1/jobmethods/{id} (Variant 3)
+Action
+Soft delete record
+Controller Mapping
+@DeleteMapping(value="/api/v1/jobmethods/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+204 No Content
+256. GET /api/v2-internal/jobmethods (Variant 1)
+Action
+Fetch all records
+Controller Mapping
+@GetMapping(value="/api/v2-internal/jobmethods")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: [{data}]
+257. GET /api/v2-internal/jobmethods (Variant 2)
+Action
+Fetch all records
+Controller Mapping
+@GetMapping(value="/api/v2-internal/jobmethods")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: [{data}]
+258. GET /api/v2-internal/jobmethods (Variant 3)
+Action
+Fetch all records
+Controller Mapping
+@GetMapping(value="/api/v2-internal/jobmethods")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: [{data}]
+259. GET /api/v2-internal/jobmethods/{id} (Variant 1)
+Action
+Fetch by ID
+Controller Mapping
+@GetMapping(value="/api/v2-internal/jobmethods/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: {data}
+260. GET /api/v2-internal/jobmethods/{id} (Variant 2)
+Action
+Fetch by ID
+Controller Mapping
+@GetMapping(value="/api/v2-internal/jobmethods/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: {data}
+261. GET /api/v2-internal/jobmethods/{id} (Variant 3)
+Action
+Fetch by ID
+Controller Mapping
+@GetMapping(value="/api/v2-internal/jobmethods/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: {data}
+262. POST /api/v2-internal/jobmethods (Variant 1)
+Action
+Create new record
+Controller Mapping
+@PostMapping(value="/api/v2-internal/jobmethods")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "jobmethodId": 0}
+Expected Response
+201 Created
+263. POST /api/v2-internal/jobmethods (Variant 2)
+Action
+Create new record
+Controller Mapping
+@PostMapping(value="/api/v2-internal/jobmethods")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "jobmethodId": 0}
+Expected Response
+201 Created
+264. POST /api/v2-internal/jobmethods (Variant 3)
+Action
+Create new record
+Controller Mapping
+@PostMapping(value="/api/v2-internal/jobmethods")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "jobmethodId": 0}
+Expected Response
+201 Created
+265. PUT /api/v2-internal/jobmethods/{id} (Variant 1)
+Action
+Update entire record
+Controller Mapping
+@PutMapping(value="/api/v2-internal/jobmethods/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "jobmethodId": 0}
+Expected Response
+200 OK
+266. PUT /api/v2-internal/jobmethods/{id} (Variant 2)
+Action
+Update entire record
+Controller Mapping
+@PutMapping(value="/api/v2-internal/jobmethods/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "jobmethodId": 0}
+Expected Response
+200 OK
+267. PUT /api/v2-internal/jobmethods/{id} (Variant 3)
+Action
+Update entire record
+Controller Mapping
+@PutMapping(value="/api/v2-internal/jobmethods/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "jobmethodId": 0}
+Expected Response
+200 OK
+268. DELETE /api/v2-internal/jobmethods/{id} (Variant 1)
+Action
+Soft delete record
+Controller Mapping
+@DeleteMapping(value="/api/v2-internal/jobmethods/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+204 No Content
+269. DELETE /api/v2-internal/jobmethods/{id} (Variant 2)
+Action
+Soft delete record
+Controller Mapping
+@DeleteMapping(value="/api/v2-internal/jobmethods/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+204 No Content
+270. DELETE /api/v2-internal/jobmethods/{id} (Variant 3)
+Action
+Soft delete record
+Controller Mapping
+@DeleteMapping(value="/api/v2-internal/jobmethods/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+204 No Content
+271. GET /api/v1/tenders (Variant 1)
+Action
+Fetch all records
+Controller Mapping
+@GetMapping(value="/api/v1/tenders")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: [{data}]
+272. GET /api/v1/tenders (Variant 2)
+Action
+Fetch all records
+Controller Mapping
+@GetMapping(value="/api/v1/tenders")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: [{data}]
+273. GET /api/v1/tenders (Variant 3)
+Action
+Fetch all records
+Controller Mapping
+@GetMapping(value="/api/v1/tenders")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: [{data}]
+274. GET /api/v1/tenders/{id} (Variant 1)
+Action
+Fetch by ID
+Controller Mapping
+@GetMapping(value="/api/v1/tenders/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: {data}
+275. GET /api/v1/tenders/{id} (Variant 2)
+Action
+Fetch by ID
+Controller Mapping
+@GetMapping(value="/api/v1/tenders/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: {data}
+276. GET /api/v1/tenders/{id} (Variant 3)
+Action
+Fetch by ID
+Controller Mapping
+@GetMapping(value="/api/v1/tenders/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: {data}
+277. POST /api/v1/tenders (Variant 1)
+Action
+Create new record
+Controller Mapping
+@PostMapping(value="/api/v1/tenders")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "tenderId": 0}
+Expected Response
+201 Created
+278. POST /api/v1/tenders (Variant 2)
+Action
+Create new record
+Controller Mapping
+@PostMapping(value="/api/v1/tenders")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "tenderId": 0}
+Expected Response
+201 Created
+279. POST /api/v1/tenders (Variant 3)
+Action
+Create new record
+Controller Mapping
+@PostMapping(value="/api/v1/tenders")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "tenderId": 0}
+Expected Response
+201 Created
+280. PUT /api/v1/tenders/{id} (Variant 1)
+Action
+Update entire record
+Controller Mapping
+@PutMapping(value="/api/v1/tenders/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "tenderId": 0}
+Expected Response
+200 OK
+281. PUT /api/v1/tenders/{id} (Variant 2)
+Action
+Update entire record
+Controller Mapping
+@PutMapping(value="/api/v1/tenders/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "tenderId": 0}
+Expected Response
+200 OK
+282. PUT /api/v1/tenders/{id} (Variant 3)
+Action
+Update entire record
+Controller Mapping
+@PutMapping(value="/api/v1/tenders/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "tenderId": 0}
+Expected Response
+200 OK
+283. DELETE /api/v1/tenders/{id} (Variant 1)
+Action
+Soft delete record
+Controller Mapping
+@DeleteMapping(value="/api/v1/tenders/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+204 No Content
+284. DELETE /api/v1/tenders/{id} (Variant 2)
+Action
+Soft delete record
+Controller Mapping
+@DeleteMapping(value="/api/v1/tenders/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+204 No Content
+285. DELETE /api/v1/tenders/{id} (Variant 3)
+Action
+Soft delete record
+Controller Mapping
+@DeleteMapping(value="/api/v1/tenders/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+204 No Content
+286. GET /api/v2-internal/tenders (Variant 1)
+Action
+Fetch all records
+Controller Mapping
+@GetMapping(value="/api/v2-internal/tenders")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: [{data}]
+287. GET /api/v2-internal/tenders (Variant 2)
+Action
+Fetch all records
+Controller Mapping
+@GetMapping(value="/api/v2-internal/tenders")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: [{data}]
+288. GET /api/v2-internal/tenders (Variant 3)
+Action
+Fetch all records
+Controller Mapping
+@GetMapping(value="/api/v2-internal/tenders")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: [{data}]
+289. GET /api/v2-internal/tenders/{id} (Variant 1)
+Action
+Fetch by ID
+Controller Mapping
+@GetMapping(value="/api/v2-internal/tenders/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: {data}
+290. GET /api/v2-internal/tenders/{id} (Variant 2)
+Action
+Fetch by ID
+Controller Mapping
+@GetMapping(value="/api/v2-internal/tenders/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: {data}
+291. GET /api/v2-internal/tenders/{id} (Variant 3)
+Action
+Fetch by ID
+Controller Mapping
+@GetMapping(value="/api/v2-internal/tenders/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: {data}
+292. POST /api/v2-internal/tenders (Variant 1)
+Action
+Create new record
+Controller Mapping
+@PostMapping(value="/api/v2-internal/tenders")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "tenderId": 0}
+Expected Response
+201 Created
+293. POST /api/v2-internal/tenders (Variant 2)
+Action
+Create new record
+Controller Mapping
+@PostMapping(value="/api/v2-internal/tenders")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "tenderId": 0}
+Expected Response
+201 Created
+294. POST /api/v2-internal/tenders (Variant 3)
+Action
+Create new record
+Controller Mapping
+@PostMapping(value="/api/v2-internal/tenders")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "tenderId": 0}
+Expected Response
+201 Created
+295. PUT /api/v2-internal/tenders/{id} (Variant 1)
+Action
+Update entire record
+Controller Mapping
+@PutMapping(value="/api/v2-internal/tenders/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "tenderId": 0}
+Expected Response
+200 OK
+296. PUT /api/v2-internal/tenders/{id} (Variant 2)
+Action
+Update entire record
+Controller Mapping
+@PutMapping(value="/api/v2-internal/tenders/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "tenderId": 0}
+Expected Response
+200 OK
+297. PUT /api/v2-internal/tenders/{id} (Variant 3)
+Action
+Update entire record
+Controller Mapping
+@PutMapping(value="/api/v2-internal/tenders/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "tenderId": 0}
+Expected Response
+200 OK
+298. DELETE /api/v2-internal/tenders/{id} (Variant 1)
+Action
+Soft delete record
+Controller Mapping
+@DeleteMapping(value="/api/v2-internal/tenders/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+204 No Content
+299. DELETE /api/v2-internal/tenders/{id} (Variant 2)
+Action
+Soft delete record
+Controller Mapping
+@DeleteMapping(value="/api/v2-internal/tenders/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+204 No Content
+300. DELETE /api/v2-internal/tenders/{id} (Variant 3)
+Action
+Soft delete record
+Controller Mapping
+@DeleteMapping(value="/api/v2-internal/tenders/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+204 No Content
+301. GET /api/v1/documentrecords (Variant 1)
+Action
+Fetch all records
+Controller Mapping
+@GetMapping(value="/api/v1/documentrecords")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: [{data}]
+302. GET /api/v1/documentrecords (Variant 2)
+Action
+Fetch all records
+Controller Mapping
+@GetMapping(value="/api/v1/documentrecords")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: [{data}]
+303. GET /api/v1/documentrecords (Variant 3)
+Action
+Fetch all records
+Controller Mapping
+@GetMapping(value="/api/v1/documentrecords")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: [{data}]
+304. GET /api/v1/documentrecords/{id} (Variant 1)
+Action
+Fetch by ID
+Controller Mapping
+@GetMapping(value="/api/v1/documentrecords/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: {data}
+305. GET /api/v1/documentrecords/{id} (Variant 2)
+Action
+Fetch by ID
+Controller Mapping
+@GetMapping(value="/api/v1/documentrecords/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: {data}
+306. GET /api/v1/documentrecords/{id} (Variant 3)
+Action
+Fetch by ID
+Controller Mapping
+@GetMapping(value="/api/v1/documentrecords/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: {data}
+307. POST /api/v1/documentrecords (Variant 1)
+Action
+Create new record
+Controller Mapping
+@PostMapping(value="/api/v1/documentrecords")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "documentrecordId": 0}
+Expected Response
+201 Created
+308. POST /api/v1/documentrecords (Variant 2)
+Action
+Create new record
+Controller Mapping
+@PostMapping(value="/api/v1/documentrecords")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "documentrecordId": 0}
+Expected Response
+201 Created
+309. POST /api/v1/documentrecords (Variant 3)
+Action
+Create new record
+Controller Mapping
+@PostMapping(value="/api/v1/documentrecords")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "documentrecordId": 0}
+Expected Response
+201 Created
+310. PUT /api/v1/documentrecords/{id} (Variant 1)
+Action
+Update entire record
+Controller Mapping
+@PutMapping(value="/api/v1/documentrecords/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "documentrecordId": 0}
+Expected Response
+200 OK
+311. PUT /api/v1/documentrecords/{id} (Variant 2)
+Action
+Update entire record
+Controller Mapping
+@PutMapping(value="/api/v1/documentrecords/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "documentrecordId": 0}
+Expected Response
+200 OK
+312. PUT /api/v1/documentrecords/{id} (Variant 3)
+Action
+Update entire record
+Controller Mapping
+@PutMapping(value="/api/v1/documentrecords/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "documentrecordId": 0}
+Expected Response
+200 OK
+313. DELETE /api/v1/documentrecords/{id} (Variant 1)
+Action
+Soft delete record
+Controller Mapping
+@DeleteMapping(value="/api/v1/documentrecords/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+204 No Content
+314. DELETE /api/v1/documentrecords/{id} (Variant 2)
+Action
+Soft delete record
+Controller Mapping
+@DeleteMapping(value="/api/v1/documentrecords/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+204 No Content
+315. DELETE /api/v1/documentrecords/{id} (Variant 3)
+Action
+Soft delete record
+Controller Mapping
+@DeleteMapping(value="/api/v1/documentrecords/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+204 No Content
+316. GET /api/v2-internal/documentrecords (Variant 1)
+Action
+Fetch all records
+Controller Mapping
+@GetMapping(value="/api/v2-internal/documentrecords")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: [{data}]
+317. GET /api/v2-internal/documentrecords (Variant 2)
+Action
+Fetch all records
+Controller Mapping
+@GetMapping(value="/api/v2-internal/documentrecords")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: [{data}]
+318. GET /api/v2-internal/documentrecords (Variant 3)
+Action
+Fetch all records
+Controller Mapping
+@GetMapping(value="/api/v2-internal/documentrecords")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: [{data}]
+319. GET /api/v2-internal/documentrecords/{id} (Variant 1)
+Action
+Fetch by ID
+Controller Mapping
+@GetMapping(value="/api/v2-internal/documentrecords/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: {data}
+320. GET /api/v2-internal/documentrecords/{id} (Variant 2)
+Action
+Fetch by ID
+Controller Mapping
+@GetMapping(value="/api/v2-internal/documentrecords/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: {data}
+321. GET /api/v2-internal/documentrecords/{id} (Variant 3)
+Action
+Fetch by ID
+Controller Mapping
+@GetMapping(value="/api/v2-internal/documentrecords/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+200 OK: {data}
+322. POST /api/v2-internal/documentrecords (Variant 1)
+Action
+Create new record
+Controller Mapping
+@PostMapping(value="/api/v2-internal/documentrecords")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "documentrecordId": 0}
+Expected Response
+201 Created
+323. POST /api/v2-internal/documentrecords (Variant 2)
+Action
+Create new record
+Controller Mapping
+@PostMapping(value="/api/v2-internal/documentrecords")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "documentrecordId": 0}
+Expected Response
+201 Created
+324. POST /api/v2-internal/documentrecords (Variant 3)
+Action
+Create new record
+Controller Mapping
+@PostMapping(value="/api/v2-internal/documentrecords")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "documentrecordId": 0}
+Expected Response
+201 Created
+325. PUT /api/v2-internal/documentrecords/{id} (Variant 1)
+Action
+Update entire record
+Controller Mapping
+@PutMapping(value="/api/v2-internal/documentrecords/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "documentrecordId": 0}
+Expected Response
+200 OK
+326. PUT /api/v2-internal/documentrecords/{id} (Variant 2)
+Action
+Update entire record
+Controller Mapping
+@PutMapping(value="/api/v2-internal/documentrecords/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "documentrecordId": 0}
+Expected Response
+200 OK
+327. PUT /api/v2-internal/documentrecords/{id} (Variant 3)
+Action
+Update entire record
+Controller Mapping
+@PutMapping(value="/api/v2-internal/documentrecords/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+{  "documentrecordId": 0}
+Expected Response
+200 OK
+328. DELETE /api/v2-internal/documentrecords/{id} (Variant 1)
+Action
+Soft delete record
+Controller Mapping
+@DeleteMapping(value="/api/v2-internal/documentrecords/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+204 No Content
+329. DELETE /api/v2-internal/documentrecords/{id} (Variant 2)
+Action
+Soft delete record
+Controller Mapping
+@DeleteMapping(value="/api/v2-internal/documentrecords/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+204 No Content
+330. DELETE /api/v2-internal/documentrecords/{id} (Variant 3)
+Action
+Soft delete record
+Controller Mapping
+@DeleteMapping(value="/api/v2-internal/documentrecords/{id}")
+Authorization
+Bearer JWT (Requires matching PermissionGroup CSV text)
+Request Body
+N/A
+Expected Response
+204 No Content
+8. Physical Database Design & DDL Specs
+Exact mappings matching the Spring Data JPA Hibernate implementation. Note: Spatial support uses locLat/locLon standard string columns, not PostGIS, per the updated backend schema.
+Table: User
+Column Name
+Data Type (PostgreSQL)
+Constraints / Mappings
+id
+BIGINT
+PK, IDENTITY
+username
+VARCHAR(255)
+UNIQUE, NOT NULL
+password
+VARCHAR(255)
+NOT NULL
+role
+VARCHAR(50)
+NOT NULL
+email
+VARCHAR(255)
+active
+BOOLEAN
+DEFAULT TRUE
+inactive_note
+TEXT
+full_name
+VARCHAR(255)
+phone
+VARCHAR(50)
+dob
+DATE
+gender
+VARCHAR(20)
+nid_or_passport
+VARCHAR(100)
+department
+VARCHAR(100)
+designation
+VARCHAR(100)
+property_id
+BIGINT
+FK -> property(id)
+permission_group_id
+BIGINT
+FK -> permission_group(id)
+created_at
+DATE
+Table: Property
+Column Name
+Data Type (PostgreSQL)
+Constraints / Mappings
+id
+BIGINT
+PK, IDENTITY
+name
+VARCHAR(255)
+NOT NULL
+address
+TEXT
+code
+VARCHAR(100)
+UNIQUE
+property_type_id
+BIGINT
+manager_name
+VARCHAR(255)
+contact_phone
+VARCHAR(50)
+contact_email
+VARCHAR(255)
+description
+TEXT
+city
+VARCHAR(100)
+country
+VARCHAR(100)
+DEFAULT 'Bangladesh'
+active
+BOOLEAN
+DEFAULT TRUE
+loc_lat
+VARCHAR(50)
+Standard String
+loc_lon
+VARCHAR(50)
+Standard String
+created_at
+DATE
+Table: Asset
+Column Name
+Data Type (PostgreSQL)
+Constraints / Mappings
+id
+BIGINT
+PK, IDENTITY
+name
+VARCHAR(255)
+NOT NULL
+type
+VARCHAR(100)
+category
+VARCHAR(100)
+sub_category
+VARCHAR(100)
+supplier_name
+VARCHAR(255)
+asset_code
+VARCHAR(100)
+purchase_date
+DATE
+purchase_value
+NUMERIC
+depreciation_percentage
+DOUBLE PRECISION
+invoice_url
+TEXT
+Cloudinary URL
+long_description
+TEXT
+remarks
+TEXT
+active
+BOOLEAN
+DEFAULT TRUE
+department
+VARCHAR(100)
+assigned_user_id
+BIGINT
+FK -> user(id)
+property_id
+BIGINT
+FK -> property(id)
+created_at
+DATE
+9. Conclusion
+This SDD fulfills its purpose as a comprehensive technical guide. It translates the SRS requirements into a concrete technical design tailored specifically for the IMMS architecture, complete with detailed physical data models, structural blueprints, and visual user workflows.

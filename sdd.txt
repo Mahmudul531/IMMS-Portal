@@ -1,0 +1,123 @@
+System Design Document (SDD) - Source Material
+Infrastructure Maintenance & Management System (IMMS)
+
+=======================================================
+1. INTRODUCTION & PURPOSE
+=======================================================
+This document serves as the foundational System Design Document (SDD) for the IMMS platform. It is intended to be used by AI agents to generate formal, formatted SDD documentation (e.g., .docx format). It accurately reflects the actual current implementation of the codebase, superseding any prior generic SRS documents.
+
+=======================================================
+2. SYSTEM ARCHITECTURE
+=======================================================
+The IMMS platform utilizes a modern n-tier Client-Server architecture:
+- Presentation Layer (Frontend): A Single Page Application (SPA) built with React 19, TypeScript, and Vite.
+- Application Layer (Backend): A RESTful API driven by Java 21 and Spring Boot 4.0.5.
+- Data Access Layer: Spring Data JPA leveraging Hibernate as the ORM.
+- Database Layer: PostgreSQL 15+.
+- External Storage: Cloudinary API for image hosting.
+
+=======================================================
+3. TECHNOLOGY STACK
+=======================================================
+Frontend:
+- Core: React, TypeScript, Vite
+- UI: Custom CSS (No Tailwind specified by default)
+- Maps: Leaflet / React-Leaflet (using Nominatim for search)
+
+Backend:
+- Framework: Spring Boot 4.0.5
+- Language: Java 21
+- Security: Spring Security, JWT (Note: Currently set to .permitAll() for rapid development; to be secured prior to production).
+- Database Migration: SchemaMigrationRunner (custom SQL scripts)
+- Document Generation: JasperReports, Apache POI (Excel), OpenPDF, Apache PDFBox
+- Integration: Cloudinary SDK (for property/asset images)
+
+=======================================================
+4. ACTUAL DATABASE DESIGN & ENTITIES (ERD Basis)
+=======================================================
+The system uses Long Identity (Auto-increment) for Primary Keys (not UUIDs). Spatial data is stored using standard String fields for Latitude/Longitude rather than native PostGIS geometries.
+
+Entity: User
+- id (Long, PK, Auto-increment)
+- username (String, Unique)
+- password (String)
+- role (String: ADMIN, ENGINEER, TECHNICIAN, ACCOUNTS, CONTRACTOR)
+- email, fullName, phone, dob, gender, nidOrPassport, department, designation
+- propertyId (Long, FK to Property)
+- permissionGroupId (Long, FK to PermissionGroup)
+- active (Boolean), createdAt (LocalDate)
+
+Entity: PermissionGroup
+- id (Long, PK, Auto-increment)
+- name (String, Unique)
+- permissions (String - Comma-separated access rules)
+
+Entity: Property
+- id (Long, PK, Auto-increment)
+- name (String)
+- code (String, Unique)
+- property_type_id (Long, FK to PropertyType)
+- locLat (String), locLon (String)
+- address, city, country (Default: Bangladesh)
+- managerName, contactPhone, contactEmail, description
+- active (Boolean)
+
+Entity: PropertyImage
+- id (Long, PK)
+- propertyId (Long, FK)
+- imageData (String - Cloudinary HTTPS URL)
+
+Entity: Asset
+- id (Long, PK)
+- name, type (Physical, Digital, Rental), category, subCategory
+- supplierName, assetCode
+- purchaseDate, purchaseValue, depreciationPercentage
+- invoiceUrl, longDescription, remarks
+- department, active
+- assigned_user_id (Long, FK to User)
+- property_id (Long, FK to Property)
+
+Entity: WorkOrder & Task
+- Handles assignments, maintenance logging, and links assets to specific engineering/technician jobs.
+
+=======================================================
+5. HIGH-LEVEL API SPECIFICATIONS (Controllers)
+=======================================================
+Base Path: /api
+
+1. Property API (/api/properties)
+   - GET /api/properties : Retrieve all properties
+   - POST /api/properties : Create a new property
+   - PUT /api/properties/{id} : Update property details
+   - DELETE /api/properties/{id} : Remove a property
+   - POST /api/properties/{id}/images : Upload image to Cloudinary & link to property
+   - GET /api/properties/{id}/images : Retrieve property images
+
+2. Asset API (/api/assets)
+   - Standard CRUD operations for Asset inventory tracking.
+   - Handles relationships between Assets, Properties, and Users.
+
+3. User & Authentication API (/api/users, /api/auth)
+   - Manages user profiles, role assignments, and permission group linking.
+
+4. Permission Group API (/api/permission-groups)
+   - Defines granular access control rules using comma-separated strings (e.g. "CREATE_ASSET, VIEW_PROPERTY").
+
+5. Work Order & Tender APIs (/api/work-orders, /api/tenders)
+   - Manages maintenance lifecycles and external contractor bidding.
+
+=======================================================
+6. SECURITY & ACCESS CONTROL STRATEGY
+=======================================================
+Current State: 
+- SecurityConfig is configured with .permitAll() for ease of frontend integration.
+Target Production State:
+- Token-based: JWT stateless authentication.
+- Authorization: Hybrid approach utilizing static roles (User.role) combined with dynamic, fine-grained access (PermissionGroup.permissions).
+- Method Security: @PreAuthorize to be applied at the Controller level.
+
+=======================================================
+7. EXTERNAL INTEGRATIONS
+=======================================================
+- Cloudinary: Used extensively for storing Property and Asset images. Images are uploaded directly via backend multipart requests, and the resulting secure URL is saved in PostgreSQL.
+- Nominatim (OSM): Used on the frontend for Geocoding and auto-suggesting property locations within Bangladesh.
