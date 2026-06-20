@@ -4,7 +4,7 @@ import { LayoutDashboard, Building2, MapPin, Wrench, LogOut, Users, Briefcase, A
 import { useState } from 'react';
 
 const Sidebar = () => {
-  const { user, logout } = useAuth();
+  const { user, logout, hasPermission } = useAuth();
   const location = useLocation();
   const [assetsOpen, setAssetsOpen] = useState(false);
   const [propertiesOpen, setPropertiesOpen] = useState(false);
@@ -43,7 +43,7 @@ const Sidebar = () => {
           Dashboard
         </Link>
 
-        {['ADMIN', 'ENGINEER'].includes(user.role) && (
+        {hasPermission('VIEW_INFRASTRUCTURE') && (
           <div>
             <div className={`nav-item ${isPropertiesActive ? 'active' : ''}`} onClick={() => setPropertiesOpen(!propertiesOpen)} style={{ cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
@@ -56,7 +56,7 @@ const Sidebar = () => {
               <div style={{ marginLeft: '1.5rem', display: 'flex', flexDirection: 'column', gap: '0.5rem', marginTop: '0.5rem', marginBottom: '0.5rem' }}>
                 <Link to="/properties/add" className={`nav-item ${isActive('/properties/add') ? 'active' : ''}`} style={{ padding: '0.4rem 0.8rem', fontSize: '0.9rem' }}>Add Infrastructure</Link>
                 <Link to="/properties/list" className={`nav-item ${isActive('/properties/list') ? 'active' : ''}`} style={{ padding: '0.4rem 0.8rem', fontSize: '0.9rem' }}>Infrastructure List</Link>
-                {['ADMIN'].includes(user.role) && (
+                {hasPermission('CREATE_INFRASTRUCTURE') && (
                   <Link to="/properties/setup" className={`nav-item ${isActive('/properties/setup') ? 'active' : ''}`} style={{ padding: '0.4rem 0.8rem', fontSize: '0.9rem' }}>Infrastructure Setup</Link>
                 )}
               </div>
@@ -64,7 +64,7 @@ const Sidebar = () => {
           </div>
         )}
 
-        {['ADMIN', 'ENGINEER', 'TECHNICIAN'].includes(user.role) && (
+        {hasPermission('VIEW_ASSETS') && (
           <div>
             <div className={`nav-item ${isAssetsActive ? 'active' : ''}`} onClick={() => setAssetsOpen(!assetsOpen)} style={{ cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
@@ -77,7 +77,7 @@ const Sidebar = () => {
               <div style={{ marginLeft: '1.5rem', display: 'flex', flexDirection: 'column', gap: '0.5rem', marginTop: '0.5rem', marginBottom: '0.5rem' }}>
                 <Link to="/assets/add" className={`nav-item ${isActive('/assets/add') ? 'active' : ''}`} style={{ padding: '0.4rem 0.8rem', fontSize: '0.9rem' }}>Add Asset</Link>
                 <Link to="/assets/list" className={`nav-item ${isActive('/assets/list') ? 'active' : ''}`} style={{ padding: '0.4rem 0.8rem', fontSize: '0.9rem' }}>Asset List</Link>
-                {['ADMIN'].includes(user.role) && (
+                {hasPermission('CREATE_ASSET') && (
                   <Link to="/assets/setup" className={`nav-item ${isActive('/assets/setup') ? 'active' : ''}`} style={{ padding: '0.4rem 0.8rem', fontSize: '0.9rem' }}>Asset Setup</Link>
                 )}
               </div>
@@ -85,7 +85,7 @@ const Sidebar = () => {
           </div>
         )}
 
-        {['ADMIN', 'ENGINEER', 'VENDOR'].includes(user.role) && (
+        {(hasPermission('VIEW_WORK_ORDERS') || hasPermission('VIEW_VENDOR_PROJECTS')) && (
           <div>
             <div className={`nav-item ${isWorkOrdersActive ? 'active' : ''}`} onClick={() => setWorkOrdersOpen(!workOrdersOpen)} style={{ cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
@@ -96,11 +96,11 @@ const Sidebar = () => {
             </div>
             {workOrdersOpen && (
               <div style={{ marginLeft: '1.5rem', display: 'flex', flexDirection: 'column', gap: '0.5rem', marginTop: '0.5rem', marginBottom: '0.5rem' }}>
-                {['ADMIN'].includes(user.role) && (
+                {hasPermission('CREATE_WORK_ORDER') && (
                   <Link to="/work-orders/add" className={`nav-item ${isActive('/work-orders/add') ? 'active' : ''}`} style={{ padding: '0.4rem 0.8rem', fontSize: '0.9rem' }}>Add Project</Link>
                 )}
                 <Link to="/work-orders/list" className={`nav-item ${isActive('/work-orders/list') ? 'active' : ''}`} style={{ padding: '0.4rem 0.8rem', fontSize: '0.9rem' }}>Project List</Link>
-                {['ADMIN'].includes(user.role) && (
+                {hasPermission('CREATE_WORK_ORDER') && (
                   <Link to="/work-orders/setup" className={`nav-item ${isActive('/work-orders/setup') ? 'active' : ''}`} style={{ padding: '0.4rem 0.8rem', fontSize: '0.9rem' }}>Work Order Setup</Link>
                 )}
               </div>
@@ -108,14 +108,14 @@ const Sidebar = () => {
           </div>
         )}
 
-        {['ADMIN', 'ENGINEER'].includes(user.role) && (
+        {hasPermission('TRANSFER_ASSET') && (
           <Link to="/asset-transfer" className={`nav-item ${isActive('/asset-transfer') ? 'active' : ''}`}>
             <ArrowRightLeft size={20} />
             Transfer Asset
           </Link>
         )}
 
-        {['ADMIN', 'ENGINEER'].includes(user.role) && (
+        {(hasPermission('VIEW_REPORTS') || hasPermission('VIEW_PAYMENT_REPORTS')) && (
           <div>
             <div className={`nav-item ${isReportsActive ? 'active' : ''}`} onClick={() => setReportsOpen(!reportsOpen)} style={{ cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
@@ -126,14 +126,18 @@ const Sidebar = () => {
             </div>
             {reportsOpen && (
               <div style={{ marginLeft: '1.5rem', display: 'flex', flexDirection: 'column', gap: '0.5rem', marginTop: '0.5rem', marginBottom: '0.5rem' }}>
-                <Link to="/reports/transfers" className={`nav-item ${isActive('/reports/transfers') ? 'active' : ''}`} style={{ padding: '0.4rem 0.8rem', fontSize: '0.9rem' }}>Asset Transfer</Link>
-                <Link to="/reports/payments" className={`nav-item ${isActive('/reports/payments') ? 'active' : ''}`} style={{ padding: '0.4rem 0.8rem', fontSize: '0.9rem' }}>Payment History</Link>
+                {hasPermission('VIEW_REPORTS') && (
+                  <Link to="/reports/transfers" className={`nav-item ${isActive('/reports/transfers') ? 'active' : ''}`} style={{ padding: '0.4rem 0.8rem', fontSize: '0.9rem' }}>Asset Transfer</Link>
+                )}
+                {hasPermission('VIEW_PAYMENT_REPORTS') && (
+                  <Link to="/reports/payments" className={`nav-item ${isActive('/reports/payments') ? 'active' : ''}`} style={{ padding: '0.4rem 0.8rem', fontSize: '0.9rem' }}>Payment History</Link>
+                )}
               </div>
             )}
           </div>
         )}
 
-        {['ADMIN'].includes(user.role) && (
+        {hasPermission('VIEW_USERS') && (
           <div>
             <div className={`nav-item ${isUsersActive ? 'active' : ''}`} onClick={() => setUsersOpen(!usersOpen)} style={{ cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
@@ -144,18 +148,22 @@ const Sidebar = () => {
             </div>
             {usersOpen && (
               <div style={{ marginLeft: '1.5rem', display: 'flex', flexDirection: 'column', gap: '0.5rem', marginTop: '0.5rem', marginBottom: '0.5rem' }}>
-                <Link to="/users/add" className={`nav-item ${isActive('/users/add') ? 'active' : ''}`} style={{ padding: '0.4rem 0.8rem', fontSize: '0.9rem' }}>Add User</Link>
+                {hasPermission('MANAGE_USERS') && (
+                  <Link to="/users/add" className={`nav-item ${isActive('/users/add') ? 'active' : ''}`} style={{ padding: '0.4rem 0.8rem', fontSize: '0.9rem' }}>Add User</Link>
+                )}
                 <Link to="/users/list" className={`nav-item ${isActive('/users/list') ? 'active' : ''}`} style={{ padding: '0.4rem 0.8rem', fontSize: '0.9rem' }}>User List</Link>
-                <Link to="/users/permission-groups" className={`nav-item ${isActive('/users/permission-groups') ? 'active' : ''}`} style={{ padding: '0.4rem 0.8rem', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: 6 }}>
-                  <Shield size={14} /> Permission Groups
-                </Link>
+                {hasPermission('MANAGE_PERMISSION_GROUPS') && (
+                  <Link to="/users/permission-groups" className={`nav-item ${isActive('/users/permission-groups') ? 'active' : ''}`} style={{ padding: '0.4rem 0.8rem', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: 6 }}>
+                    <Shield size={14} /> Permission Groups
+                  </Link>
+                )}
               </div>
             )}
           </div>
         )}
 
         {/* Tender Lifecycle */}
-        {['ADMIN', 'VENDOR'].includes(user.role) && (
+        {(hasPermission('VIEW_TENDERS') || hasPermission('VIEW_CONTRACTS')) && (
           <div>
             <div className={`nav-item ${isTenderActive ? 'active' : ''}`} onClick={() => setTenderOpen(!tenderOpen)} style={{ cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
@@ -166,13 +174,13 @@ const Sidebar = () => {
             </div>
             {tenderOpen && (
               <div style={{ marginLeft: '1.5rem', display: 'flex', flexDirection: 'column', gap: '0.5rem', marginTop: '0.5rem', marginBottom: '0.5rem' }}>
-                {['ADMIN'].includes(user.role) && (
+                {hasPermission('CREATE_TENDER') && (
                   <Link to="/tenders/add" className={`nav-item ${isActive('/tenders/add') ? 'active' : ''}`} style={{ padding: '0.4rem 0.8rem', fontSize: '0.9rem' }}>Add Tender</Link>
                 )}
-                {['ADMIN'].includes(user.role) && (
+                {hasPermission('VIEW_TENDERS') && (
                   <Link to="/tenders" className={`nav-item ${isActive('/tenders') ? 'active' : ''}`} style={{ padding: '0.4rem 0.8rem', fontSize: '0.9rem' }}>Tender List</Link>
                 )}
-                {['VENDOR'].includes(user.role) && (
+                {hasPermission('VIEW_CONTRACTS') && (
                   <Link to="/my-contracts" className={`nav-item ${isActive('/my-contracts') ? 'active' : ''}`} style={{ padding: '0.4rem 0.8rem', fontSize: '0.9rem' }}>My Contracts</Link>
                 )}
               </div>
@@ -181,7 +189,7 @@ const Sidebar = () => {
         )}
 
         {/* Finance Workflow */}
-        {['ADMIN', 'ENGINEER'].includes(user.role) && (
+        {hasPermission('VIEW_FINANCE') && (
           <div>
             <div className={`nav-item ${isFinanceActive ? 'active' : ''}`} onClick={() => setFinanceOpen(!financeOpen)} style={{ cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
@@ -200,7 +208,7 @@ const Sidebar = () => {
         )}
 
         {/* Tasks */}
-        {['ADMIN', 'ENGINEER', 'TECHNICIAN'].includes(user.role) && (
+        {hasPermission('VIEW_TASKS') && (
           <div>
             <div className={`nav-item ${isTasksActive ? 'active' : ''}`} onClick={() => setTasksOpen(!tasksOpen)} style={{ cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
@@ -211,7 +219,7 @@ const Sidebar = () => {
             </div>
             {tasksOpen && (
               <div style={{ marginLeft: '1.5rem', display: 'flex', flexDirection: 'column', gap: '0.5rem', marginTop: '0.5rem', marginBottom: '0.5rem' }}>
-                {['ADMIN', 'ENGINEER'].includes(user.role) && (
+                {hasPermission('CREATE_TASK') && (
                   <Link to="/tasks/add" className={`nav-item ${isActive('/tasks/add') ? 'active' : ''}`} style={{ padding: '0.4rem 0.8rem', fontSize: '0.9rem' }}>Add Task</Link>
                 )}
                 <Link to="/tasks/list" className={`nav-item ${isActive('/tasks/list') ? 'active' : ''}`} style={{ padding: '0.4rem 0.8rem', fontSize: '0.9rem' }}>Task List</Link>
@@ -224,7 +232,8 @@ const Sidebar = () => {
         )}
 
         {/* Document & Drawing */}
-        <div>
+        {hasPermission('VIEW_DOCUMENTS') && (
+          <div>
           <div
             className={`nav-item ${isDocumentsActive ? 'active' : ''}`}
             onClick={() => setDocsOpen(!docsOpen)}
@@ -243,6 +252,7 @@ const Sidebar = () => {
             </div>
           )}
         </div>
+        )}
 
         {/* User Manual */}
         <a
