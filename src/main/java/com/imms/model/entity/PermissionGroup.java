@@ -18,5 +18,9 @@ public class PermissionGroup {
     private String name; // e.g. "Site Engineers", "Finance Team"
 
     @Column(columnDefinition = "TEXT")
-    private String permissions; // Comma-separated: "CREATE_ASSET,VIEW_REPORTS,MANAGE_PROPERTIES"
+    private String permissions; // Comma-separated: "CREATE_ASSET,VIEW_REPORTS,MANAGE_INFRASTRUCTURE"
+
+    // Role this group applies to: ADMIN, ENGINEER, TECHNICIAN, VENDOR
+    private String targetRole;
 }
+

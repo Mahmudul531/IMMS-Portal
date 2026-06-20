@@ -35,10 +35,19 @@ import FinanceApprovals from './pages/FinanceApprovals';
 import FinanceProjects from './pages/FinanceProjects';
 import Sidebar from './components/Sidebar';
 // Protected Route Component
-const ProtectedRoute = ({ children, allowedRoles }: { children: ReactElement, allowedRoles?: string[] }) => {
-  const { user } = useAuth();
+const ProtectedRoute = ({ children, allowedRoles, requiredPermission }: { children: ReactElement, allowedRoles?: string[], requiredPermission?: string | string[] }) => {
+  const { user, hasPermission } = useAuth();
   if (!user) return <Navigate to="/login" replace />;
   if (allowedRoles && !allowedRoles.includes(user.role)) return <Navigate to="/dashboard" replace />;
+  
+  if (requiredPermission) {
+      if (Array.isArray(requiredPermission)) {
+          const hasAny = requiredPermission.some(p => hasPermission(p));
+          if (!hasAny) return <Navigate to="/dashboard" replace />;
+      } else {
+          if (!hasPermission(requiredPermission)) return <Navigate to="/dashboard" replace />;
+      }
+  }
   return children;
 };
 
@@ -63,61 +72,61 @@ function App() {
           <Route path="/dashboard" element={<ProtectedRoute allowedRoles={['ADMIN', 'ENGINEER', 'TECHNICIAN', 'VENDOR']}><AppLayout><Dashboard /></AppLayout></ProtectedRoute>} />
 
           {/* Properties */}
-          <Route path="/properties" element={<ProtectedRoute allowedRoles={['ADMIN', 'ENGINEER']}><Navigate to="/properties/list" replace /></ProtectedRoute>} />
-          <Route path="/properties/add" element={<ProtectedRoute allowedRoles={['ADMIN', 'ENGINEER']}><AppLayout><PropertyAdd /></AppLayout></ProtectedRoute>} />
-          <Route path="/properties/list" element={<ProtectedRoute allowedRoles={['ADMIN', 'ENGINEER']}><AppLayout><PropertyList /></AppLayout></ProtectedRoute>} />
-          <Route path="/properties/setup" element={<ProtectedRoute allowedRoles={['ADMIN']}><AppLayout><PropertySetup /></AppLayout></ProtectedRoute>} />
-          <Route path="/properties/:id" element={<ProtectedRoute allowedRoles={['ADMIN', 'ENGINEER', 'TECHNICIAN']}><AppLayout><PropertyDetail /></AppLayout></ProtectedRoute>} />
+          <Route path="/properties" element={<ProtectedRoute requiredPermission="VIEW_INFRASTRUCTURE"><Navigate to="/properties/list" replace /></ProtectedRoute>} />
+          <Route path="/properties/add" element={<ProtectedRoute requiredPermission="CREATE_INFRASTRUCTURE"><AppLayout><PropertyAdd /></AppLayout></ProtectedRoute>} />
+          <Route path="/properties/list" element={<ProtectedRoute requiredPermission="VIEW_INFRASTRUCTURE"><AppLayout><PropertyList /></AppLayout></ProtectedRoute>} />
+          <Route path="/properties/setup" element={<ProtectedRoute requiredPermission="CREATE_INFRASTRUCTURE"><AppLayout><PropertySetup /></AppLayout></ProtectedRoute>} />
+          <Route path="/properties/:id" element={<ProtectedRoute requiredPermission="VIEW_INFRASTRUCTURE"><AppLayout><PropertyDetail /></AppLayout></ProtectedRoute>} />
 
           {/* Assets */}
-          <Route path="/assets" element={<ProtectedRoute allowedRoles={['ADMIN', 'ENGINEER', 'TECHNICIAN']}><Navigate to="/assets/list" replace /></ProtectedRoute>} />
-          <Route path="/assets/add" element={<ProtectedRoute allowedRoles={['ADMIN', 'ENGINEER', 'TECHNICIAN']}><AppLayout><AssetAdd /></AppLayout></ProtectedRoute>} />
-          <Route path="/assets/list" element={<ProtectedRoute allowedRoles={['ADMIN', 'ENGINEER', 'TECHNICIAN']}><AppLayout><AssetList /></AppLayout></ProtectedRoute>} />
-          <Route path="/assets/setup" element={<ProtectedRoute allowedRoles={['ADMIN']}><AppLayout><AssetSetup /></AppLayout></ProtectedRoute>} />
-          <Route path="/assets/:id" element={<ProtectedRoute allowedRoles={['ADMIN', 'ENGINEER', 'TECHNICIAN']}><AppLayout><AssetDetail /></AppLayout></ProtectedRoute>} />
+          <Route path="/assets" element={<ProtectedRoute requiredPermission="VIEW_ASSETS"><Navigate to="/assets/list" replace /></ProtectedRoute>} />
+          <Route path="/assets/add" element={<ProtectedRoute requiredPermission="CREATE_ASSET"><AppLayout><AssetAdd /></AppLayout></ProtectedRoute>} />
+          <Route path="/assets/list" element={<ProtectedRoute requiredPermission="VIEW_ASSETS"><AppLayout><AssetList /></AppLayout></ProtectedRoute>} />
+          <Route path="/assets/setup" element={<ProtectedRoute requiredPermission="CREATE_ASSET"><AppLayout><AssetSetup /></AppLayout></ProtectedRoute>} />
+          <Route path="/assets/:id" element={<ProtectedRoute requiredPermission="VIEW_ASSETS"><AppLayout><AssetDetail /></AppLayout></ProtectedRoute>} />
 
           {/* Projects / Work Orders */}
-          <Route path="/work-orders" element={<ProtectedRoute allowedRoles={['ADMIN', 'ENGINEER', 'VENDOR']}><Navigate to="/work-orders/list" replace /></ProtectedRoute>} />
-          <Route path="/work-orders/add" element={<ProtectedRoute allowedRoles={['ADMIN']}><AppLayout><ProjectAdd /></AppLayout></ProtectedRoute>} />
-          <Route path="/work-orders/list" element={<ProtectedRoute allowedRoles={['ADMIN', 'ENGINEER', 'VENDOR']}><AppLayout><ProjectList /></AppLayout></ProtectedRoute>} />
-          <Route path="/work-orders/setup" element={<ProtectedRoute allowedRoles={['ADMIN']}><AppLayout><ProjectSetup /></AppLayout></ProtectedRoute>} />
-          <Route path="/work-orders/:id" element={<ProtectedRoute allowedRoles={['ADMIN', 'ENGINEER', 'VENDOR']}><AppLayout><ProjectDetail /></AppLayout></ProtectedRoute>} />
+          <Route path="/work-orders" element={<ProtectedRoute requiredPermission={['VIEW_WORK_ORDERS', 'VIEW_VENDOR_PROJECTS']}><Navigate to="/work-orders/list" replace /></ProtectedRoute>} />
+          <Route path="/work-orders/add" element={<ProtectedRoute requiredPermission="CREATE_WORK_ORDER"><AppLayout><ProjectAdd /></AppLayout></ProtectedRoute>} />
+          <Route path="/work-orders/list" element={<ProtectedRoute requiredPermission={['VIEW_WORK_ORDERS', 'VIEW_VENDOR_PROJECTS']}><AppLayout><ProjectList /></AppLayout></ProtectedRoute>} />
+          <Route path="/work-orders/setup" element={<ProtectedRoute requiredPermission="CREATE_WORK_ORDER"><AppLayout><ProjectSetup /></AppLayout></ProtectedRoute>} />
+          <Route path="/work-orders/:id" element={<ProtectedRoute requiredPermission={['VIEW_WORK_ORDERS', 'VIEW_VENDOR_PROJECTS']}><AppLayout><ProjectDetail /></AppLayout></ProtectedRoute>} />
 
           {/* Users */}
-          <Route path="/users" element={<ProtectedRoute allowedRoles={['ADMIN']}><Navigate to="/users/list" replace /></ProtectedRoute>} />
-          <Route path="/users/list" element={<ProtectedRoute allowedRoles={['ADMIN']}><AppLayout><UserList /></AppLayout></ProtectedRoute>} />
-          <Route path="/users/add" element={<ProtectedRoute allowedRoles={['ADMIN']}><AppLayout><UserAdd /></AppLayout></ProtectedRoute>} />
-          <Route path="/users/permission-groups" element={<ProtectedRoute allowedRoles={['ADMIN']}><AppLayout><PermissionGroups /></AppLayout></ProtectedRoute>} />
+          <Route path="/users" element={<ProtectedRoute requiredPermission="VIEW_USERS"><Navigate to="/users/list" replace /></ProtectedRoute>} />
+          <Route path="/users/list" element={<ProtectedRoute requiredPermission="VIEW_USERS"><AppLayout><UserList /></AppLayout></ProtectedRoute>} />
+          <Route path="/users/add" element={<ProtectedRoute requiredPermission="MANAGE_USERS"><AppLayout><UserAdd /></AppLayout></ProtectedRoute>} />
+          <Route path="/users/permission-groups" element={<ProtectedRoute requiredPermission="MANAGE_PERMISSION_GROUPS"><AppLayout><PermissionGroups /></AppLayout></ProtectedRoute>} />
 
           {/* Personnel Detail — accessible from User List and Property Details */}
           <Route path="/personnel/:id" element={<ProtectedRoute allowedRoles={['ADMIN', 'ENGINEER', 'TECHNICIAN']}><AppLayout><PersonnelDetail /></AppLayout></ProtectedRoute>} />
 
           {/* Asset Transfer */}
-          <Route path="/asset-transfer" element={<ProtectedRoute allowedRoles={['ADMIN', 'ENGINEER']}><AppLayout><AssetTransfer /></AppLayout></ProtectedRoute>} />
+          <Route path="/asset-transfer" element={<ProtectedRoute requiredPermission="TRANSFER_ASSET"><AppLayout><AssetTransfer /></AppLayout></ProtectedRoute>} />
 
           {/* Reports */}
-          <Route path="/reports" element={<ProtectedRoute allowedRoles={['ADMIN', 'ENGINEER']}><Navigate to="/reports/transfers" replace /></ProtectedRoute>} />
-          <Route path="/reports/transfers" element={<ProtectedRoute allowedRoles={['ADMIN', 'ENGINEER']}><AppLayout><Reports /></AppLayout></ProtectedRoute>} />
-          <Route path="/reports/payments" element={<ProtectedRoute allowedRoles={['ADMIN', 'ENGINEER']}><AppLayout><PaymentReports /></AppLayout></ProtectedRoute>} />
+          <Route path="/reports" element={<ProtectedRoute requiredPermission="VIEW_REPORTS"><Navigate to="/reports/transfers" replace /></ProtectedRoute>} />
+          <Route path="/reports/transfers" element={<ProtectedRoute requiredPermission="VIEW_REPORTS"><AppLayout><Reports /></AppLayout></ProtectedRoute>} />
+          <Route path="/reports/payments" element={<ProtectedRoute requiredPermission="VIEW_PAYMENT_REPORTS"><AppLayout><PaymentReports /></AppLayout></ProtectedRoute>} />
           {/* Tenders & Contracts */}
-          <Route path="/tenders/add" element={<ProtectedRoute allowedRoles={['ADMIN']}><AppLayout><TenderAdd /></AppLayout></ProtectedRoute>} />
-          <Route path="/tenders" element={<ProtectedRoute allowedRoles={['ADMIN']}><AppLayout><TenderList /></AppLayout></ProtectedRoute>} />
-          <Route path="/my-contracts" element={<ProtectedRoute allowedRoles={['VENDOR']}><AppLayout><MyContracts /></AppLayout></ProtectedRoute>} />
+          <Route path="/tenders/add" element={<ProtectedRoute requiredPermission="CREATE_TENDER"><AppLayout><TenderAdd /></AppLayout></ProtectedRoute>} />
+          <Route path="/tenders" element={<ProtectedRoute requiredPermission="VIEW_TENDERS"><AppLayout><TenderList /></AppLayout></ProtectedRoute>} />
+          <Route path="/my-contracts" element={<ProtectedRoute requiredPermission="VIEW_CONTRACTS"><AppLayout><MyContracts /></AppLayout></ProtectedRoute>} />
 
           {/* Finance */}
-          <Route path="/finance/approvals" element={<ProtectedRoute allowedRoles={['ADMIN', 'ENGINEER']}><AppLayout><FinanceApprovals /></AppLayout></ProtectedRoute>} />
-          <Route path="/finance/projects" element={<ProtectedRoute allowedRoles={['ADMIN', 'ENGINEER']}><AppLayout><FinanceProjects /></AppLayout></ProtectedRoute>} />
+          <Route path="/finance/approvals" element={<ProtectedRoute requiredPermission="VIEW_FINANCE"><AppLayout><FinanceApprovals /></AppLayout></ProtectedRoute>} />
+          <Route path="/finance/projects" element={<ProtectedRoute requiredPermission="VIEW_FINANCE"><AppLayout><FinanceProjects /></AppLayout></ProtectedRoute>} />
 
           {/* Tasks & Gantt */}
-          <Route path="/tasks" element={<ProtectedRoute allowedRoles={['ADMIN', 'ENGINEER', 'TECHNICIAN']}><Navigate to="/tasks/list" replace /></ProtectedRoute>} />
-          <Route path="/tasks/add" element={<ProtectedRoute allowedRoles={['ADMIN', 'ENGINEER']}><AppLayout><TaskAdd /></AppLayout></ProtectedRoute>} />
-          <Route path="/tasks/list" element={<ProtectedRoute allowedRoles={['ADMIN', 'ENGINEER', 'TECHNICIAN']}><AppLayout><TaskList /></AppLayout></ProtectedRoute>} />
-          <Route path="/tasks/gantt" element={<ProtectedRoute allowedRoles={['ADMIN', 'ENGINEER', 'TECHNICIAN']}><AppLayout><GanttChart /></AppLayout></ProtectedRoute>} />
+          <Route path="/tasks" element={<ProtectedRoute requiredPermission="VIEW_TASKS"><Navigate to="/tasks/list" replace /></ProtectedRoute>} />
+          <Route path="/tasks/add" element={<ProtectedRoute requiredPermission="CREATE_TASK"><AppLayout><TaskAdd /></AppLayout></ProtectedRoute>} />
+          <Route path="/tasks/list" element={<ProtectedRoute requiredPermission="VIEW_TASKS"><AppLayout><TaskList /></AppLayout></ProtectedRoute>} />
+          <Route path="/tasks/gantt" element={<ProtectedRoute requiredPermission="VIEW_TASKS"><AppLayout><GanttChart /></AppLayout></ProtectedRoute>} />
 
           {/* Documents & Drawings */}
-          <Route path="/documents" element={<ProtectedRoute allowedRoles={['ADMIN', 'ENGINEER', 'TECHNICIAN', 'VENDOR']}><Navigate to="/documents/list" replace /></ProtectedRoute>} />
-          <Route path="/documents/add" element={<ProtectedRoute allowedRoles={['ADMIN', 'ENGINEER', 'TECHNICIAN']}><AppLayout><DocumentAdd /></AppLayout></ProtectedRoute>} />
-          <Route path="/documents/list" element={<ProtectedRoute allowedRoles={['ADMIN', 'ENGINEER', 'TECHNICIAN', 'VENDOR']}><AppLayout><DocumentList /></AppLayout></ProtectedRoute>} />
+          <Route path="/documents" element={<ProtectedRoute requiredPermission="VIEW_DOCUMENTS"><Navigate to="/documents/list" replace /></ProtectedRoute>} />
+          <Route path="/documents/add" element={<ProtectedRoute requiredPermission="UPLOAD_DOCUMENT"><AppLayout><DocumentAdd /></AppLayout></ProtectedRoute>} />
+          <Route path="/documents/list" element={<ProtectedRoute requiredPermission="VIEW_DOCUMENTS"><AppLayout><DocumentList /></AppLayout></ProtectedRoute>} />
         </Routes>
       </Router>
     </AuthProvider>
