@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { Building2, Package, Inbox, ArrowLeft, Loader2, MapPin, Briefcase, Image, ChevronLeft, ChevronRight, Map as MapIcon, Phone, Mail, User } from 'lucide-react';
+import { Building2, Package, Inbox, ArrowLeft, Loader2, MapPin, Briefcase, Image, ChevronLeft, ChevronRight, Map as MapIcon, Phone, Mail, User, Link2 } from 'lucide-react';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import toast from 'react-hot-toast';
 
@@ -20,6 +20,7 @@ interface Property {
   description: string;
   active: boolean;
   propertyType: { id: number, name: string } | null;
+  parentProperty: { id: number, name: string, code: string } | null;
   locLat: string;
   locLon: string;
 }
@@ -183,7 +184,21 @@ const PropertyDetail = () => {
               {property.code && <span style={{ background: '#f1f5f9', padding: '2px 8px', borderRadius: '4px', fontSize: '0.9rem', color: 'var(--text-muted)', border: '1px solid var(--border)' }}>{property.code}</span>}
               {!property.active && <span style={{ background: '#f8d7da', color: '#842029', padding: '2px 8px', borderRadius: '4px', fontSize: '0.85rem' }}>Inactive</span>}
             </div>
-            {property.propertyType && <div style={{ color: 'var(--text-muted)', marginBottom: '1rem', fontWeight: 500 }}>Type: {property.propertyType.name}</div>}
+            {property.propertyType && <div style={{ color: 'var(--text-muted)', marginBottom: '0.5rem', fontWeight: 500 }}>Type: {property.propertyType.name}</div>}
+            {property.parentProperty && (
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: 'var(--primary)', fontWeight: 500, marginBottom: '1rem', fontSize: '0.92rem' }}>
+                <Link2 size={14} />
+                <span>Part of:</span>
+                <span
+                  style={{ textDecoration: 'underline', cursor: 'pointer', fontWeight: 700 }}
+                  onClick={() => navigate(`/properties/${property.parentProperty!.id}`)}
+                  title="View parent infrastructure"
+                >
+                  {property.parentProperty.name}
+                  {property.parentProperty.code ? ` (${property.parentProperty.code})` : ''}
+                </span>
+              </div>
+            )}
           </div>
           <button 
             onClick={toggleStatus}

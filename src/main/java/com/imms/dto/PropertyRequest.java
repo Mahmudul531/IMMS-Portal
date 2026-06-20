@@ -20,4 +20,5 @@ public class PropertyRequest {
     
     private String locLat;
     private String locLon;
+    private Long parentPropertyId;
 }

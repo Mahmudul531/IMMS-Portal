@@ -27,6 +27,10 @@ public class Property {
     @JoinColumn(name = "property_type_id")
     private PropertyType propertyType;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "parent_property_id")
+    private Property parentProperty;
+
     private String managerName;
     private String contactPhone;
     private String contactEmail;

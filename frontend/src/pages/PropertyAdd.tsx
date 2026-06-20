@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useSearchParams, useNavigate } from 'react-router-dom';
-import { Plus, Map as MapIcon, X, Image, Search, Save, ArrowLeft } from 'lucide-react';
+import { Plus, Map as MapIcon, X, Image, Search, Save, ArrowLeft, Link2 } from 'lucide-react';
 import { MapContainer, TileLayer, Marker, useMapEvents, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
@@ -75,11 +75,13 @@ const PropertyAdd = () => {
     // DB References for dropdowns
     const [propertyTypes, setPropertyTypes] = useState<{id: number, name: string}[]>([]);
     const [cities, setCities] = useState<{id: number, name: string}[]>([]);
+    const [allInfrastructures, setAllInfrastructures] = useState<{id: number, name: string, code: string}[]>([]);
 
     // Form States
     const [name, setName] = useState('');
     const [code, setCode] = useState('');
     const [propertyTypeId, setPropertyTypeId] = useState('');
+    const [parentPropertyId, setParentPropertyId] = useState('');
     const [managerName, setManagerName] = useState('');
     const [contactPhone, setContactPhone] = useState('');
     const [contactEmail, setContactEmail] = useState('');
@@ -115,12 +117,14 @@ const PropertyAdd = () => {
 
     const fetchDropdowns = async () => {
         try {
-            const [typeRes, cityRes] = await Promise.all([
+            const [typeRes, cityRes, propRes] = await Promise.all([
                 axios.get(`${API}/api/property-types`),
-                axios.get(`${API}/api/cities`)
+                axios.get(`${API}/api/cities`),
+                axios.get(`${API}/api/properties`)
             ]);
             setPropertyTypes(typeRes.data);
-            setCities(cityRes.data.filter((c: any) => c.active)); // Only active cities
+            setCities(cityRes.data.filter((c: any) => c.active));
+            setAllInfrastructures(Array.isArray(propRes.data) ? propRes.data : []);
         } catch (_) {}
     };
 
@@ -132,13 +136,14 @@ const PropertyAdd = () => {
                 setName(prop.name || '');
                 setCode(prop.code || '');
                 setPropertyTypeId(prop.propertyType?.id?.toString() || '');
+                setParentPropertyId(prop.parentProperty?.id?.toString() || '');
                 setManagerName(prop.managerName || '');
                 setContactPhone(prop.contactPhone || '');
                 setContactEmail(prop.contactEmail || '');
                 setDescription(prop.description || '');
                 setAddress(prop.address || '');
                 setCity(prop.city || '');
-                setActive(prop.active !== false); // default to true
+                setActive(prop.active !== false);
                 setLatitude(prop.locLat || '');
                 setLongitude(prop.locLon || '');
                 if (prop.locLat && prop.locLon) setMarkerPos([parseFloat(prop.locLat), parseFloat(prop.locLon)]);
@@ -147,7 +152,7 @@ const PropertyAdd = () => {
             const imgRes = await axios.get(`${API}/api/properties/${id}/images`);
             setExistingImages(imgRes.data);
         } catch (error) {
-            toast.error('Failed to load property data');
+            toast.error('Failed to load infrastructure data');
         }
     };
 
@@ -180,22 +185,23 @@ const PropertyAdd = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setUploading(true);
-        const payload = { 
+        const payload = {
             name, code, propertyTypeId: propertyTypeId ? parseInt(propertyTypeId) : null,
+            parentPropertyId: parentPropertyId ? parseInt(parentPropertyId) : null,
             managerName, contactPhone, contactEmail, description,
             address, city, country, active,
-            locLat: latitude, locLon: longitude 
+            locLat: latitude, locLon: longitude
         };
         try {
             let savedId: number;
             if (editingId) {
                 await axios.put(`${API}/api/properties/${editingId}`, payload);
                 savedId = parseInt(editingId);
-                toast.success('Property updated successfully');
+                toast.success('Infrastructure updated successfully');
             } else {
                 const { data } = await axios.post(`${API}/api/properties`, payload);
                 savedId = data.id;
-                toast.success('Property created successfully');
+                toast.success('Infrastructure created successfully');
             }
             if (pendingFiles.length > 0) await uploadFiles(savedId);
             
@@ -204,7 +210,7 @@ const PropertyAdd = () => {
             if (error.response?.data) {
                 toast.error(error.response.data);
             } else {
-                toast.error('Failed to save property. Please check required fields including unique code.');
+                toast.error('Failed to save infrastructure. Please check required fields including unique code.');
             }
         } finally { 
             setUploading(false); 
@@ -246,13 +252,16 @@ const PropertyAdd = () => {
         finally { setMapSearching(false); }
     };
 
+    // Exclude the current infrastructure from parent dropdown to avoid self-referencing
+    const parentOptions = allInfrastructures.filter(p => !editingId || p.id !== parseInt(editingId));
+
     return (
         <div className="page-container fade-in">
             <div className="page-header" style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
                 <button className="action-btn" onClick={() => navigate('/properties/list')} title="Back to List">
                     <ArrowLeft size={24} />
                 </button>
-                <h2 style={{ margin: 0 }}>{editingId ? 'Edit Property' : 'Add Property'}</h2>
+                <h2 style={{ margin: 0 }}>{editingId ? 'Edit Infrastructure' : 'Add Infrastructure'}</h2>
             </div>
 
             <form onSubmit={handleSubmit}>
@@ -262,7 +271,7 @@ const PropertyAdd = () => {
                         <h3 style={{ margin: 0, paddingBottom: '0.5rem', borderBottom: '1px solid var(--border)' }}>Basic Info</h3>
                         
                         <div className="form-group">
-                            <label className="form-label">Property Name <span style={{color: 'red'}}>*</span></label>
+                            <label className="form-label">Infrastructure Name <span style={{color: 'red'}}>*</span></label>
                             <input className="form-input" value={name} onChange={e => setName(e.target.value)} required />
                         </div>
                         <div className="form-group">
@@ -270,12 +279,26 @@ const PropertyAdd = () => {
                             <input className="form-input" value={code} onChange={e => setCode(e.target.value)} required placeholder="e.g. WH-001" />
                         </div>
                         <div className="form-group">
-                            <label className="form-label">Property Type</label>
+                            <label className="form-label">Infrastructure Type</label>
                             <select className="form-input" value={propertyTypeId} onChange={e => setPropertyTypeId(e.target.value)}>
                                 <option value="">-- Select Type --</option>
                                 {propertyTypes.map(t => <option key={t.id} value={t.id}>{t.name}</option>)}
                             </select>
                         </div>
+
+                        {/* Parent Infrastructure */}
+                        <div className="form-group">
+                            <label className="form-label" style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                                <Link2 size={14} /> Parent Infrastructure <span style={{ color: 'var(--text-muted)', fontWeight: 400 }}>(optional)</span>
+                            </label>
+                            <select className="form-input" value={parentPropertyId} onChange={e => setParentPropertyId(e.target.value)}>
+                                <option value="">-- None (Top-level) --</option>
+                                {parentOptions.map(p => (
+                                    <option key={p.id} value={p.id}>{p.name}{p.code ? ` (${p.code})` : ''}</option>
+                                ))}
+                            </select>
+                        </div>
+
                         <div className="form-group">
                             <label className="form-label">Manager Name</label>
                             <input className="form-input" value={managerName} onChange={e => setManagerName(e.target.value)} />
@@ -389,7 +412,7 @@ const PropertyAdd = () => {
                 <div style={{ marginTop: '2rem', display: 'flex', justifyContent: 'flex-end', gap: '1rem' }}>
                     <button type="button" className="btn" onClick={() => navigate('/properties/list')} style={{ background: 'var(--border)' }}>Cancel</button>
                     <button type="submit" className="btn btn-primary" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }} disabled={uploading}>
-                        <Save size={18} /> {uploading ? 'Saving...' : (editingId ? 'Update Property' : 'Save Property')}
+                        <Save size={18} /> {uploading ? 'Saving...' : (editingId ? 'Update Infrastructure' : 'Save Infrastructure')}
                     </button>
                 </div>
             </form>

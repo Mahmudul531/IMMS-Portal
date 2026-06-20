@@ -59,6 +59,13 @@ public class PropertyController {
             PropertyType pt = propertyTypeRepository.findById(request.getPropertyTypeId()).orElse(null);
             property.setPropertyType(pt);
         }
+
+        if (request.getParentPropertyId() != null) {
+            com.imms.model.entity.Property parent = propertyRepository.findById(request.getParentPropertyId()).orElse(null);
+            property.setParentProperty(parent);
+        } else {
+            property.setParentProperty(null);
+        }
         
         property.setLocLat(request.getLocLat());
         property.setLocLon(request.getLocLon());
@@ -96,6 +103,13 @@ public class PropertyController {
             property.setPropertyType(pt);
         } else {
             property.setPropertyType(null);
+        }
+
+        if (request.getParentPropertyId() != null) {
+            com.imms.model.entity.Property parent = propertyRepository.findById(request.getParentPropertyId()).orElse(null);
+            property.setParentProperty(parent);
+        } else {
+            property.setParentProperty(null);
         }
         
         property.setLocLat(request.getLocLat());

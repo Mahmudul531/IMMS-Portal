@@ -120,8 +120,8 @@ const PropertyList = () => {
     return (
         <div className="page-container fade-in">
             <div className="page-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <h2>Registered Properties</h2>
-                <button className="btn btn-primary" onClick={() => navigate('/properties/add')}>Add New Property</button>
+                <h2>Registered Infrastructures</h2>
+                <button className="btn btn-primary" onClick={() => navigate('/properties/add')}>Add New Infrastructure</button>
             </div>
 
             {lightboxSrc && (
@@ -131,26 +131,43 @@ const PropertyList = () => {
             )}
 
             <div className="card" style={{ marginBottom: '2rem' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem', background: '#f8fafc', padding: '1rem', borderRadius: '8px', border: '1px solid var(--border)' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: 600, color: 'var(--text)' }}>
-                        <Filter size={18} /> Filters
+                {/* Filters — all fields side by side */}
+                <div style={{
+                    display: 'flex', alignItems: 'center', gap: '0.75rem',
+                    flexWrap: 'wrap', marginBottom: '1.5rem',
+                    background: '#f8fafc', padding: '0.85rem 1rem',
+                    borderRadius: '8px', border: '1px solid var(--border)'
+                }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontWeight: 600, color: 'var(--text)', whiteSpace: 'nowrap', flexShrink: 0 }}>
+                        <Filter size={16} /> Filters:
                     </div>
-                    <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-                        <input className="form-input" type="text" placeholder="Search by name, code or address..." value={searchTerm}
-                            onChange={e => { setSearchTerm(e.target.value); setCurrentPage(1); }}
-                            style={{ padding: '0.4rem 0.8rem', minWidth: '220px' }} />
-                        
-                        <select className="form-input" value={filterCity} onChange={e => { setFilterCity(e.target.value); setCurrentPage(1); }} style={{ padding: '0.4rem 0.8rem', minWidth: '150px' }}>
-                            <option value="">All Cities</option>
-                            {cities.map(c => <option key={c.id} value={c.name}>{c.name}</option>)}
-                        </select>
-
-                        <select className="form-input" value={filterStatus} onChange={e => { setFilterStatus(e.target.value); setCurrentPage(1); }} style={{ padding: '0.4rem 0.8rem', minWidth: '150px' }}>
-                            <option value="ALL">All Statuses</option>
-                            <option value="ACTIVE">Active</option>
-                            <option value="INACTIVE">Inactive</option>
-                        </select>
-                    </div>
+                    <input
+                        className="form-input"
+                        type="text"
+                        placeholder="Search by name, code or address..."
+                        value={searchTerm}
+                        onChange={e => { setSearchTerm(e.target.value); setCurrentPage(1); }}
+                        style={{ padding: '0.4rem 0.8rem', flex: '1 1 200px', minWidth: 0 }}
+                    />
+                    <select
+                        className="form-input"
+                        value={filterCity}
+                        onChange={e => { setFilterCity(e.target.value); setCurrentPage(1); }}
+                        style={{ padding: '0.4rem 0.8rem', flex: '0 1 160px', minWidth: 120 }}
+                    >
+                        <option value="">All Cities</option>
+                        {cities.map(c => <option key={c.id} value={c.name}>{c.name}</option>)}
+                    </select>
+                    <select
+                        className="form-input"
+                        value={filterStatus}
+                        onChange={e => { setFilterStatus(e.target.value); setCurrentPage(1); }}
+                        style={{ padding: '0.4rem 0.8rem', flex: '0 1 150px', minWidth: 120 }}
+                    >
+                        <option value="ALL">All Statuses</option>
+                        <option value="ACTIVE">Active</option>
+                        <option value="INACTIVE">Inactive</option>
+                    </select>
                 </div>
 
                 {listLoading ? (
@@ -232,7 +249,7 @@ const PropertyList = () => {
                                 </tr>
                             ))}
                             {filteredProps.length === 0 && (
-                                <tr><td colSpan={6} style={{ textAlign: 'center', color: 'var(--text-muted)' }}>No properties found.</td></tr>
+                                <tr><td colSpan={6} style={{ textAlign: 'center', color: 'var(--text-muted)' }}>No infrastructures found.</td></tr>
                             )}
                         </tbody>
                     </table>

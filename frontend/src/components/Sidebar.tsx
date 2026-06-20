@@ -48,16 +48,16 @@ const Sidebar = () => {
             <div className={`nav-item ${isPropertiesActive ? 'active' : ''}`} onClick={() => setPropertiesOpen(!propertiesOpen)} style={{ cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                 <Building2 size={20} />
-                Properties
+                Infrastructure
               </div>
               {propertiesOpen ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
             </div>
             {propertiesOpen && (
               <div style={{ marginLeft: '1.5rem', display: 'flex', flexDirection: 'column', gap: '0.5rem', marginTop: '0.5rem', marginBottom: '0.5rem' }}>
-                <Link to="/properties/add" className={`nav-item ${isActive('/properties/add') ? 'active' : ''}`} style={{ padding: '0.4rem 0.8rem', fontSize: '0.9rem' }}>Add Property</Link>
-                <Link to="/properties/list" className={`nav-item ${isActive('/properties/list') ? 'active' : ''}`} style={{ padding: '0.4rem 0.8rem', fontSize: '0.9rem' }}>Property List</Link>
+                <Link to="/properties/add" className={`nav-item ${isActive('/properties/add') ? 'active' : ''}`} style={{ padding: '0.4rem 0.8rem', fontSize: '0.9rem' }}>Add Infrastructure</Link>
+                <Link to="/properties/list" className={`nav-item ${isActive('/properties/list') ? 'active' : ''}`} style={{ padding: '0.4rem 0.8rem', fontSize: '0.9rem' }}>Infrastructure List</Link>
                 {['ADMIN'].includes(user.role) && (
-                  <Link to="/properties/setup" className={`nav-item ${isActive('/properties/setup') ? 'active' : ''}`} style={{ padding: '0.4rem 0.8rem', fontSize: '0.9rem' }}>Property Setup</Link>
+                  <Link to="/properties/setup" className={`nav-item ${isActive('/properties/setup') ? 'active' : ''}`} style={{ padding: '0.4rem 0.8rem', fontSize: '0.9rem' }}>Infrastructure Setup</Link>
                 )}
               </div>
             )}
