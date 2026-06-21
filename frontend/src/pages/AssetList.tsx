@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Trash2, Edit2, Plus, History, ExternalLink, Filter } from 'lucide-react';
 import { toast } from 'react-hot-toast';
+import { useAuth } from '../context/AuthContext';
 
 const API = import.meta.env.VITE_API_URL || 'http://localhost:8080';
 
@@ -20,6 +21,7 @@ interface AssetImage { id: number; imageData: string; }
 
 const AssetList = () => {
     const navigate = useNavigate();
+    const { hasPermission } = useAuth();
     
     const [assets, setAssets] = useState<Asset[]>([]);
     const [listLoading, setListLoading] = useState(true);
@@ -58,12 +60,13 @@ const AssetList = () => {
 
     const handleDelete = async (id: number) => {
         if (!confirm('Are you sure you want to delete this asset?')) return;
-        try { 
-            await axios.delete(`${API}/api/assets/${id}`); 
-            toast.success("Deleted successfully");
-            fetchData(); 
-        } catch (err) { 
-            toast.error("Failed to delete asset");
+        try {
+            await axios.delete(`${API}/api/assets/${id}`);
+            toast.success('Deleted successfully');
+            fetchData();
+        } catch (err: any) {
+            const msg = err.response?.data || err.message;
+            toast.error(typeof msg === 'string' ? msg : 'Failed to delete asset — it may be linked to work orders.');
         }
     };
 
@@ -96,9 +99,11 @@ const AssetList = () => {
         <div className="page-container fade-in">
             <div className="page-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <h2>Registered Assets</h2>
-                <button className="btn btn-primary" onClick={() => navigate('/assets/add')} style={{ width: 'auto', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <Plus size={18} /> Add New Asset
-                </button>
+                {hasPermission('CREATE_ASSET') && (
+                    <button className="btn btn-primary" onClick={() => navigate('/assets/add')} style={{ width: 'auto', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <Plus size={18} /> Add New Asset
+                    </button>
+                )}
             </div>
             
             <div className="card" style={{ marginBottom: '2rem' }}>
@@ -200,9 +205,13 @@ const AssetList = () => {
                                     </td>
                                     <td>
                                         <div style={{ display: 'flex', gap: '0.4rem', justifyContent: 'flex-start' }}>
-                                            <button className="action-btn" title="Edit" onClick={() => navigate(`/assets/add?id=${asset.id}`)}><Edit2 size={18} /></button>
+                                            {hasPermission('EDIT_ASSET') && (
+                                                <button className="action-btn" title="Edit" onClick={() => navigate(`/assets/add?id=${asset.id}`)}><Edit2 size={18} /></button>
+                                            )}
                                             <button className="action-btn" title="View History" onClick={() => navigate(`/assets/${asset.id}`)} style={{ color: 'var(--warning)' }}><History size={18} /></button>
-                                            <button className="action-btn" title="Delete" style={{ color: 'var(--danger)' }} onClick={() => handleDelete(asset.id)}><Trash2 size={18} /></button>
+                                            {hasPermission('DELETE_ASSET') && (
+                                                <button className="action-btn" title="Delete" style={{ color: 'var(--danger)' }} onClick={() => handleDelete(asset.id)}><Trash2 size={18} /></button>
+                                            )}
                                         </div>
                                     </td>
                                 </tr>

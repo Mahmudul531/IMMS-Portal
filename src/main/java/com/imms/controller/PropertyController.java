@@ -66,7 +66,10 @@ public class PropertyController {
         } else {
             property.setParentProperty(null);
         }
-        
+        property.setDivision(request.getDivision());
+        property.setDistrict(request.getDistrict());
+        property.setUpazila(request.getUpazila());
+        property.setUnionName(request.getUnionName());
         property.setLocLat(request.getLocLat());
         property.setLocLon(request.getLocLon());
         return ResponseEntity.ok(propertyRepository.save(property));
@@ -111,16 +114,27 @@ public class PropertyController {
         } else {
             property.setParentProperty(null);
         }
-        
+        property.setDivision(request.getDivision());
+        property.setDistrict(request.getDistrict());
+        property.setUpazila(request.getUpazila());
+        property.setUnionName(request.getUnionName());
         property.setLocLat(request.getLocLat());
         property.setLocLon(request.getLocLon());
         return ResponseEntity.ok(propertyRepository.save(property));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteProperty(@PathVariable Long id) {
-        propertyRepository.deleteById(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<?> deleteProperty(@PathVariable Long id) {
+        try {
+            propertyRepository.deleteById(id);
+            return ResponseEntity.noContent().build();
+        } catch (Exception e) {
+            String msg = e.getMessage();
+            if (msg != null && (msg.contains("constraint") || msg.contains("violates foreign key"))) {
+                return ResponseEntity.badRequest().body("Cannot delete: this infrastructure is linked to assets, work orders, or users. Please remove those links first.");
+            }
+            return ResponseEntity.badRequest().body("Delete failed: " + (msg != null ? msg : "Unknown error"));
+        }
     }
 
     // ─── Image endpoints ──────────────────────────────────────────────────

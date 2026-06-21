@@ -4,6 +4,7 @@ import axios from 'axios';
 import { Plus, Edit2, Trash2, Filter, MapPin, Users, X } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { toast } from 'react-hot-toast';
+
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -24,7 +25,7 @@ const statusColors: Record<string, { bg: string; color: string }> = {
 };
 
 const ProjectList = () => {
-    const { user } = useAuth();
+    const { user, hasPermission } = useAuth();
     const isAdmin = user?.role === 'ADMIN';
     const navigate = useNavigate();
 
@@ -68,7 +69,10 @@ const ProjectList = () => {
             await axios.delete(`${API}/api/work-orders/${id}`);
             toast.success('Deleted');
             fetchData();
-        } catch { toast.error('Delete failed'); }
+        } catch (err: any) {
+            const msg = err.response?.data || err.message;
+            toast.error(typeof msg === 'string' ? msg : 'Delete failed — project may have linked records.');
+        }
     };
 
     const handleApply = async (id: number) => {
@@ -134,7 +138,7 @@ const ProjectList = () => {
         <div className="page-container fade-in">
             <div className="page-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <h2>Projects / Work Orders</h2>
-                {isAdmin && (
+                {hasPermission('CREATE_WORK_ORDER') && (
                     <button className="btn btn-primary" onClick={() => navigate('/work-orders/add')} style={{ width: 'auto', display: 'flex', alignItems: 'center', gap: '8px' }}>
                         <Plus size={18} /> New Project
                     </button>
@@ -220,19 +224,21 @@ const ProjectList = () => {
                                         </td>
                                         <td>
                                             <div style={{ display: 'flex', gap: '6px', alignItems: 'center', flexWrap: 'wrap' }}>
-                                                {isAdmin && (
+                                                {hasPermission('EDIT_WORK_ORDER') && (
                                                     <>
                                                         {wo.status !== 'CANCELLED' && (
                                                             <button className="action-btn" title="Edit" onClick={() => navigate(`/work-orders/add?id=${wo.id}`)}><Edit2 size={16} /></button>
                                                         )}
-                                                        {['PENDING', 'APPLIED'].includes(wo.status) && (
+                                                        {['PENDING', 'APPLIED'].includes(wo.status) && isAdmin && (
                                                             <>
                                                                 <button className="action-btn" title="View Applications" onClick={() => viewApplications(wo.id)} style={{ color: 'var(--warning)' }}><Users size={16} /></button>
                                                                 <button className="action-btn" title="Cancel" onClick={() => handleCancel(wo.id)} style={{ color: 'var(--danger)' }}><X size={16} /></button>
                                                             </>
                                                         )}
-                                                        <button className="action-btn" title="Delete" onClick={() => handleDelete(wo.id)} style={{ color: 'var(--danger)' }}><Trash2 size={16} /></button>
                                                     </>
+                                                )}
+                                                {hasPermission('DELETE_WORK_ORDER') && (
+                                                    <button className="action-btn" title="Delete" onClick={() => handleDelete(wo.id)} style={{ color: 'var(--danger)' }}><Trash2 size={16} /></button>
                                                 )}
                                                 {!isAdmin && wo.status === 'PENDING' && !appliedWoIds.has(wo.id) && (
                                                     <button className="btn btn-primary" style={{ padding: '0.25rem 0.6rem', fontSize: '0.78rem', width: 'auto' }} onClick={() => handleApply(wo.id)}>Apply</button>

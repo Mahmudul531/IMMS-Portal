@@ -40,12 +40,20 @@ public class Property {
 
     private String city;
     private String country = "Bangladesh";
-    
-    @Column(columnDefinition = "boolean default true")
-    private Boolean active = true;
+
+    // Bangladesh Geographic Fields
+    private String division;
+    private String district;
+    private String upazila;
+
+    @Column(name = "bd_union")
+    private String unionName;
 
     private String locLat;
     private String locLon;
+
+    @Column(columnDefinition = "boolean default true")
+    private Boolean active = true;
 
     @org.hibernate.annotations.CreationTimestamp
     @Column(updatable = false)

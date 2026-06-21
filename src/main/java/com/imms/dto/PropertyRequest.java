@@ -17,8 +17,15 @@ public class PropertyRequest {
     private String city;
     private String country;
     private Boolean active;
-    
+
+    // Bangladesh Geographic Fields
+    private String division;
+    private String district;
+    private String upazila;
+    private String unionName;
+
     private String locLat;
     private String locLon;
     private Long parentPropertyId;
 }
+

@@ -99,9 +99,26 @@ public class WorkOrderController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteWorkOrder(@PathVariable Long id) {
-        workOrderRepository.deleteById(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<?> deleteWorkOrder(@PathVariable Long id) {
+        try {
+            WorkOrder wo = workOrderRepository.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Project/Work Order not found"));
+
+            // Must delete child applications first to avoid FK constraint violation
+            List<WorkOrderApplication> apps = applicationRepository.findByWorkOrderId(id);
+            if (!apps.isEmpty()) {
+                applicationRepository.deleteAll(apps);
+            }
+
+            workOrderRepository.delete(wo);
+            return ResponseEntity.noContent().build();
+        } catch (Exception e) {
+            String msg = e.getMessage();
+            if (msg != null && msg.contains("constraint")) {
+                return ResponseEntity.badRequest().body("Cannot delete: this project is referenced by other records.");
+            }
+            return ResponseEntity.badRequest().body("Delete failed: " + (msg != null ? msg : "Unknown error"));
+        }
     }
 
     @PutMapping("/{id}/cancel")
