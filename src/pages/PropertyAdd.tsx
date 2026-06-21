@@ -6,6 +6,7 @@ import { MapContainer, TileLayer, Marker, useMapEvents, useMap } from 'react-lea
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import { toast } from 'react-hot-toast';
+import { useAuth } from '../context/AuthContext';
 
 // Fix leaflet icon issue in react-leaflet
 delete (L.Icon.Default.prototype as any)._getIconUrl;
@@ -67,15 +68,28 @@ const compressFile = (file: File): Promise<File> => {
     });
 };
 
+type GeoUnion = { id: string; name: string };
+type GeoUpazila = { id: string; name: string; unions: GeoUnion[] };
+type GeoDistrict = { id: string; name: string; upazilas: GeoUpazila[] };
+type GeoDivision = { id: string; name: string; districts: GeoDistrict[] };
+
 const PropertyAdd = () => {
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const editingId = searchParams.get('id');
+    const { hasPermission } = useAuth();
 
     // DB References for dropdowns
     const [propertyTypes, setPropertyTypes] = useState<{id: number, name: string}[]>([]);
     const [cities, setCities] = useState<{id: number, name: string}[]>([]);
     const [allInfrastructures, setAllInfrastructures] = useState<{id: number, name: string, code: string}[]>([]);
+
+    // BD Geo data
+    const [geoData, setGeoData] = useState<GeoDivision[]>([]);
+    const [division, setDivision] = useState('');
+    const [district, setDistrict] = useState('');
+    const [upazila, setUpazila] = useState('');
+    const [unionName, setUnionName] = useState('');
 
     // Form States
     const [name, setName] = useState('');
@@ -110,6 +124,8 @@ const PropertyAdd = () => {
 
     useEffect(() => {
         fetchDropdowns();
+        // Load BD geo JSON
+        fetch(`${API}/BD_Geo_Mapping_All.json`).then(r => r.json()).then(setGeoData).catch(() => {});
         if (editingId) {
             fetchPropertyData(editingId);
         }
@@ -146,6 +162,10 @@ const PropertyAdd = () => {
                 setActive(prop.active !== false);
                 setLatitude(prop.locLat || '');
                 setLongitude(prop.locLon || '');
+                setDivision(prop.division || '');
+                setDistrict(prop.district || '');
+                setUpazila(prop.upazila || '');
+                setUnionName(prop.unionName || '');
                 if (prop.locLat && prop.locLon) setMarkerPos([parseFloat(prop.locLat), parseFloat(prop.locLon)]);
             }
 
@@ -184,12 +204,18 @@ const PropertyAdd = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        // Validate mandatory geo fields
+        if (!division || !district || !upazila) {
+            toast.error('Division, District and Upazila are required.');
+            return;
+        }
         setUploading(true);
         const payload = {
             name, code, propertyTypeId: propertyTypeId ? parseInt(propertyTypeId) : null,
             parentPropertyId: parentPropertyId ? parseInt(parentPropertyId) : null,
             managerName, contactPhone, contactEmail, description,
             address, city, country, active,
+            division, district, upazila, unionName,
             locLat: latitude, locLon: longitude
         };
         try {
@@ -344,6 +370,42 @@ const PropertyAdd = () => {
                         <div className="form-group">
                             <label className="form-label">Address</label>
                             <textarea className="form-input" value={address} onChange={e => setAddress(e.target.value)} rows={2} style={{ resize: 'vertical' }} />
+                        </div>
+
+                        {/* BD Geo — Division / District / Upazila / Union */}
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                            <div className="form-group">
+                                <label className="form-label">Division <span style={{color:'red'}}>*</span></label>
+                                <select className="form-input" value={division} required
+                                    onChange={e => { setDivision(e.target.value); setDistrict(''); setUpazila(''); setUnionName(''); }}>
+                                    <option value="">-- Select Division --</option>
+                                    {geoData.map(d => <option key={d.id} value={d.name}>{d.name}</option>)}
+                                </select>
+                            </div>
+                            <div className="form-group">
+                                <label className="form-label">District <span style={{color:'red'}}>*</span></label>
+                                <select className="form-input" value={district} required disabled={!division}
+                                    onChange={e => { setDistrict(e.target.value); setUpazila(''); setUnionName(''); }}>
+                                    <option value="">-- Select District --</option>
+                                    {(geoData.find(d => d.name === division)?.districts || []).map(d => <option key={d.id} value={d.name}>{d.name}</option>)}
+                                </select>
+                            </div>
+                            <div className="form-group">
+                                <label className="form-label">Upazila <span style={{color:'red'}}>*</span></label>
+                                <select className="form-input" value={upazila} required disabled={!district}
+                                    onChange={e => { setUpazila(e.target.value); setUnionName(''); }}>
+                                    <option value="">-- Select Upazila --</option>
+                                    {(geoData.find(d => d.name === division)?.districts.find(d => d.name === district)?.upazilas || []).map(u => <option key={u.id} value={u.name}>{u.name}</option>)}
+                                </select>
+                            </div>
+                            <div className="form-group">
+                                <label className="form-label">Union <span style={{color:'var(--text-muted)', fontWeight:400}}>(optional)</span></label>
+                                <select className="form-input" value={unionName} disabled={!upazila}
+                                    onChange={e => setUnionName(e.target.value)}>
+                                    <option value="">-- Select Union --</option>
+                                    {(geoData.find(d => d.name === division)?.districts.find(d => d.name === district)?.upazilas.find(u => u.name === upazila)?.unions || []).map(u => <option key={u.id} value={u.name}>{u.name}</option>)}
+                                </select>
+                            </div>
                         </div>
 
                         <div style={{ display: 'flex', gap: '1rem' }}>

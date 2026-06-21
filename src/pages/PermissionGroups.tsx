@@ -36,6 +36,7 @@ const PERMISSION_CATEGORIES = [
             { key: 'VIEW_WORK_ORDERS',   label: 'View Work Orders' },
             { key: 'CREATE_WORK_ORDER',  label: 'Create Work Orders' },
             { key: 'EDIT_WORK_ORDER',    label: 'Edit Work Orders' },
+            { key: 'DELETE_WORK_ORDER',  label: 'Delete Work Orders' },
             { key: 'ASSIGN_ENGINEER',    label: 'Assign Engineers to Work Orders' },
         ],
     },
