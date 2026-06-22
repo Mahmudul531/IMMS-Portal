@@ -5544,6 +5544,596 @@
             ]
           }
         ]
+      },
+      {
+        "id": "dist_C5",
+        "name": "Chattogram City Corporation",
+        "bn_name": "চট্টগ্রাম সিটি কর্পোরেশন",
+        "upazilas": [
+          {
+            "id": "upa_C5_Akbar_Shah",
+            "name": "Akbar Shah Thana",
+            "bn_name": "Akbar Shah থানা",
+            "unions": [
+              {
+                "id": "uni_1000",
+                "name": "Ward No. 1",
+                "bn_name": "ওয়ার্ড নং 1"
+              },
+              {
+                "id": "uni_1001",
+                "name": "Ward No. 2",
+                "bn_name": "ওয়ার্ড নং 2"
+              },
+              {
+                "id": "uni_1002",
+                "name": "Ward No. 3",
+                "bn_name": "ওয়ার্ড নং 3"
+              },
+              {
+                "id": "uni_1003",
+                "name": "Ward No. 4",
+                "bn_name": "ওয়ার্ড নং 4"
+              },
+              {
+                "id": "uni_1004",
+                "name": "Ward No. 5",
+                "bn_name": "ওয়ার্ড নং 5"
+              }
+            ]
+          },
+          {
+            "id": "upa_C5_Bakalia",
+            "name": "Bakalia Thana",
+            "bn_name": "Bakalia থানা",
+            "unions": [
+              {
+                "id": "uni_1005",
+                "name": "Ward No. 6",
+                "bn_name": "ওয়ার্ড নং 6"
+              },
+              {
+                "id": "uni_1006",
+                "name": "Ward No. 7",
+                "bn_name": "ওয়ার্ড নং 7"
+              },
+              {
+                "id": "uni_1007",
+                "name": "Ward No. 8",
+                "bn_name": "ওয়ার্ড নং 8"
+              },
+              {
+                "id": "uni_1008",
+                "name": "Ward No. 9",
+                "bn_name": "ওয়ার্ড নং 9"
+              },
+              {
+                "id": "uni_1009",
+                "name": "Ward No. 10",
+                "bn_name": "ওয়ার্ড নং 10"
+              }
+            ]
+          },
+          {
+            "id": "upa_C5_Bandar",
+            "name": "Bandar Thana",
+            "bn_name": "Bandar থানা",
+            "unions": [
+              {
+                "id": "uni_1010",
+                "name": "Ward No. 11",
+                "bn_name": "ওয়ার্ড নং 11"
+              },
+              {
+                "id": "uni_1011",
+                "name": "Ward No. 12",
+                "bn_name": "ওয়ার্ড নং 12"
+              },
+              {
+                "id": "uni_1012",
+                "name": "Ward No. 13",
+                "bn_name": "ওয়ার্ড নং 13"
+              },
+              {
+                "id": "uni_1013",
+                "name": "Ward No. 14",
+                "bn_name": "ওয়ার্ড নং 14"
+              },
+              {
+                "id": "uni_1014",
+                "name": "Ward No. 15",
+                "bn_name": "ওয়ার্ড নং 15"
+              }
+            ]
+          },
+          {
+            "id": "upa_C5_Bayazid_Bostami",
+            "name": "Bayazid Bostami Thana",
+            "bn_name": "Bayazid Bostami থানা",
+            "unions": [
+              {
+                "id": "uni_1015",
+                "name": "Ward No. 16",
+                "bn_name": "ওয়ার্ড নং 16"
+              },
+              {
+                "id": "uni_1016",
+                "name": "Ward No. 17",
+                "bn_name": "ওয়ার্ড নং 17"
+              },
+              {
+                "id": "uni_1017",
+                "name": "Ward No. 18",
+                "bn_name": "ওয়ার্ড নং 18"
+              },
+              {
+                "id": "uni_1018",
+                "name": "Ward No. 19",
+                "bn_name": "ওয়ার্ড নং 19"
+              },
+              {
+                "id": "uni_1019",
+                "name": "Ward No. 20",
+                "bn_name": "ওয়ার্ড নং 20"
+              }
+            ]
+          },
+          {
+            "id": "upa_C5_Chandgaon",
+            "name": "Chandgaon Thana",
+            "bn_name": "Chandgaon থানা",
+            "unions": [
+              {
+                "id": "uni_1020",
+                "name": "Ward No. 21",
+                "bn_name": "ওয়ার্ড নং 21"
+              },
+              {
+                "id": "uni_1021",
+                "name": "Ward No. 22",
+                "bn_name": "ওয়ার্ড নং 22"
+              },
+              {
+                "id": "uni_1022",
+                "name": "Ward No. 23",
+                "bn_name": "ওয়ার্ড নং 23"
+              },
+              {
+                "id": "uni_1023",
+                "name": "Ward No. 24",
+                "bn_name": "ওয়ার্ড নং 24"
+              },
+              {
+                "id": "uni_1024",
+                "name": "Ward No. 25",
+                "bn_name": "ওয়ার্ড নং 25"
+              }
+            ]
+          },
+          {
+            "id": "upa_C5_Chawkbazar",
+            "name": "Chawkbazar Thana",
+            "bn_name": "Chawkbazar থানা",
+            "unions": [
+              {
+                "id": "uni_1025",
+                "name": "Ward No. 26",
+                "bn_name": "ওয়ার্ড নং 26"
+              },
+              {
+                "id": "uni_1026",
+                "name": "Ward No. 27",
+                "bn_name": "ওয়ার্ড নং 27"
+              },
+              {
+                "id": "uni_1027",
+                "name": "Ward No. 28",
+                "bn_name": "ওয়ার্ড নং 28"
+              },
+              {
+                "id": "uni_1028",
+                "name": "Ward No. 29",
+                "bn_name": "ওয়ার্ড নং 29"
+              },
+              {
+                "id": "uni_1029",
+                "name": "Ward No. 30",
+                "bn_name": "ওয়ার্ড নং 30"
+              }
+            ]
+          },
+          {
+            "id": "upa_C5_Double_Mooring",
+            "name": "Double Mooring Thana",
+            "bn_name": "Double Mooring থানা",
+            "unions": [
+              {
+                "id": "uni_1030",
+                "name": "Ward No. 31",
+                "bn_name": "ওয়ার্ড নং 31"
+              },
+              {
+                "id": "uni_1031",
+                "name": "Ward No. 32",
+                "bn_name": "ওয়ার্ড নং 32"
+              },
+              {
+                "id": "uni_1032",
+                "name": "Ward No. 33",
+                "bn_name": "ওয়ার্ড নং 33"
+              },
+              {
+                "id": "uni_1033",
+                "name": "Ward No. 34",
+                "bn_name": "ওয়ার্ড নং 34"
+              },
+              {
+                "id": "uni_1034",
+                "name": "Ward No. 35",
+                "bn_name": "ওয়ার্ড নং 35"
+              }
+            ]
+          },
+          {
+            "id": "upa_C5_EPZ",
+            "name": "EPZ Thana",
+            "bn_name": "EPZ থানা",
+            "unions": [
+              {
+                "id": "uni_1035",
+                "name": "Ward No. 36",
+                "bn_name": "ওয়ার্ড নং 36"
+              },
+              {
+                "id": "uni_1036",
+                "name": "Ward No. 37",
+                "bn_name": "ওয়ার্ড নং 37"
+              },
+              {
+                "id": "uni_1037",
+                "name": "Ward No. 38",
+                "bn_name": "ওয়ার্ড নং 38"
+              },
+              {
+                "id": "uni_1038",
+                "name": "Ward No. 39",
+                "bn_name": "ওয়ার্ড নং 39"
+              },
+              {
+                "id": "uni_1039",
+                "name": "Ward No. 40",
+                "bn_name": "ওয়ার্ড নং 40"
+              }
+            ]
+          },
+          {
+            "id": "upa_C5_Halishahar",
+            "name": "Halishahar Thana",
+            "bn_name": "Halishahar থানা",
+            "unions": [
+              {
+                "id": "uni_1040",
+                "name": "Ward No. 41",
+                "bn_name": "ওয়ার্ড নং 41"
+              },
+              {
+                "id": "uni_1041",
+                "name": "Ward No. 42",
+                "bn_name": "ওয়ার্ড নং 42"
+              },
+              {
+                "id": "uni_1042",
+                "name": "Ward No. 43",
+                "bn_name": "ওয়ার্ড নং 43"
+              },
+              {
+                "id": "uni_1043",
+                "name": "Ward No. 44",
+                "bn_name": "ওয়ার্ড নং 44"
+              },
+              {
+                "id": "uni_1044",
+                "name": "Ward No. 45",
+                "bn_name": "ওয়ার্ড নং 45"
+              }
+            ]
+          },
+          {
+            "id": "upa_C5_Karnaphuli",
+            "name": "Karnaphuli Thana",
+            "bn_name": "Karnaphuli থানা",
+            "unions": [
+              {
+                "id": "uni_1045",
+                "name": "Ward No. 46",
+                "bn_name": "ওয়ার্ড নং 46"
+              },
+              {
+                "id": "uni_1046",
+                "name": "Ward No. 47",
+                "bn_name": "ওয়ার্ড নং 47"
+              },
+              {
+                "id": "uni_1047",
+                "name": "Ward No. 48",
+                "bn_name": "ওয়ার্ড নং 48"
+              },
+              {
+                "id": "uni_1048",
+                "name": "Ward No. 49",
+                "bn_name": "ওয়ার্ড নং 49"
+              },
+              {
+                "id": "uni_1049",
+                "name": "Ward No. 50",
+                "bn_name": "ওয়ার্ড নং 50"
+              }
+            ]
+          },
+          {
+            "id": "upa_C5_Khulshi",
+            "name": "Khulshi Thana",
+            "bn_name": "Khulshi থানা",
+            "unions": [
+              {
+                "id": "uni_1050",
+                "name": "Ward No. 51",
+                "bn_name": "ওয়ার্ড নং 51"
+              },
+              {
+                "id": "uni_1051",
+                "name": "Ward No. 52",
+                "bn_name": "ওয়ার্ড নং 52"
+              },
+              {
+                "id": "uni_1052",
+                "name": "Ward No. 53",
+                "bn_name": "ওয়ার্ড নং 53"
+              },
+              {
+                "id": "uni_1053",
+                "name": "Ward No. 54",
+                "bn_name": "ওয়ার্ড নং 54"
+              },
+              {
+                "id": "uni_1054",
+                "name": "Ward No. 55",
+                "bn_name": "ওয়ার্ড নং 55"
+              }
+            ]
+          },
+          {
+            "id": "upa_C5_Kotwali",
+            "name": "Kotwali Thana",
+            "bn_name": "Kotwali থানা",
+            "unions": [
+              {
+                "id": "uni_1055",
+                "name": "Ward No. 56",
+                "bn_name": "ওয়ার্ড নং 56"
+              },
+              {
+                "id": "uni_1056",
+                "name": "Ward No. 57",
+                "bn_name": "ওয়ার্ড নং 57"
+              },
+              {
+                "id": "uni_1057",
+                "name": "Ward No. 58",
+                "bn_name": "ওয়ার্ড নং 58"
+              },
+              {
+                "id": "uni_1058",
+                "name": "Ward No. 59",
+                "bn_name": "ওয়ার্ড নং 59"
+              },
+              {
+                "id": "uni_1059",
+                "name": "Ward No. 60",
+                "bn_name": "ওয়ার্ড নং 60"
+              }
+            ]
+          },
+          {
+            "id": "upa_C5_Pahartali",
+            "name": "Pahartali Thana",
+            "bn_name": "Pahartali থানা",
+            "unions": [
+              {
+                "id": "uni_1060",
+                "name": "Ward No. 61",
+                "bn_name": "ওয়ার্ড নং 61"
+              },
+              {
+                "id": "uni_1061",
+                "name": "Ward No. 62",
+                "bn_name": "ওয়ার্ড নং 62"
+              },
+              {
+                "id": "uni_1062",
+                "name": "Ward No. 63",
+                "bn_name": "ওয়ার্ড নং 63"
+              },
+              {
+                "id": "uni_1063",
+                "name": "Ward No. 64",
+                "bn_name": "ওয়ার্ড নং 64"
+              },
+              {
+                "id": "uni_1064",
+                "name": "Ward No. 65",
+                "bn_name": "ওয়ার্ড নং 65"
+              }
+            ]
+          },
+          {
+            "id": "upa_C5_Panchlaish",
+            "name": "Panchlaish Thana",
+            "bn_name": "Panchlaish থানা",
+            "unions": [
+              {
+                "id": "uni_1065",
+                "name": "Ward No. 66",
+                "bn_name": "ওয়ার্ড নং 66"
+              },
+              {
+                "id": "uni_1066",
+                "name": "Ward No. 67",
+                "bn_name": "ওয়ার্ড নং 67"
+              },
+              {
+                "id": "uni_1067",
+                "name": "Ward No. 68",
+                "bn_name": "ওয়ার্ড নং 68"
+              },
+              {
+                "id": "uni_1068",
+                "name": "Ward No. 69",
+                "bn_name": "ওয়ার্ড নং 69"
+              },
+              {
+                "id": "uni_1069",
+                "name": "Ward No. 70",
+                "bn_name": "ওয়ার্ড নং 70"
+              }
+            ]
+          },
+          {
+            "id": "upa_C5_Patenga",
+            "name": "Patenga Thana",
+            "bn_name": "Patenga থানা",
+            "unions": [
+              {
+                "id": "uni_1070",
+                "name": "Ward No. 71",
+                "bn_name": "ওয়ার্ড নং 71"
+              },
+              {
+                "id": "uni_1071",
+                "name": "Ward No. 72",
+                "bn_name": "ওয়ার্ড নং 72"
+              },
+              {
+                "id": "uni_1072",
+                "name": "Ward No. 73",
+                "bn_name": "ওয়ার্ড নং 73"
+              },
+              {
+                "id": "uni_1073",
+                "name": "Ward No. 74",
+                "bn_name": "ওয়ার্ড নং 74"
+              },
+              {
+                "id": "uni_1074",
+                "name": "Ward No. 75",
+                "bn_name": "ওয়ার্ড নং 75"
+              }
+            ]
+          },
+          {
+            "id": "upa_C5_Sadarghat",
+            "name": "Sadarghat Thana",
+            "bn_name": "Sadarghat থানা",
+            "unions": [
+              {
+                "id": "uni_1075",
+                "name": "Ward No. 76",
+                "bn_name": "ওয়ার্ড নং 76"
+              },
+              {
+                "id": "uni_1076",
+                "name": "Ward No. 77",
+                "bn_name": "ওয়ার্ড নং 77"
+              },
+              {
+                "id": "uni_1077",
+                "name": "Ward No. 78",
+                "bn_name": "ওয়ার্ড নং 78"
+              },
+              {
+                "id": "uni_1078",
+                "name": "Ward No. 79",
+                "bn_name": "ওয়ার্ড নং 79"
+              },
+              {
+                "id": "uni_1079",
+                "name": "Ward No. 80",
+                "bn_name": "ওয়ার্ড নং 80"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "dist_C6",
+        "name": "Cumilla City Corporation",
+        "bn_name": "কুমিল্লা সিটি কর্পোরেশন",
+        "upazilas": [
+          {
+            "id": "upa_C6_Kotwali",
+            "name": "Kotwali Thana",
+            "bn_name": "Kotwali থানা",
+            "unions": [
+              {
+                "id": "uni_1080",
+                "name": "Ward No. 1",
+                "bn_name": "ওয়ার্ড নং 1"
+              },
+              {
+                "id": "uni_1081",
+                "name": "Ward No. 2",
+                "bn_name": "ওয়ার্ড নং 2"
+              },
+              {
+                "id": "uni_1082",
+                "name": "Ward No. 3",
+                "bn_name": "ওয়ার্ড নং 3"
+              },
+              {
+                "id": "uni_1083",
+                "name": "Ward No. 4",
+                "bn_name": "ওয়ার্ড নং 4"
+              },
+              {
+                "id": "uni_1084",
+                "name": "Ward No. 5",
+                "bn_name": "ওয়ার্ড নং 5"
+              }
+            ]
+          },
+          {
+            "id": "upa_C6_Sadar_South",
+            "name": "Sadar South Thana",
+            "bn_name": "Sadar South থানা",
+            "unions": [
+              {
+                "id": "uni_1085",
+                "name": "Ward No. 6",
+                "bn_name": "ওয়ার্ড নং 6"
+              },
+              {
+                "id": "uni_1086",
+                "name": "Ward No. 7",
+                "bn_name": "ওয়ার্ড নং 7"
+              },
+              {
+                "id": "uni_1087",
+                "name": "Ward No. 8",
+                "bn_name": "ওয়ার্ড নং 8"
+              },
+              {
+                "id": "uni_1088",
+                "name": "Ward No. 9",
+                "bn_name": "ওয়ার্ড নং 9"
+              },
+              {
+                "id": "uni_1089",
+                "name": "Ward No. 10",
+                "bn_name": "ওয়ার্ড নং 10"
+              }
+            ]
+          }
+        ]
       }
     ]
   },
@@ -8875,6 +9465,141 @@
                 "id": "1512",
                 "name": "Patari",
                 "bn_name": "পাতাড়ী"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "dist_C7",
+        "name": "Rajshahi City Corporation",
+        "bn_name": "রাজশাহী সিটি কর্পোরেশন",
+        "upazilas": [
+          {
+            "id": "upa_C7_Boalia",
+            "name": "Boalia Thana",
+            "bn_name": "Boalia থানা",
+            "unions": [
+              {
+                "id": "uni_1090",
+                "name": "Ward No. 1",
+                "bn_name": "ওয়ার্ড নং 1"
+              },
+              {
+                "id": "uni_1091",
+                "name": "Ward No. 2",
+                "bn_name": "ওয়ার্ড নং 2"
+              },
+              {
+                "id": "uni_1092",
+                "name": "Ward No. 3",
+                "bn_name": "ওয়ার্ড নং 3"
+              },
+              {
+                "id": "uni_1093",
+                "name": "Ward No. 4",
+                "bn_name": "ওয়ার্ড নং 4"
+              },
+              {
+                "id": "uni_1094",
+                "name": "Ward No. 5",
+                "bn_name": "ওয়ার্ড নং 5"
+              }
+            ]
+          },
+          {
+            "id": "upa_C7_Rajpara",
+            "name": "Rajpara Thana",
+            "bn_name": "Rajpara থানা",
+            "unions": [
+              {
+                "id": "uni_1095",
+                "name": "Ward No. 6",
+                "bn_name": "ওয়ার্ড নং 6"
+              },
+              {
+                "id": "uni_1096",
+                "name": "Ward No. 7",
+                "bn_name": "ওয়ার্ড নং 7"
+              },
+              {
+                "id": "uni_1097",
+                "name": "Ward No. 8",
+                "bn_name": "ওয়ার্ড নং 8"
+              },
+              {
+                "id": "uni_1098",
+                "name": "Ward No. 9",
+                "bn_name": "ওয়ার্ড নং 9"
+              },
+              {
+                "id": "uni_1099",
+                "name": "Ward No. 10",
+                "bn_name": "ওয়ার্ড নং 10"
+              }
+            ]
+          },
+          {
+            "id": "upa_C7_Motihar",
+            "name": "Motihar Thana",
+            "bn_name": "Motihar থানা",
+            "unions": [
+              {
+                "id": "uni_1100",
+                "name": "Ward No. 11",
+                "bn_name": "ওয়ার্ড নং 11"
+              },
+              {
+                "id": "uni_1101",
+                "name": "Ward No. 12",
+                "bn_name": "ওয়ার্ড নং 12"
+              },
+              {
+                "id": "uni_1102",
+                "name": "Ward No. 13",
+                "bn_name": "ওয়ার্ড নং 13"
+              },
+              {
+                "id": "uni_1103",
+                "name": "Ward No. 14",
+                "bn_name": "ওয়ার্ড নং 14"
+              },
+              {
+                "id": "uni_1104",
+                "name": "Ward No. 15",
+                "bn_name": "ওয়ার্ড নং 15"
+              }
+            ]
+          },
+          {
+            "id": "upa_C7_Shah_Makhdum",
+            "name": "Shah Makhdum Thana",
+            "bn_name": "Shah Makhdum থানা",
+            "unions": [
+              {
+                "id": "uni_1105",
+                "name": "Ward No. 16",
+                "bn_name": "ওয়ার্ড নং 16"
+              },
+              {
+                "id": "uni_1106",
+                "name": "Ward No. 17",
+                "bn_name": "ওয়ার্ড নং 17"
+              },
+              {
+                "id": "uni_1107",
+                "name": "Ward No. 18",
+                "bn_name": "ওয়ার্ড নং 18"
+              },
+              {
+                "id": "uni_1108",
+                "name": "Ward No. 19",
+                "bn_name": "ওয়ার্ড নং 19"
+              },
+              {
+                "id": "uni_1109",
+                "name": "Ward No. 20",
+                "bn_name": "ওয়ার্ড নং 20"
               }
             ]
           }
@@ -12239,6 +12964,237 @@
             ]
           }
         ]
+      },
+      {
+        "id": "dist_C8",
+        "name": "Khulna City Corporation",
+        "bn_name": "খুলনা সিটি কর্পোরেশন",
+        "upazilas": [
+          {
+            "id": "upa_C8_Khulna_Sadar",
+            "name": "Khulna Sadar Thana",
+            "bn_name": "Khulna Sadar থানা",
+            "unions": [
+              {
+                "id": "uni_1110",
+                "name": "Ward No. 1",
+                "bn_name": "ওয়ার্ড নং 1"
+              },
+              {
+                "id": "uni_1111",
+                "name": "Ward No. 2",
+                "bn_name": "ওয়ার্ড নং 2"
+              },
+              {
+                "id": "uni_1112",
+                "name": "Ward No. 3",
+                "bn_name": "ওয়ার্ড নং 3"
+              },
+              {
+                "id": "uni_1113",
+                "name": "Ward No. 4",
+                "bn_name": "ওয়ার্ড নং 4"
+              },
+              {
+                "id": "uni_1114",
+                "name": "Ward No. 5",
+                "bn_name": "ওয়ার্ড নং 5"
+              }
+            ]
+          },
+          {
+            "id": "upa_C8_Sonadanga",
+            "name": "Sonadanga Thana",
+            "bn_name": "Sonadanga থানা",
+            "unions": [
+              {
+                "id": "uni_1115",
+                "name": "Ward No. 6",
+                "bn_name": "ওয়ার্ড নং 6"
+              },
+              {
+                "id": "uni_1116",
+                "name": "Ward No. 7",
+                "bn_name": "ওয়ার্ড নং 7"
+              },
+              {
+                "id": "uni_1117",
+                "name": "Ward No. 8",
+                "bn_name": "ওয়ার্ড নং 8"
+              },
+              {
+                "id": "uni_1118",
+                "name": "Ward No. 9",
+                "bn_name": "ওয়ার্ড নং 9"
+              },
+              {
+                "id": "uni_1119",
+                "name": "Ward No. 10",
+                "bn_name": "ওয়ার্ড নং 10"
+              }
+            ]
+          },
+          {
+            "id": "upa_C8_Khalishpur",
+            "name": "Khalishpur Thana",
+            "bn_name": "Khalishpur থানা",
+            "unions": [
+              {
+                "id": "uni_1120",
+                "name": "Ward No. 11",
+                "bn_name": "ওয়ার্ড নং 11"
+              },
+              {
+                "id": "uni_1121",
+                "name": "Ward No. 12",
+                "bn_name": "ওয়ার্ড নং 12"
+              },
+              {
+                "id": "uni_1122",
+                "name": "Ward No. 13",
+                "bn_name": "ওয়ার্ড নং 13"
+              },
+              {
+                "id": "uni_1123",
+                "name": "Ward No. 14",
+                "bn_name": "ওয়ার্ড নং 14"
+              },
+              {
+                "id": "uni_1124",
+                "name": "Ward No. 15",
+                "bn_name": "ওয়ার্ড নং 15"
+              }
+            ]
+          },
+          {
+            "id": "upa_C8_Daulatpur",
+            "name": "Daulatpur Thana",
+            "bn_name": "Daulatpur থানা",
+            "unions": [
+              {
+                "id": "uni_1125",
+                "name": "Ward No. 16",
+                "bn_name": "ওয়ার্ড নং 16"
+              },
+              {
+                "id": "uni_1126",
+                "name": "Ward No. 17",
+                "bn_name": "ওয়ার্ড নং 17"
+              },
+              {
+                "id": "uni_1127",
+                "name": "Ward No. 18",
+                "bn_name": "ওয়ার্ড নং 18"
+              },
+              {
+                "id": "uni_1128",
+                "name": "Ward No. 19",
+                "bn_name": "ওয়ার্ড নং 19"
+              },
+              {
+                "id": "uni_1129",
+                "name": "Ward No. 20",
+                "bn_name": "ওয়ার্ড নং 20"
+              }
+            ]
+          },
+          {
+            "id": "upa_C8_Khan_Jahan_Ali",
+            "name": "Khan Jahan Ali Thana",
+            "bn_name": "Khan Jahan Ali থানা",
+            "unions": [
+              {
+                "id": "uni_1130",
+                "name": "Ward No. 21",
+                "bn_name": "ওয়ার্ড নং 21"
+              },
+              {
+                "id": "uni_1131",
+                "name": "Ward No. 22",
+                "bn_name": "ওয়ার্ড নং 22"
+              },
+              {
+                "id": "uni_1132",
+                "name": "Ward No. 23",
+                "bn_name": "ওয়ার্ড নং 23"
+              },
+              {
+                "id": "uni_1133",
+                "name": "Ward No. 24",
+                "bn_name": "ওয়ার্ড নং 24"
+              },
+              {
+                "id": "uni_1134",
+                "name": "Ward No. 25",
+                "bn_name": "ওয়ার্ড নং 25"
+              }
+            ]
+          },
+          {
+            "id": "upa_C8_Arongghata",
+            "name": "Arongghata Thana",
+            "bn_name": "Arongghata থানা",
+            "unions": [
+              {
+                "id": "uni_1135",
+                "name": "Ward No. 26",
+                "bn_name": "ওয়ার্ড নং 26"
+              },
+              {
+                "id": "uni_1136",
+                "name": "Ward No. 27",
+                "bn_name": "ওয়ার্ড নং 27"
+              },
+              {
+                "id": "uni_1137",
+                "name": "Ward No. 28",
+                "bn_name": "ওয়ার্ড নং 28"
+              },
+              {
+                "id": "uni_1138",
+                "name": "Ward No. 29",
+                "bn_name": "ওয়ার্ড নং 29"
+              },
+              {
+                "id": "uni_1139",
+                "name": "Ward No. 30",
+                "bn_name": "ওয়ার্ড নং 30"
+              }
+            ]
+          },
+          {
+            "id": "upa_C8_Labanchara",
+            "name": "Labanchara Thana",
+            "bn_name": "Labanchara থানা",
+            "unions": [
+              {
+                "id": "uni_1140",
+                "name": "Ward No. 31",
+                "bn_name": "ওয়ার্ড নং 31"
+              },
+              {
+                "id": "uni_1141",
+                "name": "Ward No. 32",
+                "bn_name": "ওয়ার্ড নং 32"
+              },
+              {
+                "id": "uni_1142",
+                "name": "Ward No. 33",
+                "bn_name": "ওয়ার্ড নং 33"
+              },
+              {
+                "id": "uni_1143",
+                "name": "Ward No. 34",
+                "bn_name": "ওয়ার্ড নং 34"
+              },
+              {
+                "id": "uni_1144",
+                "name": "Ward No. 35",
+                "bn_name": "ওয়ার্ড নং 35"
+              }
+            ]
+          }
+        ]
       }
     ]
   },
@@ -14327,6 +15283,141 @@
             ]
           }
         ]
+      },
+      {
+        "id": "dist_C9",
+        "name": "Barishal City Corporation",
+        "bn_name": "বরিশাল সিটি কর্পোরেশন",
+        "upazilas": [
+          {
+            "id": "upa_C9_Barishal_Sadar_(Kotwali)",
+            "name": "Barishal Sadar (Kotwali) Thana",
+            "bn_name": "Barishal Sadar (Kotwali) থানা",
+            "unions": [
+              {
+                "id": "uni_1145",
+                "name": "Ward No. 1",
+                "bn_name": "ওয়ার্ড নং 1"
+              },
+              {
+                "id": "uni_1146",
+                "name": "Ward No. 2",
+                "bn_name": "ওয়ার্ড নং 2"
+              },
+              {
+                "id": "uni_1147",
+                "name": "Ward No. 3",
+                "bn_name": "ওয়ার্ড নং 3"
+              },
+              {
+                "id": "uni_1148",
+                "name": "Ward No. 4",
+                "bn_name": "ওয়ার্ড নং 4"
+              },
+              {
+                "id": "uni_1149",
+                "name": "Ward No. 5",
+                "bn_name": "ওয়ার্ড নং 5"
+              }
+            ]
+          },
+          {
+            "id": "upa_C9_Airport",
+            "name": "Airport Thana",
+            "bn_name": "Airport থানা",
+            "unions": [
+              {
+                "id": "uni_1150",
+                "name": "Ward No. 6",
+                "bn_name": "ওয়ার্ড নং 6"
+              },
+              {
+                "id": "uni_1151",
+                "name": "Ward No. 7",
+                "bn_name": "ওয়ার্ড নং 7"
+              },
+              {
+                "id": "uni_1152",
+                "name": "Ward No. 8",
+                "bn_name": "ওয়ার্ড নং 8"
+              },
+              {
+                "id": "uni_1153",
+                "name": "Ward No. 9",
+                "bn_name": "ওয়ার্ড নং 9"
+              },
+              {
+                "id": "uni_1154",
+                "name": "Ward No. 10",
+                "bn_name": "ওয়ার্ড নং 10"
+              }
+            ]
+          },
+          {
+            "id": "upa_C9_Kaunia",
+            "name": "Kaunia Thana",
+            "bn_name": "Kaunia থানা",
+            "unions": [
+              {
+                "id": "uni_1155",
+                "name": "Ward No. 11",
+                "bn_name": "ওয়ার্ড নং 11"
+              },
+              {
+                "id": "uni_1156",
+                "name": "Ward No. 12",
+                "bn_name": "ওয়ার্ড নং 12"
+              },
+              {
+                "id": "uni_1157",
+                "name": "Ward No. 13",
+                "bn_name": "ওয়ার্ড নং 13"
+              },
+              {
+                "id": "uni_1158",
+                "name": "Ward No. 14",
+                "bn_name": "ওয়ার্ড নং 14"
+              },
+              {
+                "id": "uni_1159",
+                "name": "Ward No. 15",
+                "bn_name": "ওয়ার্ড নং 15"
+              }
+            ]
+          },
+          {
+            "id": "upa_C9_Bandar",
+            "name": "Bandar Thana",
+            "bn_name": "Bandar থানা",
+            "unions": [
+              {
+                "id": "uni_1160",
+                "name": "Ward No. 16",
+                "bn_name": "ওয়ার্ড নং 16"
+              },
+              {
+                "id": "uni_1161",
+                "name": "Ward No. 17",
+                "bn_name": "ওয়ার্ড নং 17"
+              },
+              {
+                "id": "uni_1162",
+                "name": "Ward No. 18",
+                "bn_name": "ওয়ার্ড নং 18"
+              },
+              {
+                "id": "uni_1163",
+                "name": "Ward No. 19",
+                "bn_name": "ওয়ার্ড নং 19"
+              },
+              {
+                "id": "uni_1164",
+                "name": "Ward No. 20",
+                "bn_name": "ওয়ার্ড নং 20"
+              }
+            ]
+          }
+        ]
       }
     ]
   },
@@ -16311,6 +17402,205 @@
                 "id": "2771",
                 "name": "Kulanj",
                 "bn_name": "কুলঞ্জ"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "dist_C10",
+        "name": "Sylhet City Corporation",
+        "bn_name": "সিলেট সিটি কর্পোরেশন",
+        "upazilas": [
+          {
+            "id": "upa_C10_Kotwali",
+            "name": "Kotwali Thana",
+            "bn_name": "Kotwali থানা",
+            "unions": [
+              {
+                "id": "uni_1165",
+                "name": "Ward No. 1",
+                "bn_name": "ওয়ার্ড নং 1"
+              },
+              {
+                "id": "uni_1166",
+                "name": "Ward No. 2",
+                "bn_name": "ওয়ার্ড নং 2"
+              },
+              {
+                "id": "uni_1167",
+                "name": "Ward No. 3",
+                "bn_name": "ওয়ার্ড নং 3"
+              },
+              {
+                "id": "uni_1168",
+                "name": "Ward No. 4",
+                "bn_name": "ওয়ার্ড নং 4"
+              },
+              {
+                "id": "uni_1169",
+                "name": "Ward No. 5",
+                "bn_name": "ওয়ার্ড নং 5"
+              }
+            ]
+          },
+          {
+            "id": "upa_C10_Jalalabad",
+            "name": "Jalalabad Thana",
+            "bn_name": "Jalalabad থানা",
+            "unions": [
+              {
+                "id": "uni_1170",
+                "name": "Ward No. 6",
+                "bn_name": "ওয়ার্ড নং 6"
+              },
+              {
+                "id": "uni_1171",
+                "name": "Ward No. 7",
+                "bn_name": "ওয়ার্ড নং 7"
+              },
+              {
+                "id": "uni_1172",
+                "name": "Ward No. 8",
+                "bn_name": "ওয়ার্ড নং 8"
+              },
+              {
+                "id": "uni_1173",
+                "name": "Ward No. 9",
+                "bn_name": "ওয়ার্ড নং 9"
+              },
+              {
+                "id": "uni_1174",
+                "name": "Ward No. 10",
+                "bn_name": "ওয়ার্ড নং 10"
+              }
+            ]
+          },
+          {
+            "id": "upa_C10_Airport",
+            "name": "Airport Thana",
+            "bn_name": "Airport থানা",
+            "unions": [
+              {
+                "id": "uni_1175",
+                "name": "Ward No. 11",
+                "bn_name": "ওয়ার্ড নং 11"
+              },
+              {
+                "id": "uni_1176",
+                "name": "Ward No. 12",
+                "bn_name": "ওয়ার্ড নং 12"
+              },
+              {
+                "id": "uni_1177",
+                "name": "Ward No. 13",
+                "bn_name": "ওয়ার্ড নং 13"
+              },
+              {
+                "id": "uni_1178",
+                "name": "Ward No. 14",
+                "bn_name": "ওয়ার্ড নং 14"
+              },
+              {
+                "id": "uni_1179",
+                "name": "Ward No. 15",
+                "bn_name": "ওয়ার্ড নং 15"
+              }
+            ]
+          },
+          {
+            "id": "upa_C10_South_Surma",
+            "name": "South Surma Thana",
+            "bn_name": "South Surma থানা",
+            "unions": [
+              {
+                "id": "uni_1180",
+                "name": "Ward No. 16",
+                "bn_name": "ওয়ার্ড নং 16"
+              },
+              {
+                "id": "uni_1181",
+                "name": "Ward No. 17",
+                "bn_name": "ওয়ার্ড নং 17"
+              },
+              {
+                "id": "uni_1182",
+                "name": "Ward No. 18",
+                "bn_name": "ওয়ার্ড নং 18"
+              },
+              {
+                "id": "uni_1183",
+                "name": "Ward No. 19",
+                "bn_name": "ওয়ার্ড নং 19"
+              },
+              {
+                "id": "uni_1184",
+                "name": "Ward No. 20",
+                "bn_name": "ওয়ার্ড নং 20"
+              }
+            ]
+          },
+          {
+            "id": "upa_C10_Mogla_Bazar",
+            "name": "Mogla Bazar Thana",
+            "bn_name": "Mogla Bazar থানা",
+            "unions": [
+              {
+                "id": "uni_1185",
+                "name": "Ward No. 21",
+                "bn_name": "ওয়ার্ড নং 21"
+              },
+              {
+                "id": "uni_1186",
+                "name": "Ward No. 22",
+                "bn_name": "ওয়ার্ড নং 22"
+              },
+              {
+                "id": "uni_1187",
+                "name": "Ward No. 23",
+                "bn_name": "ওয়ার্ড নং 23"
+              },
+              {
+                "id": "uni_1188",
+                "name": "Ward No. 24",
+                "bn_name": "ওয়ার্ড নং 24"
+              },
+              {
+                "id": "uni_1189",
+                "name": "Ward No. 25",
+                "bn_name": "ওয়ার্ড নং 25"
+              }
+            ]
+          },
+          {
+            "id": "upa_C10_Shahparan",
+            "name": "Shahparan Thana",
+            "bn_name": "Shahparan থানা",
+            "unions": [
+              {
+                "id": "uni_1190",
+                "name": "Ward No. 26",
+                "bn_name": "ওয়ার্ড নং 26"
+              },
+              {
+                "id": "uni_1191",
+                "name": "Ward No. 27",
+                "bn_name": "ওয়ার্ড নং 27"
+              },
+              {
+                "id": "uni_1192",
+                "name": "Ward No. 28",
+                "bn_name": "ওয়ার্ড নং 28"
+              },
+              {
+                "id": "uni_1193",
+                "name": "Ward No. 29",
+                "bn_name": "ওয়ার্ড নং 29"
+              },
+              {
+                "id": "uni_1194",
+                "name": "Ward No. 30",
+                "bn_name": "ওয়ার্ড নং 30"
               }
             ]
           }
@@ -21409,6 +22699,1794 @@
             ]
           }
         ]
+      },
+      {
+        "id": "dist_C1",
+        "name": "Dhaka South City Corporation",
+        "bn_name": "ঢাকা দক্ষিণ সিটি কর্পোরেশন",
+        "upazilas": [
+          {
+            "id": "upa_C1_Ramna",
+            "name": "Ramna Thana",
+            "bn_name": "Ramna থানা",
+            "unions": [
+              {
+                "id": "uni_1195",
+                "name": "Ward No. 1",
+                "bn_name": "ওয়ার্ড নং 1"
+              },
+              {
+                "id": "uni_1196",
+                "name": "Ward No. 2",
+                "bn_name": "ওয়ার্ড নং 2"
+              },
+              {
+                "id": "uni_1197",
+                "name": "Ward No. 3",
+                "bn_name": "ওয়ার্ড নং 3"
+              },
+              {
+                "id": "uni_1198",
+                "name": "Ward No. 4",
+                "bn_name": "ওয়ার্ড নং 4"
+              },
+              {
+                "id": "uni_1199",
+                "name": "Ward No. 5",
+                "bn_name": "ওয়ার্ড নং 5"
+              }
+            ]
+          },
+          {
+            "id": "upa_C1_Shahbagh",
+            "name": "Shahbagh Thana",
+            "bn_name": "Shahbagh থানা",
+            "unions": [
+              {
+                "id": "uni_1200",
+                "name": "Ward No. 6",
+                "bn_name": "ওয়ার্ড নং 6"
+              },
+              {
+                "id": "uni_1201",
+                "name": "Ward No. 7",
+                "bn_name": "ওয়ার্ড নং 7"
+              },
+              {
+                "id": "uni_1202",
+                "name": "Ward No. 8",
+                "bn_name": "ওয়ার্ড নং 8"
+              },
+              {
+                "id": "uni_1203",
+                "name": "Ward No. 9",
+                "bn_name": "ওয়ার্ড নং 9"
+              },
+              {
+                "id": "uni_1204",
+                "name": "Ward No. 10",
+                "bn_name": "ওয়ার্ড নং 10"
+              }
+            ]
+          },
+          {
+            "id": "upa_C1_Dhanmondi",
+            "name": "Dhanmondi Thana",
+            "bn_name": "Dhanmondi থানা",
+            "unions": [
+              {
+                "id": "uni_1205",
+                "name": "Ward No. 11",
+                "bn_name": "ওয়ার্ড নং 11"
+              },
+              {
+                "id": "uni_1206",
+                "name": "Ward No. 12",
+                "bn_name": "ওয়ার্ড নং 12"
+              },
+              {
+                "id": "uni_1207",
+                "name": "Ward No. 13",
+                "bn_name": "ওয়ার্ড নং 13"
+              },
+              {
+                "id": "uni_1208",
+                "name": "Ward No. 14",
+                "bn_name": "ওয়ার্ড নং 14"
+              },
+              {
+                "id": "uni_1209",
+                "name": "Ward No. 15",
+                "bn_name": "ওয়ার্ড নং 15"
+              }
+            ]
+          },
+          {
+            "id": "upa_C1_Kotwali",
+            "name": "Kotwali Thana",
+            "bn_name": "Kotwali থানা",
+            "unions": [
+              {
+                "id": "uni_1210",
+                "name": "Ward No. 16",
+                "bn_name": "ওয়ার্ড নং 16"
+              },
+              {
+                "id": "uni_1211",
+                "name": "Ward No. 17",
+                "bn_name": "ওয়ার্ড নং 17"
+              },
+              {
+                "id": "uni_1212",
+                "name": "Ward No. 18",
+                "bn_name": "ওয়ার্ড নং 18"
+              },
+              {
+                "id": "uni_1213",
+                "name": "Ward No. 19",
+                "bn_name": "ওয়ার্ড নং 19"
+              },
+              {
+                "id": "uni_1214",
+                "name": "Ward No. 20",
+                "bn_name": "ওয়ার্ড নং 20"
+              }
+            ]
+          },
+          {
+            "id": "upa_C1_Hazaribagh",
+            "name": "Hazaribagh Thana",
+            "bn_name": "Hazaribagh থানা",
+            "unions": [
+              {
+                "id": "uni_1215",
+                "name": "Ward No. 21",
+                "bn_name": "ওয়ার্ড নং 21"
+              },
+              {
+                "id": "uni_1216",
+                "name": "Ward No. 22",
+                "bn_name": "ওয়ার্ড নং 22"
+              },
+              {
+                "id": "uni_1217",
+                "name": "Ward No. 23",
+                "bn_name": "ওয়ার্ড নং 23"
+              },
+              {
+                "id": "uni_1218",
+                "name": "Ward No. 24",
+                "bn_name": "ওয়ার্ড নং 24"
+              },
+              {
+                "id": "uni_1219",
+                "name": "Ward No. 25",
+                "bn_name": "ওয়ার্ড নং 25"
+              }
+            ]
+          },
+          {
+            "id": "upa_C1_Lalbagh",
+            "name": "Lalbagh Thana",
+            "bn_name": "Lalbagh থানা",
+            "unions": [
+              {
+                "id": "uni_1220",
+                "name": "Ward No. 26",
+                "bn_name": "ওয়ার্ড নং 26"
+              },
+              {
+                "id": "uni_1221",
+                "name": "Ward No. 27",
+                "bn_name": "ওয়ার্ড নং 27"
+              },
+              {
+                "id": "uni_1222",
+                "name": "Ward No. 28",
+                "bn_name": "ওয়ার্ড নং 28"
+              },
+              {
+                "id": "uni_1223",
+                "name": "Ward No. 29",
+                "bn_name": "ওয়ার্ড নং 29"
+              },
+              {
+                "id": "uni_1224",
+                "name": "Ward No. 30",
+                "bn_name": "ওয়ার্ড নং 30"
+              }
+            ]
+          },
+          {
+            "id": "upa_C1_Chawkbazar",
+            "name": "Chawkbazar Thana",
+            "bn_name": "Chawkbazar থানা",
+            "unions": [
+              {
+                "id": "uni_1225",
+                "name": "Ward No. 31",
+                "bn_name": "ওয়ার্ড নং 31"
+              },
+              {
+                "id": "uni_1226",
+                "name": "Ward No. 32",
+                "bn_name": "ওয়ার্ড নং 32"
+              },
+              {
+                "id": "uni_1227",
+                "name": "Ward No. 33",
+                "bn_name": "ওয়ার্ড নং 33"
+              },
+              {
+                "id": "uni_1228",
+                "name": "Ward No. 34",
+                "bn_name": "ওয়ার্ড নং 34"
+              },
+              {
+                "id": "uni_1229",
+                "name": "Ward No. 35",
+                "bn_name": "ওয়ার্ড নং 35"
+              }
+            ]
+          },
+          {
+            "id": "upa_C1_Sutrapur",
+            "name": "Sutrapur Thana",
+            "bn_name": "Sutrapur থানা",
+            "unions": [
+              {
+                "id": "uni_1230",
+                "name": "Ward No. 36",
+                "bn_name": "ওয়ার্ড নং 36"
+              },
+              {
+                "id": "uni_1231",
+                "name": "Ward No. 37",
+                "bn_name": "ওয়ার্ড নং 37"
+              },
+              {
+                "id": "uni_1232",
+                "name": "Ward No. 38",
+                "bn_name": "ওয়ার্ড নং 38"
+              },
+              {
+                "id": "uni_1233",
+                "name": "Ward No. 39",
+                "bn_name": "ওয়ার্ড নং 39"
+              },
+              {
+                "id": "uni_1234",
+                "name": "Ward No. 40",
+                "bn_name": "ওয়ার্ড নং 40"
+              }
+            ]
+          },
+          {
+            "id": "upa_C1_Paltan",
+            "name": "Paltan Thana",
+            "bn_name": "Paltan থানা",
+            "unions": [
+              {
+                "id": "uni_1235",
+                "name": "Ward No. 41",
+                "bn_name": "ওয়ার্ড নং 41"
+              },
+              {
+                "id": "uni_1236",
+                "name": "Ward No. 42",
+                "bn_name": "ওয়ার্ড নং 42"
+              },
+              {
+                "id": "uni_1237",
+                "name": "Ward No. 43",
+                "bn_name": "ওয়ার্ড নং 43"
+              },
+              {
+                "id": "uni_1238",
+                "name": "Ward No. 44",
+                "bn_name": "ওয়ার্ড নং 44"
+              },
+              {
+                "id": "uni_1239",
+                "name": "Ward No. 45",
+                "bn_name": "ওয়ার্ড নং 45"
+              }
+            ]
+          },
+          {
+            "id": "upa_C1_Motijheel",
+            "name": "Motijheel Thana",
+            "bn_name": "Motijheel থানা",
+            "unions": [
+              {
+                "id": "uni_1240",
+                "name": "Ward No. 46",
+                "bn_name": "ওয়ার্ড নং 46"
+              },
+              {
+                "id": "uni_1241",
+                "name": "Ward No. 47",
+                "bn_name": "ওয়ার্ড নং 47"
+              },
+              {
+                "id": "uni_1242",
+                "name": "Ward No. 48",
+                "bn_name": "ওয়ার্ড নং 48"
+              },
+              {
+                "id": "uni_1243",
+                "name": "Ward No. 49",
+                "bn_name": "ওয়ার্ড নং 49"
+              },
+              {
+                "id": "uni_1244",
+                "name": "Ward No. 50",
+                "bn_name": "ওয়ার্ড নং 50"
+              }
+            ]
+          },
+          {
+            "id": "upa_C1_Sabujbagh",
+            "name": "Sabujbagh Thana",
+            "bn_name": "Sabujbagh থানা",
+            "unions": [
+              {
+                "id": "uni_1245",
+                "name": "Ward No. 51",
+                "bn_name": "ওয়ার্ড নং 51"
+              },
+              {
+                "id": "uni_1246",
+                "name": "Ward No. 52",
+                "bn_name": "ওয়ার্ড নং 52"
+              },
+              {
+                "id": "uni_1247",
+                "name": "Ward No. 53",
+                "bn_name": "ওয়ার্ড নং 53"
+              },
+              {
+                "id": "uni_1248",
+                "name": "Ward No. 54",
+                "bn_name": "ওয়ার্ড নং 54"
+              },
+              {
+                "id": "uni_1249",
+                "name": "Ward No. 55",
+                "bn_name": "ওয়ার্ড নং 55"
+              }
+            ]
+          },
+          {
+            "id": "upa_C1_Khilgaon",
+            "name": "Khilgaon Thana",
+            "bn_name": "Khilgaon থানা",
+            "unions": [
+              {
+                "id": "uni_1250",
+                "name": "Ward No. 56",
+                "bn_name": "ওয়ার্ড নং 56"
+              },
+              {
+                "id": "uni_1251",
+                "name": "Ward No. 57",
+                "bn_name": "ওয়ার্ড নং 57"
+              },
+              {
+                "id": "uni_1252",
+                "name": "Ward No. 58",
+                "bn_name": "ওয়ার্ড নং 58"
+              },
+              {
+                "id": "uni_1253",
+                "name": "Ward No. 59",
+                "bn_name": "ওয়ার্ড নং 59"
+              },
+              {
+                "id": "uni_1254",
+                "name": "Ward No. 60",
+                "bn_name": "ওয়ার্ড নং 60"
+              }
+            ]
+          },
+          {
+            "id": "upa_C1_Mugda",
+            "name": "Mugda Thana",
+            "bn_name": "Mugda থানা",
+            "unions": [
+              {
+                "id": "uni_1255",
+                "name": "Ward No. 61",
+                "bn_name": "ওয়ার্ড নং 61"
+              },
+              {
+                "id": "uni_1256",
+                "name": "Ward No. 62",
+                "bn_name": "ওয়ার্ড নং 62"
+              },
+              {
+                "id": "uni_1257",
+                "name": "Ward No. 63",
+                "bn_name": "ওয়ার্ড নং 63"
+              },
+              {
+                "id": "uni_1258",
+                "name": "Ward No. 64",
+                "bn_name": "ওয়ার্ড নং 64"
+              },
+              {
+                "id": "uni_1259",
+                "name": "Ward No. 65",
+                "bn_name": "ওয়ার্ড নং 65"
+              }
+            ]
+          },
+          {
+            "id": "upa_C1_Demra",
+            "name": "Demra Thana",
+            "bn_name": "Demra থানা",
+            "unions": [
+              {
+                "id": "uni_1260",
+                "name": "Ward No. 66",
+                "bn_name": "ওয়ার্ড নং 66"
+              },
+              {
+                "id": "uni_1261",
+                "name": "Ward No. 67",
+                "bn_name": "ওয়ার্ড নং 67"
+              },
+              {
+                "id": "uni_1262",
+                "name": "Ward No. 68",
+                "bn_name": "ওয়ার্ড নং 68"
+              },
+              {
+                "id": "uni_1263",
+                "name": "Ward No. 69",
+                "bn_name": "ওয়ার্ড নং 69"
+              },
+              {
+                "id": "uni_1264",
+                "name": "Ward No. 70",
+                "bn_name": "ওয়ার্ড নং 70"
+              }
+            ]
+          },
+          {
+            "id": "upa_C1_Shyampur",
+            "name": "Shyampur Thana",
+            "bn_name": "Shyampur থানা",
+            "unions": [
+              {
+                "id": "uni_1265",
+                "name": "Ward No. 71",
+                "bn_name": "ওয়ার্ড নং 71"
+              },
+              {
+                "id": "uni_1266",
+                "name": "Ward No. 72",
+                "bn_name": "ওয়ার্ড নং 72"
+              },
+              {
+                "id": "uni_1267",
+                "name": "Ward No. 73",
+                "bn_name": "ওয়ার্ড নং 73"
+              },
+              {
+                "id": "uni_1268",
+                "name": "Ward No. 74",
+                "bn_name": "ওয়ার্ড নং 74"
+              },
+              {
+                "id": "uni_1269",
+                "name": "Ward No. 75",
+                "bn_name": "ওয়ার্ড নং 75"
+              }
+            ]
+          },
+          {
+            "id": "upa_C1_Jatrabari",
+            "name": "Jatrabari Thana",
+            "bn_name": "Jatrabari থানা",
+            "unions": [
+              {
+                "id": "uni_1270",
+                "name": "Ward No. 76",
+                "bn_name": "ওয়ার্ড নং 76"
+              },
+              {
+                "id": "uni_1271",
+                "name": "Ward No. 77",
+                "bn_name": "ওয়ার্ড নং 77"
+              },
+              {
+                "id": "uni_1272",
+                "name": "Ward No. 78",
+                "bn_name": "ওয়ার্ড নং 78"
+              },
+              {
+                "id": "uni_1273",
+                "name": "Ward No. 79",
+                "bn_name": "ওয়ার্ড নং 79"
+              },
+              {
+                "id": "uni_1274",
+                "name": "Ward No. 80",
+                "bn_name": "ওয়ার্ড নং 80"
+              }
+            ]
+          },
+          {
+            "id": "upa_C1_Kadamtali",
+            "name": "Kadamtali Thana",
+            "bn_name": "Kadamtali থানা",
+            "unions": [
+              {
+                "id": "uni_1275",
+                "name": "Ward No. 81",
+                "bn_name": "ওয়ার্ড নং 81"
+              },
+              {
+                "id": "uni_1276",
+                "name": "Ward No. 82",
+                "bn_name": "ওয়ার্ড নং 82"
+              },
+              {
+                "id": "uni_1277",
+                "name": "Ward No. 83",
+                "bn_name": "ওয়ার্ড নং 83"
+              },
+              {
+                "id": "uni_1278",
+                "name": "Ward No. 84",
+                "bn_name": "ওয়ার্ড নং 84"
+              },
+              {
+                "id": "uni_1279",
+                "name": "Ward No. 85",
+                "bn_name": "ওয়ার্ড নং 85"
+              }
+            ]
+          },
+          {
+            "id": "upa_C1_Gendaria",
+            "name": "Gendaria Thana",
+            "bn_name": "Gendaria থানা",
+            "unions": [
+              {
+                "id": "uni_1280",
+                "name": "Ward No. 86",
+                "bn_name": "ওয়ার্ড নং 86"
+              },
+              {
+                "id": "uni_1281",
+                "name": "Ward No. 87",
+                "bn_name": "ওয়ার্ড নং 87"
+              },
+              {
+                "id": "uni_1282",
+                "name": "Ward No. 88",
+                "bn_name": "ওয়ার্ড নং 88"
+              },
+              {
+                "id": "uni_1283",
+                "name": "Ward No. 89",
+                "bn_name": "ওয়ার্ড নং 89"
+              },
+              {
+                "id": "uni_1284",
+                "name": "Ward No. 90",
+                "bn_name": "ওয়ার্ড নং 90"
+              }
+            ]
+          },
+          {
+            "id": "upa_C1_New_Market",
+            "name": "New Market Thana",
+            "bn_name": "New Market থানা",
+            "unions": [
+              {
+                "id": "uni_1285",
+                "name": "Ward No. 91",
+                "bn_name": "ওয়ার্ড নং 91"
+              },
+              {
+                "id": "uni_1286",
+                "name": "Ward No. 92",
+                "bn_name": "ওয়ার্ড নং 92"
+              },
+              {
+                "id": "uni_1287",
+                "name": "Ward No. 93",
+                "bn_name": "ওয়ার্ড নং 93"
+              },
+              {
+                "id": "uni_1288",
+                "name": "Ward No. 94",
+                "bn_name": "ওয়ার্ড নং 94"
+              },
+              {
+                "id": "uni_1289",
+                "name": "Ward No. 95",
+                "bn_name": "ওয়ার্ড নং 95"
+              }
+            ]
+          },
+          {
+            "id": "upa_C1_Bangshal",
+            "name": "Bangshal Thana",
+            "bn_name": "Bangshal থানা",
+            "unions": [
+              {
+                "id": "uni_1290",
+                "name": "Ward No. 96",
+                "bn_name": "ওয়ার্ড নং 96"
+              },
+              {
+                "id": "uni_1291",
+                "name": "Ward No. 97",
+                "bn_name": "ওয়ার্ড নং 97"
+              },
+              {
+                "id": "uni_1292",
+                "name": "Ward No. 98",
+                "bn_name": "ওয়ার্ড নং 98"
+              },
+              {
+                "id": "uni_1293",
+                "name": "Ward No. 99",
+                "bn_name": "ওয়ার্ড নং 99"
+              },
+              {
+                "id": "uni_1294",
+                "name": "Ward No. 100",
+                "bn_name": "ওয়ার্ড নং 100"
+              }
+            ]
+          },
+          {
+            "id": "upa_C1_Kamrangirchar",
+            "name": "Kamrangirchar Thana",
+            "bn_name": "Kamrangirchar থানা",
+            "unions": [
+              {
+                "id": "uni_1295",
+                "name": "Ward No. 101",
+                "bn_name": "ওয়ার্ড নং 101"
+              },
+              {
+                "id": "uni_1296",
+                "name": "Ward No. 102",
+                "bn_name": "ওয়ার্ড নং 102"
+              },
+              {
+                "id": "uni_1297",
+                "name": "Ward No. 103",
+                "bn_name": "ওয়ার্ড নং 103"
+              },
+              {
+                "id": "uni_1298",
+                "name": "Ward No. 104",
+                "bn_name": "ওয়ার্ড নং 104"
+              },
+              {
+                "id": "uni_1299",
+                "name": "Ward No. 105",
+                "bn_name": "ওয়ার্ড নং 105"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "dist_C2",
+        "name": "Dhaka North City Corporation",
+        "bn_name": "ঢাকা উত্তর সিটি কর্পোরেশন",
+        "upazilas": [
+          {
+            "id": "upa_C2_Mirpur",
+            "name": "Mirpur Thana",
+            "bn_name": "Mirpur থানা",
+            "unions": [
+              {
+                "id": "uni_1300",
+                "name": "Ward No. 1",
+                "bn_name": "ওয়ার্ড নং 1"
+              },
+              {
+                "id": "uni_1301",
+                "name": "Ward No. 2",
+                "bn_name": "ওয়ার্ড নং 2"
+              },
+              {
+                "id": "uni_1302",
+                "name": "Ward No. 3",
+                "bn_name": "ওয়ার্ড নং 3"
+              },
+              {
+                "id": "uni_1303",
+                "name": "Ward No. 4",
+                "bn_name": "ওয়ার্ড নং 4"
+              },
+              {
+                "id": "uni_1304",
+                "name": "Ward No. 5",
+                "bn_name": "ওয়ার্ড নং 5"
+              }
+            ]
+          },
+          {
+            "id": "upa_C2_Pallabi",
+            "name": "Pallabi Thana",
+            "bn_name": "Pallabi থানা",
+            "unions": [
+              {
+                "id": "uni_1305",
+                "name": "Ward No. 6",
+                "bn_name": "ওয়ার্ড নং 6"
+              },
+              {
+                "id": "uni_1306",
+                "name": "Ward No. 7",
+                "bn_name": "ওয়ার্ড নং 7"
+              },
+              {
+                "id": "uni_1307",
+                "name": "Ward No. 8",
+                "bn_name": "ওয়ার্ড নং 8"
+              },
+              {
+                "id": "uni_1308",
+                "name": "Ward No. 9",
+                "bn_name": "ওয়ার্ড নং 9"
+              },
+              {
+                "id": "uni_1309",
+                "name": "Ward No. 10",
+                "bn_name": "ওয়ার্ড নং 10"
+              }
+            ]
+          },
+          {
+            "id": "upa_C2_Kafrul",
+            "name": "Kafrul Thana",
+            "bn_name": "Kafrul থানা",
+            "unions": [
+              {
+                "id": "uni_1310",
+                "name": "Ward No. 11",
+                "bn_name": "ওয়ার্ড নং 11"
+              },
+              {
+                "id": "uni_1311",
+                "name": "Ward No. 12",
+                "bn_name": "ওয়ার্ড নং 12"
+              },
+              {
+                "id": "uni_1312",
+                "name": "Ward No. 13",
+                "bn_name": "ওয়ার্ড নং 13"
+              },
+              {
+                "id": "uni_1313",
+                "name": "Ward No. 14",
+                "bn_name": "ওয়ার্ড নং 14"
+              },
+              {
+                "id": "uni_1314",
+                "name": "Ward No. 15",
+                "bn_name": "ওয়ার্ড নং 15"
+              }
+            ]
+          },
+          {
+            "id": "upa_C2_Shah_Ali",
+            "name": "Shah Ali Thana",
+            "bn_name": "Shah Ali থানা",
+            "unions": [
+              {
+                "id": "uni_1315",
+                "name": "Ward No. 16",
+                "bn_name": "ওয়ার্ড নং 16"
+              },
+              {
+                "id": "uni_1316",
+                "name": "Ward No. 17",
+                "bn_name": "ওয়ার্ড নং 17"
+              },
+              {
+                "id": "uni_1317",
+                "name": "Ward No. 18",
+                "bn_name": "ওয়ার্ড নং 18"
+              },
+              {
+                "id": "uni_1318",
+                "name": "Ward No. 19",
+                "bn_name": "ওয়ার্ড নং 19"
+              },
+              {
+                "id": "uni_1319",
+                "name": "Ward No. 20",
+                "bn_name": "ওয়ার্ড নং 20"
+              }
+            ]
+          },
+          {
+            "id": "upa_C2_Bhashantek",
+            "name": "Bhashantek Thana",
+            "bn_name": "Bhashantek থানা",
+            "unions": [
+              {
+                "id": "uni_1320",
+                "name": "Ward No. 21",
+                "bn_name": "ওয়ার্ড নং 21"
+              },
+              {
+                "id": "uni_1321",
+                "name": "Ward No. 22",
+                "bn_name": "ওয়ার্ড নং 22"
+              },
+              {
+                "id": "uni_1322",
+                "name": "Ward No. 23",
+                "bn_name": "ওয়ার্ড নং 23"
+              },
+              {
+                "id": "uni_1323",
+                "name": "Ward No. 24",
+                "bn_name": "ওয়ার্ড নং 24"
+              },
+              {
+                "id": "uni_1324",
+                "name": "Ward No. 25",
+                "bn_name": "ওয়ার্ড নং 25"
+              }
+            ]
+          },
+          {
+            "id": "upa_C2_Darus_Salam",
+            "name": "Darus Salam Thana",
+            "bn_name": "Darus Salam থানা",
+            "unions": [
+              {
+                "id": "uni_1325",
+                "name": "Ward No. 26",
+                "bn_name": "ওয়ার্ড নং 26"
+              },
+              {
+                "id": "uni_1326",
+                "name": "Ward No. 27",
+                "bn_name": "ওয়ার্ড নং 27"
+              },
+              {
+                "id": "uni_1327",
+                "name": "Ward No. 28",
+                "bn_name": "ওয়ার্ড নং 28"
+              },
+              {
+                "id": "uni_1328",
+                "name": "Ward No. 29",
+                "bn_name": "ওয়ার্ড নং 29"
+              },
+              {
+                "id": "uni_1329",
+                "name": "Ward No. 30",
+                "bn_name": "ওয়ার্ড নং 30"
+              }
+            ]
+          },
+          {
+            "id": "upa_C2_Sher-e-Bangla_Nagar",
+            "name": "Sher-e-Bangla Nagar Thana",
+            "bn_name": "Sher-e-Bangla Nagar থানা",
+            "unions": [
+              {
+                "id": "uni_1330",
+                "name": "Ward No. 31",
+                "bn_name": "ওয়ার্ড নং 31"
+              },
+              {
+                "id": "uni_1331",
+                "name": "Ward No. 32",
+                "bn_name": "ওয়ার্ড নং 32"
+              },
+              {
+                "id": "uni_1332",
+                "name": "Ward No. 33",
+                "bn_name": "ওয়ার্ড নং 33"
+              },
+              {
+                "id": "uni_1333",
+                "name": "Ward No. 34",
+                "bn_name": "ওয়ার্ড নং 34"
+              },
+              {
+                "id": "uni_1334",
+                "name": "Ward No. 35",
+                "bn_name": "ওয়ার্ড নং 35"
+              }
+            ]
+          },
+          {
+            "id": "upa_C2_Mohammadpur",
+            "name": "Mohammadpur Thana",
+            "bn_name": "Mohammadpur থানা",
+            "unions": [
+              {
+                "id": "uni_1335",
+                "name": "Ward No. 36",
+                "bn_name": "ওয়ার্ড নং 36"
+              },
+              {
+                "id": "uni_1336",
+                "name": "Ward No. 37",
+                "bn_name": "ওয়ার্ড নং 37"
+              },
+              {
+                "id": "uni_1337",
+                "name": "Ward No. 38",
+                "bn_name": "ওয়ার্ড নং 38"
+              },
+              {
+                "id": "uni_1338",
+                "name": "Ward No. 39",
+                "bn_name": "ওয়ার্ড নং 39"
+              },
+              {
+                "id": "uni_1339",
+                "name": "Ward No. 40",
+                "bn_name": "ওয়ার্ড নং 40"
+              }
+            ]
+          },
+          {
+            "id": "upa_C2_Adabor",
+            "name": "Adabor Thana",
+            "bn_name": "Adabor থানা",
+            "unions": [
+              {
+                "id": "uni_1340",
+                "name": "Ward No. 41",
+                "bn_name": "ওয়ার্ড নং 41"
+              },
+              {
+                "id": "uni_1341",
+                "name": "Ward No. 42",
+                "bn_name": "ওয়ার্ড নং 42"
+              },
+              {
+                "id": "uni_1342",
+                "name": "Ward No. 43",
+                "bn_name": "ওয়ার্ড নং 43"
+              },
+              {
+                "id": "uni_1343",
+                "name": "Ward No. 44",
+                "bn_name": "ওয়ার্ড নং 44"
+              },
+              {
+                "id": "uni_1344",
+                "name": "Ward No. 45",
+                "bn_name": "ওয়ার্ড নং 45"
+              }
+            ]
+          },
+          {
+            "id": "upa_C2_Cantonment",
+            "name": "Cantonment Thana",
+            "bn_name": "Cantonment থানা",
+            "unions": [
+              {
+                "id": "uni_1345",
+                "name": "Ward No. 46",
+                "bn_name": "ওয়ার্ড নং 46"
+              },
+              {
+                "id": "uni_1346",
+                "name": "Ward No. 47",
+                "bn_name": "ওয়ার্ড নং 47"
+              },
+              {
+                "id": "uni_1347",
+                "name": "Ward No. 48",
+                "bn_name": "ওয়ার্ড নং 48"
+              },
+              {
+                "id": "uni_1348",
+                "name": "Ward No. 49",
+                "bn_name": "ওয়ার্ড নং 49"
+              },
+              {
+                "id": "uni_1349",
+                "name": "Ward No. 50",
+                "bn_name": "ওয়ার্ড নং 50"
+              }
+            ]
+          },
+          {
+            "id": "upa_C2_Banani",
+            "name": "Banani Thana",
+            "bn_name": "Banani থানা",
+            "unions": [
+              {
+                "id": "uni_1350",
+                "name": "Ward No. 51",
+                "bn_name": "ওয়ার্ড নং 51"
+              },
+              {
+                "id": "uni_1351",
+                "name": "Ward No. 52",
+                "bn_name": "ওয়ার্ড নং 52"
+              },
+              {
+                "id": "uni_1352",
+                "name": "Ward No. 53",
+                "bn_name": "ওয়ার্ড নং 53"
+              },
+              {
+                "id": "uni_1353",
+                "name": "Ward No. 54",
+                "bn_name": "ওয়ার্ড নং 54"
+              },
+              {
+                "id": "uni_1354",
+                "name": "Ward No. 55",
+                "bn_name": "ওয়ার্ড নং 55"
+              }
+            ]
+          },
+          {
+            "id": "upa_C2_Gulshan",
+            "name": "Gulshan Thana",
+            "bn_name": "Gulshan থানা",
+            "unions": [
+              {
+                "id": "uni_1355",
+                "name": "Ward No. 56",
+                "bn_name": "ওয়ার্ড নং 56"
+              },
+              {
+                "id": "uni_1356",
+                "name": "Ward No. 57",
+                "bn_name": "ওয়ার্ড নং 57"
+              },
+              {
+                "id": "uni_1357",
+                "name": "Ward No. 58",
+                "bn_name": "ওয়ার্ড নং 58"
+              },
+              {
+                "id": "uni_1358",
+                "name": "Ward No. 59",
+                "bn_name": "ওয়ার্ড নং 59"
+              },
+              {
+                "id": "uni_1359",
+                "name": "Ward No. 60",
+                "bn_name": "ওয়ার্ড নং 60"
+              }
+            ]
+          },
+          {
+            "id": "upa_C2_Badda",
+            "name": "Badda Thana",
+            "bn_name": "Badda থানা",
+            "unions": [
+              {
+                "id": "uni_1360",
+                "name": "Ward No. 61",
+                "bn_name": "ওয়ার্ড নং 61"
+              },
+              {
+                "id": "uni_1361",
+                "name": "Ward No. 62",
+                "bn_name": "ওয়ার্ড নং 62"
+              },
+              {
+                "id": "uni_1362",
+                "name": "Ward No. 63",
+                "bn_name": "ওয়ার্ড নং 63"
+              },
+              {
+                "id": "uni_1363",
+                "name": "Ward No. 64",
+                "bn_name": "ওয়ার্ড নং 64"
+              },
+              {
+                "id": "uni_1364",
+                "name": "Ward No. 65",
+                "bn_name": "ওয়ার্ড নং 65"
+              }
+            ]
+          },
+          {
+            "id": "upa_C2_Tejgaon",
+            "name": "Tejgaon Thana",
+            "bn_name": "Tejgaon থানা",
+            "unions": [
+              {
+                "id": "uni_1365",
+                "name": "Ward No. 66",
+                "bn_name": "ওয়ার্ড নং 66"
+              },
+              {
+                "id": "uni_1366",
+                "name": "Ward No. 67",
+                "bn_name": "ওয়ার্ড নং 67"
+              },
+              {
+                "id": "uni_1367",
+                "name": "Ward No. 68",
+                "bn_name": "ওয়ার্ড নং 68"
+              },
+              {
+                "id": "uni_1368",
+                "name": "Ward No. 69",
+                "bn_name": "ওয়ার্ড নং 69"
+              },
+              {
+                "id": "uni_1369",
+                "name": "Ward No. 70",
+                "bn_name": "ওয়ার্ড নং 70"
+              }
+            ]
+          },
+          {
+            "id": "upa_C2_Tejgaon_Industrial_Area",
+            "name": "Tejgaon Industrial Area Thana",
+            "bn_name": "Tejgaon Industrial Area থানা",
+            "unions": [
+              {
+                "id": "uni_1370",
+                "name": "Ward No. 71",
+                "bn_name": "ওয়ার্ড নং 71"
+              },
+              {
+                "id": "uni_1371",
+                "name": "Ward No. 72",
+                "bn_name": "ওয়ার্ড নং 72"
+              },
+              {
+                "id": "uni_1372",
+                "name": "Ward No. 73",
+                "bn_name": "ওয়ার্ড নং 73"
+              },
+              {
+                "id": "uni_1373",
+                "name": "Ward No. 74",
+                "bn_name": "ওয়ার্ড নং 74"
+              },
+              {
+                "id": "uni_1374",
+                "name": "Ward No. 75",
+                "bn_name": "ওয়ার্ড নং 75"
+              }
+            ]
+          },
+          {
+            "id": "upa_C2_Uttara_East",
+            "name": "Uttara East Thana",
+            "bn_name": "Uttara East থানা",
+            "unions": [
+              {
+                "id": "uni_1375",
+                "name": "Ward No. 76",
+                "bn_name": "ওয়ার্ড নং 76"
+              },
+              {
+                "id": "uni_1376",
+                "name": "Ward No. 77",
+                "bn_name": "ওয়ার্ড নং 77"
+              },
+              {
+                "id": "uni_1377",
+                "name": "Ward No. 78",
+                "bn_name": "ওয়ার্ড নং 78"
+              },
+              {
+                "id": "uni_1378",
+                "name": "Ward No. 79",
+                "bn_name": "ওয়ার্ড নং 79"
+              },
+              {
+                "id": "uni_1379",
+                "name": "Ward No. 80",
+                "bn_name": "ওয়ার্ড নং 80"
+              }
+            ]
+          },
+          {
+            "id": "upa_C2_Uttara_West",
+            "name": "Uttara West Thana",
+            "bn_name": "Uttara West থানা",
+            "unions": [
+              {
+                "id": "uni_1380",
+                "name": "Ward No. 81",
+                "bn_name": "ওয়ার্ড নং 81"
+              },
+              {
+                "id": "uni_1381",
+                "name": "Ward No. 82",
+                "bn_name": "ওয়ার্ড নং 82"
+              },
+              {
+                "id": "uni_1382",
+                "name": "Ward No. 83",
+                "bn_name": "ওয়ার্ড নং 83"
+              },
+              {
+                "id": "uni_1383",
+                "name": "Ward No. 84",
+                "bn_name": "ওয়ার্ড নং 84"
+              },
+              {
+                "id": "uni_1384",
+                "name": "Ward No. 85",
+                "bn_name": "ওয়ার্ড নং 85"
+              }
+            ]
+          },
+          {
+            "id": "upa_C2_Turag",
+            "name": "Turag Thana",
+            "bn_name": "Turag থানা",
+            "unions": [
+              {
+                "id": "uni_1385",
+                "name": "Ward No. 86",
+                "bn_name": "ওয়ার্ড নং 86"
+              },
+              {
+                "id": "uni_1386",
+                "name": "Ward No. 87",
+                "bn_name": "ওয়ার্ড নং 87"
+              },
+              {
+                "id": "uni_1387",
+                "name": "Ward No. 88",
+                "bn_name": "ওয়ার্ড নং 88"
+              },
+              {
+                "id": "uni_1388",
+                "name": "Ward No. 89",
+                "bn_name": "ওয়ার্ড নং 89"
+              },
+              {
+                "id": "uni_1389",
+                "name": "Ward No. 90",
+                "bn_name": "ওয়ার্ড নং 90"
+              }
+            ]
+          },
+          {
+            "id": "upa_C2_Dakshinkhan",
+            "name": "Dakshinkhan Thana",
+            "bn_name": "Dakshinkhan থানা",
+            "unions": [
+              {
+                "id": "uni_1390",
+                "name": "Ward No. 91",
+                "bn_name": "ওয়ার্ড নং 91"
+              },
+              {
+                "id": "uni_1391",
+                "name": "Ward No. 92",
+                "bn_name": "ওয়ার্ড নং 92"
+              },
+              {
+                "id": "uni_1392",
+                "name": "Ward No. 93",
+                "bn_name": "ওয়ার্ড নং 93"
+              },
+              {
+                "id": "uni_1393",
+                "name": "Ward No. 94",
+                "bn_name": "ওয়ার্ড নং 94"
+              },
+              {
+                "id": "uni_1394",
+                "name": "Ward No. 95",
+                "bn_name": "ওয়ার্ড নং 95"
+              }
+            ]
+          },
+          {
+            "id": "upa_C2_Uttarkhan",
+            "name": "Uttarkhan Thana",
+            "bn_name": "Uttarkhan থানা",
+            "unions": [
+              {
+                "id": "uni_1395",
+                "name": "Ward No. 96",
+                "bn_name": "ওয়ার্ড নং 96"
+              },
+              {
+                "id": "uni_1396",
+                "name": "Ward No. 97",
+                "bn_name": "ওয়ার্ড নং 97"
+              },
+              {
+                "id": "uni_1397",
+                "name": "Ward No. 98",
+                "bn_name": "ওয়ার্ড নং 98"
+              },
+              {
+                "id": "uni_1398",
+                "name": "Ward No. 99",
+                "bn_name": "ওয়ার্ড নং 99"
+              },
+              {
+                "id": "uni_1399",
+                "name": "Ward No. 100",
+                "bn_name": "ওয়ার্ড নং 100"
+              }
+            ]
+          },
+          {
+            "id": "upa_C2_Vatara",
+            "name": "Vatara Thana",
+            "bn_name": "Vatara থানা",
+            "unions": [
+              {
+                "id": "uni_1400",
+                "name": "Ward No. 101",
+                "bn_name": "ওয়ার্ড নং 101"
+              },
+              {
+                "id": "uni_1401",
+                "name": "Ward No. 102",
+                "bn_name": "ওয়ার্ড নং 102"
+              },
+              {
+                "id": "uni_1402",
+                "name": "Ward No. 103",
+                "bn_name": "ওয়ার্ড নং 103"
+              },
+              {
+                "id": "uni_1403",
+                "name": "Ward No. 104",
+                "bn_name": "ওয়ার্ড নং 104"
+              },
+              {
+                "id": "uni_1404",
+                "name": "Ward No. 105",
+                "bn_name": "ওয়ার্ড নং 105"
+              }
+            ]
+          },
+          {
+            "id": "upa_C2_Rupnagar",
+            "name": "Rupnagar Thana",
+            "bn_name": "Rupnagar থানা",
+            "unions": [
+              {
+                "id": "uni_1405",
+                "name": "Ward No. 106",
+                "bn_name": "ওয়ার্ড নং 106"
+              },
+              {
+                "id": "uni_1406",
+                "name": "Ward No. 107",
+                "bn_name": "ওয়ার্ড নং 107"
+              },
+              {
+                "id": "uni_1407",
+                "name": "Ward No. 108",
+                "bn_name": "ওয়ার্ড নং 108"
+              },
+              {
+                "id": "uni_1408",
+                "name": "Ward No. 109",
+                "bn_name": "ওয়ার্ড নং 109"
+              },
+              {
+                "id": "uni_1409",
+                "name": "Ward No. 110",
+                "bn_name": "ওয়ার্ড নং 110"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "dist_C3",
+        "name": "Gazipur City Corporation",
+        "bn_name": "গাজীপুর সিটি কর্পোরেশন",
+        "upazilas": [
+          {
+            "id": "upa_C3_Joydebpur",
+            "name": "Joydebpur Thana",
+            "bn_name": "Joydebpur থানা",
+            "unions": [
+              {
+                "id": "uni_1410",
+                "name": "Ward No. 1",
+                "bn_name": "ওয়ার্ড নং 1"
+              },
+              {
+                "id": "uni_1411",
+                "name": "Ward No. 2",
+                "bn_name": "ওয়ার্ড নং 2"
+              },
+              {
+                "id": "uni_1412",
+                "name": "Ward No. 3",
+                "bn_name": "ওয়ার্ড নং 3"
+              },
+              {
+                "id": "uni_1413",
+                "name": "Ward No. 4",
+                "bn_name": "ওয়ার্ড নং 4"
+              },
+              {
+                "id": "uni_1414",
+                "name": "Ward No. 5",
+                "bn_name": "ওয়ার্ড নং 5"
+              }
+            ]
+          },
+          {
+            "id": "upa_C3_Tongi",
+            "name": "Tongi Thana",
+            "bn_name": "Tongi থানা",
+            "unions": [
+              {
+                "id": "uni_1415",
+                "name": "Ward No. 6",
+                "bn_name": "ওয়ার্ড নং 6"
+              },
+              {
+                "id": "uni_1416",
+                "name": "Ward No. 7",
+                "bn_name": "ওয়ার্ড নং 7"
+              },
+              {
+                "id": "uni_1417",
+                "name": "Ward No. 8",
+                "bn_name": "ওয়ার্ড নং 8"
+              },
+              {
+                "id": "uni_1418",
+                "name": "Ward No. 9",
+                "bn_name": "ওয়ার্ড নং 9"
+              },
+              {
+                "id": "uni_1419",
+                "name": "Ward No. 10",
+                "bn_name": "ওয়ার্ড নং 10"
+              }
+            ]
+          },
+          {
+            "id": "upa_C3_Bason",
+            "name": "Bason Thana",
+            "bn_name": "Bason থানা",
+            "unions": [
+              {
+                "id": "uni_1420",
+                "name": "Ward No. 11",
+                "bn_name": "ওয়ার্ড নং 11"
+              },
+              {
+                "id": "uni_1421",
+                "name": "Ward No. 12",
+                "bn_name": "ওয়ার্ড নং 12"
+              },
+              {
+                "id": "uni_1422",
+                "name": "Ward No. 13",
+                "bn_name": "ওয়ার্ড নং 13"
+              },
+              {
+                "id": "uni_1423",
+                "name": "Ward No. 14",
+                "bn_name": "ওয়ার্ড নং 14"
+              },
+              {
+                "id": "uni_1424",
+                "name": "Ward No. 15",
+                "bn_name": "ওয়ার্ড নং 15"
+              }
+            ]
+          },
+          {
+            "id": "upa_C3_Konabari",
+            "name": "Konabari Thana",
+            "bn_name": "Konabari থানা",
+            "unions": [
+              {
+                "id": "uni_1425",
+                "name": "Ward No. 16",
+                "bn_name": "ওয়ার্ড নং 16"
+              },
+              {
+                "id": "uni_1426",
+                "name": "Ward No. 17",
+                "bn_name": "ওয়ার্ড নং 17"
+              },
+              {
+                "id": "uni_1427",
+                "name": "Ward No. 18",
+                "bn_name": "ওয়ার্ড নং 18"
+              },
+              {
+                "id": "uni_1428",
+                "name": "Ward No. 19",
+                "bn_name": "ওয়ার্ড নং 19"
+              },
+              {
+                "id": "uni_1429",
+                "name": "Ward No. 20",
+                "bn_name": "ওয়ার্ড নং 20"
+              }
+            ]
+          },
+          {
+            "id": "upa_C3_Kashimpur",
+            "name": "Kashimpur Thana",
+            "bn_name": "Kashimpur থানা",
+            "unions": [
+              {
+                "id": "uni_1430",
+                "name": "Ward No. 21",
+                "bn_name": "ওয়ার্ড নং 21"
+              },
+              {
+                "id": "uni_1431",
+                "name": "Ward No. 22",
+                "bn_name": "ওয়ার্ড নং 22"
+              },
+              {
+                "id": "uni_1432",
+                "name": "Ward No. 23",
+                "bn_name": "ওয়ার্ড নং 23"
+              },
+              {
+                "id": "uni_1433",
+                "name": "Ward No. 24",
+                "bn_name": "ওয়ার্ড নং 24"
+              },
+              {
+                "id": "uni_1434",
+                "name": "Ward No. 25",
+                "bn_name": "ওয়ার্ড নং 25"
+              }
+            ]
+          },
+          {
+            "id": "upa_C3_Gacha",
+            "name": "Gacha Thana",
+            "bn_name": "Gacha থানা",
+            "unions": [
+              {
+                "id": "uni_1435",
+                "name": "Ward No. 26",
+                "bn_name": "ওয়ার্ড নং 26"
+              },
+              {
+                "id": "uni_1436",
+                "name": "Ward No. 27",
+                "bn_name": "ওয়ার্ড নং 27"
+              },
+              {
+                "id": "uni_1437",
+                "name": "Ward No. 28",
+                "bn_name": "ওয়ার্ড নং 28"
+              },
+              {
+                "id": "uni_1438",
+                "name": "Ward No. 29",
+                "bn_name": "ওয়ার্ড নং 29"
+              },
+              {
+                "id": "uni_1439",
+                "name": "Ward No. 30",
+                "bn_name": "ওয়ার্ড নং 30"
+              }
+            ]
+          },
+          {
+            "id": "upa_C3_Pubail",
+            "name": "Pubail Thana",
+            "bn_name": "Pubail থানা",
+            "unions": [
+              {
+                "id": "uni_1440",
+                "name": "Ward No. 31",
+                "bn_name": "ওয়ার্ড নং 31"
+              },
+              {
+                "id": "uni_1441",
+                "name": "Ward No. 32",
+                "bn_name": "ওয়ার্ড নং 32"
+              },
+              {
+                "id": "uni_1442",
+                "name": "Ward No. 33",
+                "bn_name": "ওয়ার্ড নং 33"
+              },
+              {
+                "id": "uni_1443",
+                "name": "Ward No. 34",
+                "bn_name": "ওয়ার্ড নং 34"
+              },
+              {
+                "id": "uni_1444",
+                "name": "Ward No. 35",
+                "bn_name": "ওয়ার্ড নং 35"
+              }
+            ]
+          },
+          {
+            "id": "upa_C3_Tongi_East",
+            "name": "Tongi East Thana",
+            "bn_name": "Tongi East থানা",
+            "unions": [
+              {
+                "id": "uni_1445",
+                "name": "Ward No. 36",
+                "bn_name": "ওয়ার্ড নং 36"
+              },
+              {
+                "id": "uni_1446",
+                "name": "Ward No. 37",
+                "bn_name": "ওয়ার্ড নং 37"
+              },
+              {
+                "id": "uni_1447",
+                "name": "Ward No. 38",
+                "bn_name": "ওয়ার্ড নং 38"
+              },
+              {
+                "id": "uni_1448",
+                "name": "Ward No. 39",
+                "bn_name": "ওয়ার্ড নং 39"
+              },
+              {
+                "id": "uni_1449",
+                "name": "Ward No. 40",
+                "bn_name": "ওয়ার্ড নং 40"
+              }
+            ]
+          },
+          {
+            "id": "upa_C3_Tongi_West",
+            "name": "Tongi West Thana",
+            "bn_name": "Tongi West থানা",
+            "unions": [
+              {
+                "id": "uni_1450",
+                "name": "Ward No. 41",
+                "bn_name": "ওয়ার্ড নং 41"
+              },
+              {
+                "id": "uni_1451",
+                "name": "Ward No. 42",
+                "bn_name": "ওয়ার্ড নং 42"
+              },
+              {
+                "id": "uni_1452",
+                "name": "Ward No. 43",
+                "bn_name": "ওয়ার্ড নং 43"
+              },
+              {
+                "id": "uni_1453",
+                "name": "Ward No. 44",
+                "bn_name": "ওয়ার্ড নং 44"
+              },
+              {
+                "id": "uni_1454",
+                "name": "Ward No. 45",
+                "bn_name": "ওয়ার্ড নং 45"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "dist_C4",
+        "name": "Narayanganj City Corporation",
+        "bn_name": "নারায়ণগঞ্জ সিটি কর্পোরেশন",
+        "upazilas": [
+          {
+            "id": "upa_C4_Narayanganj_Sadar",
+            "name": "Narayanganj Sadar Thana",
+            "bn_name": "Narayanganj Sadar থানা",
+            "unions": [
+              {
+                "id": "uni_1455",
+                "name": "Ward No. 1",
+                "bn_name": "ওয়ার্ড নং 1"
+              },
+              {
+                "id": "uni_1456",
+                "name": "Ward No. 2",
+                "bn_name": "ওয়ার্ড নং 2"
+              },
+              {
+                "id": "uni_1457",
+                "name": "Ward No. 3",
+                "bn_name": "ওয়ার্ড নং 3"
+              },
+              {
+                "id": "uni_1458",
+                "name": "Ward No. 4",
+                "bn_name": "ওয়ার্ড নং 4"
+              },
+              {
+                "id": "uni_1459",
+                "name": "Ward No. 5",
+                "bn_name": "ওয়ার্ড নং 5"
+              }
+            ]
+          },
+          {
+            "id": "upa_C4_Bandar",
+            "name": "Bandar Thana",
+            "bn_name": "Bandar থানা",
+            "unions": [
+              {
+                "id": "uni_1460",
+                "name": "Ward No. 6",
+                "bn_name": "ওয়ার্ড নং 6"
+              },
+              {
+                "id": "uni_1461",
+                "name": "Ward No. 7",
+                "bn_name": "ওয়ার্ড নং 7"
+              },
+              {
+                "id": "uni_1462",
+                "name": "Ward No. 8",
+                "bn_name": "ওয়ার্ড নং 8"
+              },
+              {
+                "id": "uni_1463",
+                "name": "Ward No. 9",
+                "bn_name": "ওয়ার্ড নং 9"
+              },
+              {
+                "id": "uni_1464",
+                "name": "Ward No. 10",
+                "bn_name": "ওয়ার্ড নং 10"
+              }
+            ]
+          },
+          {
+            "id": "upa_C4_Siddhirganj",
+            "name": "Siddhirganj Thana",
+            "bn_name": "Siddhirganj থানা",
+            "unions": [
+              {
+                "id": "uni_1465",
+                "name": "Ward No. 11",
+                "bn_name": "ওয়ার্ড নং 11"
+              },
+              {
+                "id": "uni_1466",
+                "name": "Ward No. 12",
+                "bn_name": "ওয়ার্ড নং 12"
+              },
+              {
+                "id": "uni_1467",
+                "name": "Ward No. 13",
+                "bn_name": "ওয়ার্ড নং 13"
+              },
+              {
+                "id": "uni_1468",
+                "name": "Ward No. 14",
+                "bn_name": "ওয়ার্ড নং 14"
+              },
+              {
+                "id": "uni_1469",
+                "name": "Ward No. 15",
+                "bn_name": "ওয়ার্ড নং 15"
+              }
+            ]
+          }
+        ]
       }
     ]
   },
@@ -24583,6 +27661,205 @@
             ]
           }
         ]
+      },
+      {
+        "id": "dist_C11",
+        "name": "Rangpur City Corporation",
+        "bn_name": "রংপুর সিটি কর্পোরেশন",
+        "upazilas": [
+          {
+            "id": "upa_C11_Kotwali",
+            "name": "Kotwali Thana",
+            "bn_name": "Kotwali থানা",
+            "unions": [
+              {
+                "id": "uni_1470",
+                "name": "Ward No. 1",
+                "bn_name": "ওয়ার্ড নং 1"
+              },
+              {
+                "id": "uni_1471",
+                "name": "Ward No. 2",
+                "bn_name": "ওয়ার্ড নং 2"
+              },
+              {
+                "id": "uni_1472",
+                "name": "Ward No. 3",
+                "bn_name": "ওয়ার্ড নং 3"
+              },
+              {
+                "id": "uni_1473",
+                "name": "Ward No. 4",
+                "bn_name": "ওয়ার্ড নং 4"
+              },
+              {
+                "id": "uni_1474",
+                "name": "Ward No. 5",
+                "bn_name": "ওয়ার্ড নং 5"
+              }
+            ]
+          },
+          {
+            "id": "upa_C11_Tajhat",
+            "name": "Tajhat Thana",
+            "bn_name": "Tajhat থানা",
+            "unions": [
+              {
+                "id": "uni_1475",
+                "name": "Ward No. 6",
+                "bn_name": "ওয়ার্ড নং 6"
+              },
+              {
+                "id": "uni_1476",
+                "name": "Ward No. 7",
+                "bn_name": "ওয়ার্ড নং 7"
+              },
+              {
+                "id": "uni_1477",
+                "name": "Ward No. 8",
+                "bn_name": "ওয়ার্ড নং 8"
+              },
+              {
+                "id": "uni_1478",
+                "name": "Ward No. 9",
+                "bn_name": "ওয়ার্ড নং 9"
+              },
+              {
+                "id": "uni_1479",
+                "name": "Ward No. 10",
+                "bn_name": "ওয়ার্ড নং 10"
+              }
+            ]
+          },
+          {
+            "id": "upa_C11_Mahiganj",
+            "name": "Mahiganj Thana",
+            "bn_name": "Mahiganj থানা",
+            "unions": [
+              {
+                "id": "uni_1480",
+                "name": "Ward No. 11",
+                "bn_name": "ওয়ার্ড নং 11"
+              },
+              {
+                "id": "uni_1481",
+                "name": "Ward No. 12",
+                "bn_name": "ওয়ার্ড নং 12"
+              },
+              {
+                "id": "uni_1482",
+                "name": "Ward No. 13",
+                "bn_name": "ওয়ার্ড নং 13"
+              },
+              {
+                "id": "uni_1483",
+                "name": "Ward No. 14",
+                "bn_name": "ওয়ার্ড নং 14"
+              },
+              {
+                "id": "uni_1484",
+                "name": "Ward No. 15",
+                "bn_name": "ওয়ার্ড নং 15"
+              }
+            ]
+          },
+          {
+            "id": "upa_C11_Haragach",
+            "name": "Haragach Thana",
+            "bn_name": "Haragach থানা",
+            "unions": [
+              {
+                "id": "uni_1485",
+                "name": "Ward No. 16",
+                "bn_name": "ওয়ার্ড নং 16"
+              },
+              {
+                "id": "uni_1486",
+                "name": "Ward No. 17",
+                "bn_name": "ওয়ার্ড নং 17"
+              },
+              {
+                "id": "uni_1487",
+                "name": "Ward No. 18",
+                "bn_name": "ওয়ার্ড নং 18"
+              },
+              {
+                "id": "uni_1488",
+                "name": "Ward No. 19",
+                "bn_name": "ওয়ার্ড নং 19"
+              },
+              {
+                "id": "uni_1489",
+                "name": "Ward No. 20",
+                "bn_name": "ওয়ার্ড নং 20"
+              }
+            ]
+          },
+          {
+            "id": "upa_C11_Parshuram",
+            "name": "Parshuram Thana",
+            "bn_name": "Parshuram থানা",
+            "unions": [
+              {
+                "id": "uni_1490",
+                "name": "Ward No. 21",
+                "bn_name": "ওয়ার্ড নং 21"
+              },
+              {
+                "id": "uni_1491",
+                "name": "Ward No. 22",
+                "bn_name": "ওয়ার্ড নং 22"
+              },
+              {
+                "id": "uni_1492",
+                "name": "Ward No. 23",
+                "bn_name": "ওয়ার্ড নং 23"
+              },
+              {
+                "id": "uni_1493",
+                "name": "Ward No. 24",
+                "bn_name": "ওয়ার্ড নং 24"
+              },
+              {
+                "id": "uni_1494",
+                "name": "Ward No. 25",
+                "bn_name": "ওয়ার্ড নং 25"
+              }
+            ]
+          },
+          {
+            "id": "upa_C11_Hajirhat",
+            "name": "Hajirhat Thana",
+            "bn_name": "Hajirhat থানা",
+            "unions": [
+              {
+                "id": "uni_1495",
+                "name": "Ward No. 26",
+                "bn_name": "ওয়ার্ড নং 26"
+              },
+              {
+                "id": "uni_1496",
+                "name": "Ward No. 27",
+                "bn_name": "ওয়ার্ড নং 27"
+              },
+              {
+                "id": "uni_1497",
+                "name": "Ward No. 28",
+                "bn_name": "ওয়ার্ড নং 28"
+              },
+              {
+                "id": "uni_1498",
+                "name": "Ward No. 29",
+                "bn_name": "ওয়ার্ড নং 29"
+              },
+              {
+                "id": "uni_1499",
+                "name": "Ward No. 30",
+                "bn_name": "ওয়ার্ড নং 30"
+              }
+            ]
+          }
+        ]
       }
     ]
   },
@@ -26619,6 +29896,45 @@
                 "id": "4540",
                 "name": "Kaliara Babragati",
                 "bn_name": "কালিয়ারা গাবরাগাতি"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "dist_C12",
+        "name": "Mymensingh City Corporation",
+        "bn_name": "ময়মনসিংহ সিটি কর্পোরেশন",
+        "upazilas": [
+          {
+            "id": "upa_C12_Kotwali",
+            "name": "Kotwali Thana",
+            "bn_name": "Kotwali থানা",
+            "unions": [
+              {
+                "id": "uni_1500",
+                "name": "Ward No. 1",
+                "bn_name": "ওয়ার্ড নং 1"
+              },
+              {
+                "id": "uni_1501",
+                "name": "Ward No. 2",
+                "bn_name": "ওয়ার্ড নং 2"
+              },
+              {
+                "id": "uni_1502",
+                "name": "Ward No. 3",
+                "bn_name": "ওয়ার্ড নং 3"
+              },
+              {
+                "id": "uni_1503",
+                "name": "Ward No. 4",
+                "bn_name": "ওয়ার্ড নং 4"
+              },
+              {
+                "id": "uni_1504",
+                "name": "Ward No. 5",
+                "bn_name": "ওয়ার্ড নং 5"
               }
             ]
           }
