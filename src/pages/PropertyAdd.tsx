@@ -383,7 +383,7 @@ const PropertyAdd = () => {
                                 </select>
                             </div>
                             <div className="form-group">
-                                <label className="form-label">District <span style={{color:'red'}}>*</span></label>
+                                <label className="form-label">District / City<span style={{color:'red'}}>*</span></label>
                                 <select className="form-input" value={district} required disabled={!division}
                                     onChange={e => { setDistrict(e.target.value); setUpazila(''); setUnionName(''); }}>
                                     <option value="">-- Select District --</option>
@@ -391,7 +391,7 @@ const PropertyAdd = () => {
                                 </select>
                             </div>
                             <div className="form-group">
-                                <label className="form-label">Upazila <span style={{color:'red'}}>*</span></label>
+                                <label className="form-label">Upazila / Thana<span style={{color:'red'}}>*</span></label>
                                 <select className="form-input" value={upazila} required disabled={!district}
                                     onChange={e => { setUpazila(e.target.value); setUnionName(''); }}>
                                     <option value="">-- Select Upazila --</option>
@@ -399,7 +399,7 @@ const PropertyAdd = () => {
                                 </select>
                             </div>
                             <div className="form-group">
-                                <label className="form-label">Union <span style={{color:'var(--text-muted)', fontWeight:400}}>(optional)</span></label>
+                                <label className="form-label">Union / Ward <span style={{color:'var(--text-muted)', fontWeight:400}}>(optional)</span></label>
                                 <select className="form-input" value={unionName} disabled={!upazila}
                                     onChange={e => setUnionName(e.target.value)}>
                                     <option value="">-- Select Union --</option>
