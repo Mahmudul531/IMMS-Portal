@@ -52,12 +52,17 @@ const ProtectedRoute = ({ children, allowedRoles, requiredPermission }: { childr
 };
 
 // Layout Wrapper
-const AppLayout = ({ children }: { children: React.ReactNode }) => (
-  <div className="app-container">
-    <Sidebar />
-    <div className="content-wrapper">{children}</div>
-  </div>
-);
+const AppLayout = ({ children }: { children: React.ReactNode }) => {
+  const [sidebarCollapsed, setSidebarCollapsed] = React.useState(false);
+  return (
+    <div className="app-container">
+      <Sidebar collapsed={sidebarCollapsed} onToggle={() => setSidebarCollapsed(prev => !prev)} />
+      <div className={`content-wrapper${sidebarCollapsed ? ' sidebar-collapsed' : ''}`}>
+        {children}
+      </div>
+    </div>
+  );
+};
 
 function App() {
   return (
