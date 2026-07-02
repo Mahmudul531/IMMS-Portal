@@ -32,6 +32,7 @@ interface Property {
     name: string;
     code: string;
     address: string;
+    city?: string;
     locLat?: string;
     locLon?: string;
     active?: boolean;
